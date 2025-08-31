@@ -192,7 +192,7 @@ Only created the necessary folders for this stage.
         4. Use a high-quality image or illustration placed alongside the text (not as background)
     3. Create Topics Covered Section with this elements
         1. Headline
-        2. Create cards for the following topics (Vocabulary, Grammar, Reading, Writing).Each card should include an icon representation (use Lucide library already installed), short description (1-2 sentences). Each card must have a button with the text "Learn"
+        2. Create cards for the following topics (Vocabulary, Grammar, Reading, Writing).Each card should include an icon representation (use Lucide library already installed), short description (1-2 sentences). Each card must have a CTA with the text "Learn"
     4. Create How it Works Section. Include this elements
         1. Headline
         2. Horizontal cards showing the steps to get started. The path must include Choose Topic-> Choose Level -> Interactive Lessons -> Practice Exercises

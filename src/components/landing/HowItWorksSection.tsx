@@ -1,91 +1,137 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { Target, BarChart3, PlayCircle, CheckCircle, ArrowRight } from "lucide-react"
 import { HOW_IT_WORKS_STEPS } from "@/lib/constants"
 
 const iconMap = {
   Target,
   BarChart3,
-  PlayCircle, 
+  PlayCircle,
   CheckCircle,
 } as const
 
 export function HowItWorksSection() {
-  // Progressive color scheme for the 4 steps using chart colors
-  const stepColors = ['chart-1', 'chart-4', 'chart-3', 'primary']
+  const stepColors = ['primary', 'chart-3', 'chart-1', 'chart-4']
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Headline */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            How It Works
+        <div className="text-center mb-20">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            How Learning Works
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Start your English learning journey in four simple steps
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Follow our proven learning pathway designed by education experts
           </p>
         </div>
 
-        {/* Steps */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-          {HOW_IT_WORKS_STEPS.map((step, index) => {
-            const IconComponent = iconMap[step.icon]
-            const isLastStep = index === HOW_IT_WORKS_STEPS.length - 1
-            const colorClass = stepColors[index]
-            
-            return (
-              <div key={step.step} className="relative">
-                {/* Step Card */}
-                <Card className="text-center h-full hover:shadow-md transition-shadow duration-300">
-                  <CardContent className="p-6">
-                    {/* Step Number */}
-                    <div className={`mb-4 mx-auto w-12 h-12 bg-${colorClass} text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg`}>
-                      {step.step}
+        {/* Timeline Layout */}
+        <div className="max-w-7xl mx-auto">
+          {/* Desktop Timeline */}
+          <div className="hidden lg:block">
+            {/* Timeline Line */}
+            <div className="relative">
+              <div className="absolute top-0 left-0 w-full h-1 bg-border"></div>
+              {/* Step Points */}
+              <div className="flex justify-around">
+                {HOW_IT_WORKS_STEPS.map((step, index) => {
+                  const colorClass = stepColors[index]
+                  return (
+                    <div key={step.step} className="relative flex flex-col items-center">
+                      {/* Large Step Number */}
+                      <div className={`w-16 h-16 bg-${colorClass} text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg mb-8 -mt-8`}>
+                        {step.step}
+                      </div>
                     </div>
-                    
-                    {/* Icon */}
-                    <div className={`mb-4 mx-auto p-3 rounded-full bg-${colorClass}/10 w-fit`}>
-                      <IconComponent className={`h-6 w-6 text-${colorClass}`} />
+                  )
+                })}
+              </div>
+            </div>
+            {/* Step Content Blocks */}
+            <div className="grid grid-cols-4 gap-8">
+              {HOW_IT_WORKS_STEPS.map((step, index) => {
+                const IconComponent = iconMap[step.icon]
+                const colorClass = stepColors[index]
+                return (
+                  <div key={step.step} className="border-l-4 border border-t-transparent border-b-transparent border-r-transparent pl-6">
+                    {/* Fixed Height Title Container */}
+                    <div className="h-20 flex items-center mb-6">
+                      <IconComponent className={`h-8 w-8 text-${colorClass} mr-3 flex-shrink-0`} />
+                      <h3 className="text-2xl font-bold text-foreground leading-tight">
+                        {step.title}
+                      </h3>
                     </div>
-                    
-                    {/* Title */}
-                    <h3 className="text-lg font-semibold text-foreground mb-2">
-                      {step.title}
-                    </h3>
-                    
-                    {/* Description */}
-                    <p className="text-sm text-muted-foreground">
+                    {/* Description - now aligned across all columns */}
+                    <p className="text-lg text-muted-foreground leading-relaxed">
                       {step.description}
                     </p>
-                  </CardContent>
-                </Card>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
 
-                {/* Arrow connector for desktop */}
-                {!isLastStep && (
-                  <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                    <div className="bg-background rounded-full p-2 border shadow-sm">
-                      <ArrowRight className={`h-4 w-4 text-${colorClass}`} />
+          {/* Mobile/Tablet Vertical Layout */}
+          <div className="lg:hidden space-y-12">
+            {HOW_IT_WORKS_STEPS.map((step, index) => {
+              const IconComponent = iconMap[step.icon]
+              const colorClass = stepColors[index]
+              const isLastStep = index === HOW_IT_WORKS_STEPS.length - 1
+
+              return (
+                <div key={step.step} className="relative">
+                  <div className="flex items-start">
+                    {/* Step Number & Icon */}
+                    <div className="flex flex-col items-center mr-6">
+                      <div className={`w-14 h-14 bg-${colorClass} text-white rounded-full flex items-center justify-center text-xl font-bold shadow-lg`}>
+                        {step.step}
+                      </div>
+                      {!isLastStep && (
+                        <div className="w-1 h-12 bg-border mt-4"></div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1">
+                      {/* Fixed Height Title Container for Mobile */}
+                      <div className="h-16 flex items-center mb-4">
+                        <IconComponent className={`h-6 w-6 text-${colorClass} mr-3 flex-shrink-0`} />
+                        <h3 className="text-xl font-bold text-foreground leading-tight">
+                          {step.title}
+                        </h3>
+                      </div>
+
+                      <p className="text-muted-foreground leading-relaxed">
+                        {step.description}
+                      </p>
                     </div>
                   </div>
-                )}
-
-                {/* Vertical connector for mobile/tablet */}
-                {!isLastStep && (
-                  <div className="lg:hidden flex justify-center mt-4 mb-4">
-                    <div className={`w-px h-8 bg-${colorClass}/30`}></div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
+                </div>
+              )
+            })}
+          </div>
         </div>
 
-        {/* Call to action */}
-        <div className="text-center mt-12">
-          <p className="text-muted-foreground mb-2">Ready to get started?</p>
-          <p className="text-sm text-muted-foreground">
-            Choose your first topic and begin your learning journey today!
+        {/* Quick Start Section */}
+        <div className="text-center mt-20">
+          <h3 className="text-3xl font-bold text-foreground mb-4">
+            Ready to Get Started?
+          </h3>
+          <p className="text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Choose your preferred starting point and begin learning immediately
           </p>
+          {/* Quick Start Buttons */}
+          <div className="flex flex-wrap justify-center gap-4 mb-12">
+            <a className="group flex items-center px-6 py-3 border-2 rounded-full border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 font-semibold cursor-pointer">
+              <Target className="h-5 w-5 mr-2" />
+              Browse All Topics
+              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </a>
+            <a className="group flex items-center px-6 py-3 border-2 rounded-full text-foreground hover:bg-muted/50 transition-all duration-300 font-semibold cursor-pointer">
+              <BarChart3 className="h-5 w-5 mr-2" />
+              Take Assessment
+              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </a>
+          </div>
         </div>
       </div>
     </section>

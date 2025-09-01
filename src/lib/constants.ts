@@ -23,7 +23,7 @@ export const TOPICS = [
   },
   {
     id: "grammar",
-    name: "Grammar", 
+    name: "Grammar",
     description: "Master English grammar rules through practical examples and engaging activities.",
     summary: "Master tense practice, error correction, and sentence building",
     icon: "PenTool" as const,
@@ -52,7 +52,7 @@ export const HOW_IT_WORKS_STEPS = [
     icon: "Target" as const,
   },
   {
-    step: 2, 
+    step: 2,
     title: "Choose Level",
     description: "Pick Beginner, Intermediate, or Advanced difficulty",
     icon: "BarChart3" as const,
@@ -79,7 +79,7 @@ export const BENEFITS = [
   },
   {
     title: "Self-Paced Learning",
-    description: "Learn at your own speed with no pressure or deadlines.", 
+    description: "Learn at your own speed with no pressure or deadlines.",
     icon: "Clock" as const,
   },
   {

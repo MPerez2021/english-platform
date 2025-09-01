@@ -9,7 +9,6 @@ const iconMap = {
 } as const
 
 export function HowItWorksSection() {
-  const stepColors = ['primary', 'chart-3', 'chart-1', 'chart-4']
 
   return (
     <section className="py-20 bg-background">
@@ -72,7 +71,6 @@ export function HowItWorksSection() {
           <div className="lg:hidden space-y-12">
             {HOW_IT_WORKS_STEPS.map((step, index) => {
               const IconComponent = iconMap[step.icon]
-              const colorClass = stepColors[index]
               const isLastStep = index === HOW_IT_WORKS_STEPS.length - 1
 
               return (

@@ -10,47 +10,239 @@ Create a free, high-quality English learning platform providing structured pract
 
 - Flawless UI design layout containing all the features fully functional.
 
-## Target Audience
+## 🎨 Design System & UI/UX Guidelines
 
-- English learners (Beginner, Intermediate, Advanced levels)
-- Self-motivated learners seeking free resources
-- Students and professionals improving specific skills
+### Design Philosophy (MANDATORY)
 
-## Design System & UI/UX Guidelines
-
-It's mandatory to follow this:
-
-### Design Philosophy
-
-- **Professional Minimalism**: Clean, sophisticated interface with purposeful whitespace. Ensure the entire website looks visually appealing and user-friendly
+- **Professional Minimalism**: Clean, sophisticated interface with purposeful whitespace. Avoid visual noise overusing colors.
 - **Educational Focus**: Distraction-free learning environment building trust
 - **Accessibility First**: WCAG 2.1 AA compliance mandatory
-- **Mobile-First**: Responsive design for all screen sizes. Optimized for desktop, tablet and mobile.
-- **Styles**: Use Tailwind with Shadcn components.
+- **Mobile-First**: Responsive design for all screen sizes
+- **Styles**: Use Tailwind with Shadcn components only
 
 ### Component Design Principles
 
-- **One Component per File**: Each UI component should live in its own file for clarity, reusability, and maintainability.
-- **Use shadcn Components:**: Leverage shadcn/ui as the foundation. Install only what you need.
-- **Encapsulation**: Keep styles, logic, and accessibility concerns within the component file whenever possible.
-- **Consistency**: Follow the same folder and naming conventions across all components.
-- **Extensibility**: Create small, composable components that can be combined to build complex UIs.
+- **One Component per File**: Each UI component lives in its own file
+- **shadcn/ui Foundation**: Leverage existing components, install only what's needed
+- **Encapsulation**: Keep styles, logic, and accessibility within component files
+- **Consistency**: Follow same folder and naming conventions
+- **Extensibility**: Create small, composable components
 
-## Considerations
+### Design Decision Rules
 
-- Include as many additional elements that improve the overall design, only when it's necessary
-- Use Context7 to check up-to-date docs when needed for implementing new libraries or frameworks or adding features using them.
+- ✅ Add elements only when they improve UX/functionality
+- ✅ Use Context7 MCP for up-to-date library documentation
+- ❌ Never add decorative elements without purpose
+- ❌ Never deviate from established design patterns
 
-## Plan to follow
+## 🛠️ Claude Code Development Guidelines
 
-1. First think through the problem, read the codebase for relevant files, and write a plan to tasks/todo.md. Follow this name to create the file: phaseNumber-currentDate-todo.md (P1_2025-05-08_todo.md)
-2. The plan should have a list of todo items that you can check off as you complete them
-3. Before you begin working, check in with me and I will verify the plan.
-4. Always ask me if there's any clarifying questions before proceeding.
-5. Then, begin working on the todo items, marking them as complete as you go.
-6. Please every step of the way just give me a high level explanation of what changes you made
-7. Make every task and code change you do as simple as possible. I want to avoid making any massive or complex changes. Every change should impact as little code as possible. Everything is about simplicity.
-8. Finally, add a review section to the [todo.md](http://todo.md/) file with a summary of the changes you made and any other relevant information.
+### 📋 Task Decision Matrix
+
+#### When to Use TodoWrite Tool
+
+- ✅ **Multi-step tasks (3+ steps)**: Complex features, multiple file changes, new components
+- ✅ **Unclear scope**: When task complexity is unknown initially
+- ✅ **User provides multiple requirements**: "Add navbar, hero section, and footer"
+- ✅ **Cross-component changes**: Updates affecting layout, theme, or shared components
+
+#### When to Skip TodoWrite Tool
+
+- ❌ **Single file edits**: Fix typo, update single component prop, simple style change
+- ❌ **Clear, simple tasks**: "Change button color to blue", "Add missing import"
+- ❌ **Quick fixes**: Lint errors, missing semicolons, formatting issues
+
+### 🔄 Core Development Workflow
+
+#### 1. Analysis & Planning
+
+```md
+📖 Read Request → 🔍 Analyze Codebase → 🤔 Assess Complexity → 📝 Plan or Execute
+```
+
+**Decision Points:**
+
+- **Simple task?** → Execute directly
+- **Complex task?** → Create TodoWrite plan
+- **Unclear scope?** → Ask clarifying questions
+
+#### 2. Implementation Approach
+
+- **One task in progress** at any time
+- **Mark in_progress BEFORE starting** work
+- **Complete immediately** after finishing (no batching)
+- **Test changes** before marking complete
+
+#### 3. Quality Verification
+
+- **Run verification commands** after each component
+- **Test responsive design** across breakpoints
+- **Verify accessibility** requirements
+- **Check dark/light theme** consistency
+
+### 📝 Practical Examples
+
+#### Example 1: Simple Task (No TodoWrite)
+
+**User Request:** "Change the hero button color to blue"
+**Action:** Direct Edit tool usage - single file change
+
+#### Example 2: Complex Task (Use TodoWrite)
+
+**User Request:** "Add a new features section with cards, icons, and animations"
+**Action:** Create TodoWrite plan with subtasks:
+
+1. Design feature section layout
+2. Create feature card component
+3. Add icons and animations
+4. Implement responsive design
+5. Test across breakpoints
+
+#### Example 3: Multi-Component Task (Use TodoWrite)
+
+**User Request:** "Update the entire navbar to support mobile menu"
+**Action:** TodoWrite plan for:
+
+1. Analyze current navbar structure
+2. Create mobile menu component
+3. Update navbar responsive behavior
+4. Add menu toggle functionality
+5. Test mobile experience
+
+## MCP Tools
+
+### Context7 MCP
+
+**Primary Use**: Fetch up-to-date documentation and code examples for any library or framework.
+
+**When to Use**:
+
+- Implementing new libraries or frameworks
+- Adding features using external dependencies
+- Need current documentation and best practices
+- Working with Next.js, Tailwind CSS, Shadcn/ui, Radix-UI, or any other library
+
+**How to Use**:
+
+1. First call `resolve-library-id` with the library name to get the Context7-compatible ID
+2. Then call `get-library-docs` with the library ID to fetch documentation
+3. Specify topics for focused documentation (e.g., 'hooks', 'routing', 'components')
+4. Use higher token limits for comprehensive context
+
+**Best Practices**:
+
+- Always resolve library ID first unless user provides exact format
+- Use specific topics to get relevant documentation
+- Check documentation before implementing new features
+- Prefer official library documentation over assumptions
+
+### Playwright MCP
+
+**Primary Use**: Visual testing and validation of frontend changes in real browsers.
+
+**When to Use**:
+
+- After making significant UI modifications
+- Testing responsive design implementations
+- Validating cross-browser compatibility
+- Checking visual regressions
+- Ensuring accessibility standards are met
+
+**How to Use**:
+
+- Run visual tests after completing UI components
+- Test across different viewport sizes
+- Validate dark/light theme implementations
+- Check mobile responsiveness
+- Test interactive elements and animations
+
+**Best Practices**:
+
+- Test immediately after major UI changes
+- Include multiple viewport sizes in tests
+- Document any visual differences found
+- Re-test after fixes are applied
+
+## ✅ Quality Standards & Verification
+
+### 🔍 Mandatory Component Checklist
+
+**Every component MUST pass this checklist before marking tasks complete:**
+
+#### TypeScript Requirements
+
+- [ ] **Props interface defined** with proper types and JSDoc comments
+- [ ] **No `any` types** - all variables properly typed
+- [ ] **Event handlers typed** - onClick, onChange, etc.
+- [ ] **Ref types specified** - forwardRef implementations
+
+#### Responsive Design Requirements
+
+- [ ] **Mobile (320px-639px)** - Content readable, buttons accessible
+- [ ] **Tablet (640px-1023px)** - Layout adapts properly
+- [ ] **Desktop (1024px+)** - Optimal spacing and layout
+- [ ] **Test in DevTools** - Verify all breakpoints manually
+
+#### Accessibility Requirements
+
+- [ ] **Semantic HTML** - Use proper heading hierarchy (h1, h2, h3)
+- [ ] **ARIA labels** - screen reader friendly descriptions
+- [ ] **Keyboard navigation** - Tab order logical, focus visible
+- [ ] **Color contrast** - WCAG 2.1 AA compliant (4.5:1 minimum)
+- [ ] **Alt text** - All images have descriptive alt attributes
+
+#### Theme Support Requirements
+
+- [ ] **Dark mode variables** - Use dark style withing global CSS
+- [ ] **Light mode tested** - All elements visible and styled
+- [ ] **Dark mode tested** - Consistent appearance across themes
+- [ ] **Smooth transitions** - Theme switching animations (if any)
+
+#### Error Handling & Edge Cases
+
+- [ ] **Loading states** - Skeleton loaders or spinners where needed
+- [ ] **Empty states** - Graceful handling of no data
+- [ ] **Error boundaries** - Prevent crashes from component errors
+- [ ] **Form validation** - Clear error messages for user inputs
+
+### 🚀 Performance Requirements
+
+- [ ] **Bundle size impact** - New components shouldn't significantly increase bundle
+- [ ] **Image optimization** - Use Next.js Image component with proper sizing
+- [ ] **Lazy loading** - Implement for below-the-fold content
+- [ ] **No console errors** - Clean console in development and production
+
+### Development Commands
+
+#### Essential Commands
+
+- **Development**: `npm run dev --turbopack`
+- **Build**: `npm run build --turbopack`
+- **Lint**: `npm run lint`
+- **Type Check**: `tsc --noEmit` (add this script to package.json if missing)
+
+#### Post-Implementation Verification
+
+Always run these commands after completing tasks:
+
+1. `npm run lint` - Code quality check
+2. `npm run build` - Production build verification  
+3. Type check validation
+4. Manual testing across breakpoints
+
+### Manual Testing Checklist
+
+Test all components across official Tailwind CSS breakpoints:
+
+- [ ] **Mobile** (below 640px): 375px, 414px, 360px
+- [ ] **Small (sm)** (640px and above): Test navigation and layout
+- [ ] **Medium (md)** (768px and above): Tablet view optimization
+- [ ] **Large (lg)** (1024px and above): Desktop layout
+- [ ] **Extra Large (xl)** (1280px and above): Large desktop
+- [ ] **2X Large (2xl)** (1536px and above): Ultra-wide displays
+- [ ] **Dark/light theme switching** - Smooth transitions, consistent colors
+- [ ] **Keyboard navigation** - Tab order, focus states, accessibility (Tab, Enter, Space, Arrow keys)
+- [ ] **Screen reader compatibility** - Proper ARIA labels and structure
 
 ## Technical Stack Requirements
 
@@ -262,6 +454,131 @@ Only created the necessary folders for this stage.
 - Sentence Combining (building complex sentences)
 - Paragraph Structure (organization exercises)
 - Creative Prompts (open-ended writing tasks)
+
+## 🚨 Troubleshooting & Common Issues
+
+### 🔧 Development Environment Issues
+
+#### Build Failures
+
+**Problem:** `npm run build` fails with TypeScript errors
+**Solutions:**
+
+1. Run `npm run lint` first to catch syntax errors
+2. Check for missing type definitions: `npm install @types/node @types/react`
+3. Verify all imports have proper file extensions
+4. Ensure all components export default properly
+
+**Problem:** Tailwind styles not applying
+**Solutions:**
+
+1. Check documentation using Context7
+2. Ensure class names are complete strings (not dynamic)
+
+#### Component Issues
+
+**Problem:** Component not updating on prop changes
+**Solutions:**
+
+1. Check if component is properly receiving props
+2. Verify props are not being mutated directly
+3. Use React DevTools to inspect prop flow
+4. Ensure useEffect dependencies include all used props
+
+**Problem:** Dark/Light theme not switching properly
+**Solutions:**
+
+1. Verify `next-themes` provider wraps entire app
+2. Check CSS custom properties are defined for both themes
+3. Use `theme` and `setTheme` from `useTheme` hook properly
+4. Ensure theme-dependent classes use Tailwind's dark: prefix
+
+### 🎨 Design System Issues
+
+#### Responsive Design Problems
+
+**Problem:** Layout breaks on mobile devices
+**Solutions:**
+
+1. Use `mobile-first` approach - define mobile styles first
+2. Check for fixed widths that don't scale
+3. Use Tailwind responsive prefixes correctly (`sm:`, `md:`, `lg:`, `xl:`)
+
+**Problem:** Components don't match design system
+**Solutions:**
+
+1. Use only approved Shadcn components
+2. Follow established spacing scale (Tailwind spacing)
+3. Check color palette matches theme variables
+4. Verify font sizes follow type scale
+
+### ⚡ Performance Issues
+
+#### Slow Loading Times
+
+**Problem:** Page loads slowly
+**Solutions:**
+
+1. Implement lazy loading for below-fold content
+2. Optimize images using Next.js Image component
+3. Check bundle size with `npm run analyze`
+4. Remove unused dependencies and imports
+
+#### Memory Leaks
+
+**Problem:** Performance degrades over time
+**Solutions:**
+
+1. Clean up useEffect subscriptions with return functions
+2. Remove event listeners in component cleanup
+3. Avoid creating new objects/functions in render
+4. Use React.memo for expensive computations
+
+### 🛠️ Quick Fixes Checklist
+
+#### Before Asking for Help
+
+- [ ] Clear browser cache and hard refresh
+- [ ] Restart development server
+- [ ] Check browser console for errors
+- [ ] Verify all dependencies are installed
+- [ ] Run linting and type check commands
+- [ ] Test in different browsers
+- [ ] Check responsive design at different breakpoints
+
+#### Common Command Solutions
+
+```bash
+# Clear Next.js cache
+rm -rf .next
+
+# Reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
+
+# Run full project verification
+npm run lint && npm run build
+
+# Type check without building
+tsc --noEmit
+```
+
+### When to Ask for Clarification
+
+#### Always Ask When
+
+- Requirements are ambiguous or conflicting
+- Design specifications are unclear
+- Technical approach has multiple valid options
+- Scope of changes is larger than expected
+- Dependencies or integrations are unclear
+
+#### Example Clarification Questions
+
+- "Should the mobile menu overlay the content or push it down?"
+- "Which breakpoint should the sidebar collapse at?"
+- "Do you want the animation to be subtle or prominent?"
+- "Should this component be reusable across other pages?"
 
 ## Development Best Practices
 

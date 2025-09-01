@@ -10,6 +10,9 @@ const iconMap = {
 } as const
 
 export function HowItWorksSection() {
+  // Progressive color scheme for the 4 steps using chart colors
+  const stepColors = ['chart-1', 'chart-4', 'chart-3', 'primary']
+
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,6 +31,7 @@ export function HowItWorksSection() {
           {HOW_IT_WORKS_STEPS.map((step, index) => {
             const IconComponent = iconMap[step.icon]
             const isLastStep = index === HOW_IT_WORKS_STEPS.length - 1
+            const colorClass = stepColors[index]
             
             return (
               <div key={step.step} className="relative">
@@ -35,13 +39,13 @@ export function HowItWorksSection() {
                 <Card className="text-center h-full hover:shadow-md transition-shadow duration-300">
                   <CardContent className="p-6">
                     {/* Step Number */}
-                    <div className="mb-4 mx-auto w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg">
+                    <div className={`mb-4 mx-auto w-12 h-12 bg-${colorClass} text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg`}>
                       {step.step}
                     </div>
                     
                     {/* Icon */}
-                    <div className="mb-4 mx-auto p-3 rounded-full bg-primary/10 w-fit">
-                      <IconComponent className="h-6 w-6 text-primary" />
+                    <div className={`mb-4 mx-auto p-3 rounded-full bg-${colorClass}/10 w-fit`}>
+                      <IconComponent className={`h-6 w-6 text-${colorClass}`} />
                     </div>
                     
                     {/* Title */}
@@ -60,7 +64,7 @@ export function HowItWorksSection() {
                 {!isLastStep && (
                   <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
                     <div className="bg-background rounded-full p-2 border shadow-sm">
-                      <ArrowRight className="h-4 w-4 text-primary" />
+                      <ArrowRight className={`h-4 w-4 text-${colorClass}`} />
                     </div>
                   </div>
                 )}
@@ -68,7 +72,7 @@ export function HowItWorksSection() {
                 {/* Vertical connector for mobile/tablet */}
                 {!isLastStep && (
                   <div className="lg:hidden flex justify-center mt-4 mb-4">
-                    <div className="w-px h-8 bg-border"></div>
+                    <div className={`w-px h-8 bg-${colorClass}/30`}></div>
                   </div>
                 )}
               </div>

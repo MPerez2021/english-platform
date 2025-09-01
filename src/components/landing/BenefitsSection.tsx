@@ -12,6 +12,9 @@ const iconMap = {
 } as const
 
 export function BenefitsSection() {
+  // Distribute chart colors across the 6 benefit cards for visual variety
+  const benefitColors = ['chart-1', 'chart-4', 'chart-3', 'primary', 'chart-1', 'chart-4']
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -29,17 +32,18 @@ export function BenefitsSection() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {BENEFITS.map((benefit, index) => {
             const IconComponent = iconMap[benefit.icon]
+            const colorClass = benefitColors[index]
             
             return (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 border hover:border-primary/20">
+              <Card key={index} className={`group hover:shadow-lg transition-all duration-300 border hover:border-${colorClass}/20`}>
                 <CardContent className="p-6">
                   {/* Icon */}
-                  <div className="mb-4 p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300 w-fit">
-                    <IconComponent className="h-6 w-6 text-primary" />
+                  <div className={`mb-4 p-3 rounded-full bg-${colorClass}/10 group-hover:bg-${colorClass}/20 transition-colors duration-300 w-fit`}>
+                    <IconComponent className={`h-6 w-6 text-${colorClass}`} />
                   </div>
                   
                   {/* Title */}
-                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                  <h3 className={`text-lg font-semibold text-foreground mb-2 group-hover:text-${colorClass} transition-colors duration-300`}>
                     {benefit.title}
                   </h3>
                   

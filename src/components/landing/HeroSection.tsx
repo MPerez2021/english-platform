@@ -4,7 +4,7 @@ import { SITE_CONFIG } from "@/lib/constants"
 
 export function HeroSection() {
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-br from-background to-muted">
+    <section className="py-20 md:py-32 bg-gradient-to-br bg-primary/10 min-h-screen">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
@@ -15,7 +15,7 @@ export function HeroSection() {
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl">
               {SITE_CONFIG.description}
             </p>
-            <Button size="lg" className="text-lg px-8 py-4 h-auto">
+            <Button size="lg" className="text-lg px-8 py-4 h-auto bg-gradient-to-r from-primary to-chart-4 hover:from-primary/90 hover:to-chart-4/90">
               Start your Journey Today
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
@@ -25,8 +25,8 @@ export function HeroSection() {
           <div className="flex justify-center lg:justify-end">
             <div className="relative w-full max-w-lg aspect-square">
               {/* Placeholder for hero image */}
-              <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl border-2 border-dashed border-primary/20 flex flex-col items-center justify-center text-center p-8">
-                <div className="mb-4 p-4 rounded-full bg-primary/10">
+              <div className="w-full h-full bg-gradient-to-br from-chart-1/15 via-primary/10 to-chart-3/15 rounded-3xl border-2 border-dashed border-primary/30 flex flex-col items-center justify-center text-center p-8">
+                <div className="mb-4 p-4 rounded-full bg-gradient-to-br from-primary/20 to-chart-1/20">
                   <svg 
                     className="w-12 h-12 text-primary" 
                     fill="none" 

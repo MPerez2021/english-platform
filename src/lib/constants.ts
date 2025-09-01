@@ -81,33 +81,33 @@ export const HOW_IT_WORKS_STEPS = [
 
 export const BENEFITS = [
   {
-    title: "100% Free Access",
-    description: "Quality English education accessible to everyone, everywhere.",
+    title: "Learn Without Limits",
+    description: "Access premium English education at no cost. Quality learning shouldn't depend on your budget.",
     icon: "Gift" as const,
   },
   {
-    title: "Self-Paced Learning",
-    description: "Learn at your own speed with no pressure or deadlines.",
+    title: "Your Schedule, Your Progress",
+    description: "Master English at your own pace. No deadlines, no pressure—just steady improvement when it works for you.",
     icon: "Clock" as const,
   },
   {
-    title: "Academic Quality",
-    description: "Content designed by education experts following proven methodologies.",
+    title: "Expert-Designed Content",
+    description: "Every lesson crafted by education professionals using proven teaching methodologies that actually work.",
     icon: "Award" as const,
   },
   {
-    title: "Interactive Practice",
-    description: "Engaging exercises that make learning enjoyable and effective.",
+    title: "Learn by Doing",
+    description: "Interactive exercises that engage your mind. Learning through practice, not passive reading.",
     icon: "Zap" as const,
   },
   {
-    title: "Progress Tracking",
-    description: "Monitor your improvement with detailed learning analytics.",
+    title: "See Your Growth",
+    description: "Watch your English skills improve with detailed progress insights that celebrate your achievements.",
     icon: "TrendingUp" as const,
   },
   {
-    title: "Mobile Friendly",
-    description: "Learn anywhere, anytime on any device with responsive design.",
+    title: "Learn Anywhere",
+    description: "Perfect experience on any device. Your English lessons adapt to your lifestyle, not the other way around.",
     icon: "Smartphone" as const,
   },
 ] as const

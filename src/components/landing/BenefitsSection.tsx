@@ -1,5 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Gift, Clock, Award, Zap, TrendingUp, Smartphone } from "lucide-react"
+import { Gift, Clock, Award, Zap, TrendingUp, Smartphone, Target, ArrowRight } from "lucide-react"
 import { BENEFITS } from "@/lib/constants"
 
 const iconMap = {
@@ -11,9 +10,18 @@ const iconMap = {
   Smartphone,
 } as const
 
+
+
 export function BenefitsSection() {
-  // Distribute chart colors across the 6 benefit cards for visual variety
-  const benefitColors = ['chart-1', 'chart-4', 'chart-3', 'primary', 'chart-1', 'chart-4']
+  // Strategic color assignment based on benefit themes and existing design patterns
+  const benefitColors = [
+    'text-primary',    // Learn Without Limits (Gift) - accessibility theme
+    'text-chart-3',    // Your Schedule (Clock) - time/progress theme
+    'text-chart-4',    // Expert Content (Award) - quality/achievement theme
+    'text-chart-1',    // Learn by Doing (Zap) - interactive/energy theme
+    'text-chart-4',    // See Your Growth (TrendingUp) - progress/achievement
+    'text-primary',    // Learn Anywhere (Smartphone) - accessibility theme
+  ]
 
   return (
     <section className="py-20 bg-background">
@@ -29,44 +37,39 @@ export function BenefitsSection() {
         </div>
 
         {/* Benefits Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {BENEFITS.map((benefit, index) => {
             const IconComponent = iconMap[benefit.icon]
-            const colorClass = benefitColors[index]
-            
+            const iconColor = benefitColors[index]
+
             return (
-              <Card key={index} className={`group hover:shadow-lg transition-all duration-300 border hover:border-${colorClass}/20`}>
-                <CardContent className="p-6">
-                  {/* Icon */}
-                  <div className={`mb-4 p-3 rounded-full bg-${colorClass}/10 group-hover:bg-${colorClass}/20 transition-colors duration-300 w-fit`}>
-                    <IconComponent className={`h-6 w-6 text-${colorClass}`} />
-                  </div>
-                  
-                  {/* Title */}
-                  <h3 className={`text-lg font-semibold text-foreground mb-2 group-hover:text-${colorClass} transition-colors duration-300`}>
-                    {benefit.title}
-                  </h3>
-                  
-                  {/* Description */}
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {benefit.description}
-                  </p>
-                </CardContent>
-              </Card>
+              <div key={index} className={`text-center sm:text-left p-6 rounded-2xl `}>
+                {/* Icon */}
+                <div className="flex justify-center sm:justify-start mb-4">
+                  <IconComponent className={`h-8 w-8 ${iconColor}`} />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl font-semibold text-foreground mb-3">
+                  {benefit.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-muted-foreground leading-relaxed">
+                  {benefit.description}
+                </p>
+              </div>
             )
           })}
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-16">
-          <div className="max-w-2xl mx-auto">
-            <p className="text-lg text-muted-foreground mb-2">
-              Join thousands of learners improving their English skills every day
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Start learning today – it&apos;s completely free and takes less than a minute to begin
-            </p>
-          </div>
+        {/* Enhanced Call to Action */}
+        <div className="flex justify-center mt-20">
+        <a className="group flex items-center px-6 py-3 border-2 rounded-full border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 font-semibold cursor-pointer">
+              <Target className="h-5 w-5 mr-2" />
+              Get Started
+              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+            </a>
         </div>
       </div>
     </section>

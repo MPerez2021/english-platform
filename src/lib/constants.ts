@@ -48,7 +48,7 @@ export const HOW_IT_WORKS_STEPS = [
   {
     step: 1,
     title: "Choose Topic",
-    description: "Select from Vocabulary, Grammar, Reading, or Writing",
+    description: "Select the English skill you want to improve - Vocabulary, Grammar, Reading, or Writing",
     icon: "Target" as const,
     color: "bg-primary",
     textColor: "text-primary",
@@ -56,7 +56,7 @@ export const HOW_IT_WORKS_STEPS = [
   {
     step: 2,
     title: "Choose Level",
-    description: "Pick Beginner, Intermediate, or Advanced difficulty",
+    description: "Start with Beginner, Intermediate, or Advanced based on your current ability",
     icon: "BarChart3" as const,
     color: "bg-chart-3",
     textColor: "text-chart-3",
@@ -64,7 +64,7 @@ export const HOW_IT_WORKS_STEPS = [
   {
     step: 3,
     title: "Interactive Lessons",
-    description: "Learn through engaging, step-by-step lessons",
+    description: "Engage with dynamic lessons designed to make learning enjoyable and effective",
     icon: "PlayCircle" as const,
     color: "bg-chart-1",
     textColor: "text-chart-1",
@@ -72,7 +72,7 @@ export const HOW_IT_WORKS_STEPS = [
   {
     step: 4,
     title: "Practice Exercises",
-    description: "Reinforce learning with hands-on practice activities",
+    description: "Apply what you've learned through interactive exercises and track your progress",
     icon: "CheckCircle" as const,
     color: "bg-chart-4",
     textColor: "text-chart-4",

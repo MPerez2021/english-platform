@@ -33,12 +33,11 @@ export function HowItWorksSection() {
               <div className="absolute top-0 left-0 w-full h-1 bg-border"></div>
               {/* Step Points */}
               <div className="flex justify-around">
-                {HOW_IT_WORKS_STEPS.map((step, index) => {
-                  const colorClass = stepColors[index]
+                {HOW_IT_WORKS_STEPS.map((step) => {
                   return (
                     <div key={step.step} className="relative flex flex-col items-center">
                       {/* Large Step Number */}
-                      <div className={`w-16 h-16 bg-${colorClass} text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg mb-8 -mt-8`}>
+                      <div className={`w-16 h-16 ${step.color} text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-lg mb-8 -mt-8`}>
                         {step.step}
                       </div>
                     </div>
@@ -48,14 +47,13 @@ export function HowItWorksSection() {
             </div>
             {/* Step Content Blocks */}
             <div className="grid grid-cols-4 gap-8">
-              {HOW_IT_WORKS_STEPS.map((step, index) => {
+              {HOW_IT_WORKS_STEPS.map((step) => {
                 const IconComponent = iconMap[step.icon]
-                const colorClass = stepColors[index]
                 return (
                   <div key={step.step} className="border-l-4 border border-t-transparent border-b-transparent border-r-transparent pl-6">
                     {/* Fixed Height Title Container */}
                     <div className="h-20 flex items-center mb-6">
-                      <IconComponent className={`h-8 w-8 text-${colorClass} mr-3 flex-shrink-0`} />
+                      <IconComponent className={`h-8 w-8 ${step.textColor} mr-3 flex-shrink-0`} />
                       <h3 className="text-2xl font-bold text-foreground leading-tight">
                         {step.title}
                       </h3>
@@ -82,7 +80,7 @@ export function HowItWorksSection() {
                   <div className="flex items-start">
                     {/* Step Number & Icon */}
                     <div className="flex flex-col items-center mr-6">
-                      <div className={`w-14 h-14 bg-${colorClass} text-white rounded-full flex items-center justify-center text-xl font-bold shadow-lg`}>
+                      <div className={`w-14 h-14 ${step.color} text-white rounded-full flex items-center justify-center text-xl font-bold shadow-lg`}>
                         {step.step}
                       </div>
                       {!isLastStep && (
@@ -94,7 +92,7 @@ export function HowItWorksSection() {
                     <div className="flex-1">
                       {/* Fixed Height Title Container for Mobile */}
                       <div className="h-16 flex items-center mb-4">
-                        <IconComponent className={`h-6 w-6 text-${colorClass} mr-3 flex-shrink-0`} />
+                        <IconComponent className={`h-6 w-6 ${step.textColor} mr-3 flex-shrink-0`} />
                         <h3 className="text-xl font-bold text-foreground leading-tight">
                           {step.title}
                         </h3>

@@ -27,20 +27,27 @@ export function HowItWorksSection() {
             Simple steps to get you started on your English learning journey
           </p>
         </div>
+
         {/* Steps Grid */}
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {HOW_IT_WORKS_STEPS.map((step) => {
+            {HOW_IT_WORKS_STEPS.map((step, index) => {
               const IconComponent = iconMap[step.icon];
               return (
                 <div
                   key={step.step}
-                  className="text-center group hover:shadow-sm transition-all duration-300 p-4 rounded-sm"
+                  className="text-center group hover:shadow-sm transition-all duration-300 p-4 rounded-sm relative"
                 >
-                  {/* Icon Container */}
+                  {/* Icon Container with Corner Number */}
                   <div className="mb-6 flex justify-center">
-                    <div className="w-16 h-16 bg-primary/5 rounded-sm flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_4px_6px_-1px_oklch(0.5393_0.2713_286.7462_/_0.2)]">
+                    <div className="w-16 h-16 bg-primary/5 rounded-sm flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_4px_6px_-1px_oklch(0.5393_0.2713_286.7462_/_0.2)] relative">
                       <IconComponent className="h-8 w-8 text-primary" />
+                      {/* Step Number Badge */}
+                      <div className="absolute -top-2 -right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center border-2 border-background">
+                        <span className="text-primary-foreground text-xs font-semibold">
+                          {index + 1}
+                        </span>
+                      </div>
                     </div>
                   </div>
                   {/* Content */}

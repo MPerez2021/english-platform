@@ -21,7 +21,7 @@ export function HowItWorksSection() {
         {/* Headline */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Let&apos;s See How it Works
+            How it Works?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Simple steps to get you started on your English learning journey

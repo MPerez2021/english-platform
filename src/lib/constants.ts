@@ -20,6 +20,7 @@ export const TOPICS = [
     description: "Build your word knowledge with interactive exercises and contextual learning.",
     summary: "Practice word meanings, context usage, and synonyms",
       icon: "BookOpen" as const,
+    image: "/images/topics/vocabulary.webp",
   },
   {
     id: "grammar",
@@ -27,6 +28,7 @@ export const TOPICS = [
     description: "Master English grammar rules through practical examples and engaging activities.",
     summary: "Master tense practice, error correction, and sentence building",
     icon: "PenTool" as const,
+    image: "/images/topics/grammar.webp",
   },
   {
     id: "reading",
@@ -34,6 +36,7 @@ export const TOPICS = [
     description: "Improve comprehension skills with diverse texts and guided reading exercises.",
     summary: "Develop comprehension, speed reading, and analysis skills",
     icon: "FileText" as const,
+    image: "/images/topics/reading.webp",
   },
   {
     id: "writing",
@@ -41,6 +44,7 @@ export const TOPICS = [
     description: "Develop writing skills from sentences to essays with structured guidance.",
     summary: "Improve essay writing, grammar, and style techniques",
     icon: "Edit3" as const,
+    image: "/images/topics/writing.webp",
   },
 ] as const
 

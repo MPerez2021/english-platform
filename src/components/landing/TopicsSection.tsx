@@ -16,25 +16,6 @@ export function TopicsSection() {
             Comprehensive learning paths designed to improve every aspect of
             your English proficiency
           </p>
-
-          {/* Feature Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
-            <span className="px-3 py-1.5 bg-muted/50 text-muted-foreground rounded-full border border-border hover:bg-muted/70 transition-colors duration-200 cursor-default">
-              500+ Exercises
-            </span>
-            <span className="px-3 py-1.5 bg-muted/50 text-muted-foreground rounded-full border border-border hover:bg-muted/70 transition-colors duration-200 cursor-default">
-              4 Core Skills
-            </span>
-            <span className="px-3 py-1.5 bg-muted/50 text-muted-foreground rounded-full border border-border hover:bg-muted/70 transition-colors duration-200 cursor-default">
-              Self-Paced
-            </span>
-            <span className="px-3 py-1.5 bg-primary/10 text-primary rounded-full border border-primary/20 font-medium hover:bg-primary/15 transition-colors duration-200 cursor-default">
-              100% Free
-            </span>
-            <span className="px-3 py-1.5 bg-chart-1/10 text-chart-1 rounded-full border border-chart-1/20 font-medium hover:bg-chart-1/15 transition-colors duration-200 cursor-default">
-              All Levels
-            </span>
-          </div>
         </div>
 
         {/* Topics Grid */}
@@ -47,9 +28,7 @@ export function TopicsSection() {
               reading: { style: 'Immersive', approach: 'Text Analysis', color: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800' },
               writing: { style: 'Creative', approach: 'Guided Practice', color: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800' },
             };
-            
             const info = topicInfo[topic.id as keyof typeof topicInfo];
-            
             return (
               <div
                 key={topic.id}
@@ -65,14 +44,14 @@ export function TopicsSection() {
                     placeholder="blur"
                     blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                   />
-                  
+
                   {/* Topic Badge */}
                   <div className="absolute top-3 left-3">
                     <span className={`px-2 py-1 text-xs font-medium rounded-full border ${info.color}`}>
                       {info.style}
                     </span>
                   </div>
-                  
+
                   {/* Gradient Overlay for better text contrast */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
@@ -92,8 +71,8 @@ export function TopicsSection() {
                     {topic.description}
                   </p>
 
-                  <a 
-                    href="#" 
+                  <a
+                    href="#"
                     className="group/link inline-flex items-center text-sm font-bold text-primary hover:text-primary/80 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 rounded-sm"
                     tabIndex={0}
                     role="button"

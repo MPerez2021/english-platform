@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export function HeroSection() {
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-br min-h-screen">
+    <section className="py-20 md:py-32 flex flex-col justify-center items-center bg-gradient-to-br min-h-screen">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}

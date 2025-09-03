@@ -32,7 +32,7 @@ export function TopicsSection() {
             return (
               <div
                 key={topic.id}
-                className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 hover:border-muted-foreground/40 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50"
+                className="group bg-card shadow-sm rounded-lg overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 hover:border-muted-foreground/40 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50"
               >
                 {/* Image Container */}
                 <div className="relative aspect-[4/3] bg-muted/30 overflow-hidden">

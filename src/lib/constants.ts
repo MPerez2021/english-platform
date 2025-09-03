@@ -115,3 +115,70 @@ export const BENEFITS = [
     icon: "Smartphone" as const,
   },
 ] as const
+
+export const FAQ_ITEMS = [
+  {
+    category: "Getting Started",
+    questions: [
+      {
+        question: "Is this platform really 100% free?",
+        answer: "Yes! Our core English learning content is completely free with no hidden costs, ads, or subscription requirements. You can access vocabulary, grammar, reading, and writing exercises without creating an account or providing payment information."
+      },
+      {
+        question: "Do I need to create an account to start learning?",
+        answer: "No account required! You can immediately start using all our interactive exercises, self-paced lessons, and practice materials. Simply visit our website and begin learning right away."
+      },
+      {
+        question: "What English levels do you support?",
+        answer: "Our platform caters to all proficiency levels, from complete beginners to advanced learners. Our content is designed to help you progress naturally through different difficulty levels."
+      },
+      {
+        question: "What devices can I use to access the platform?",
+        answer: "Our platform works seamlessly on any web browser and is fully optimized for mobile devices. You can learn on your computer, tablet, or smartphone, wherever and whenever it's convenient for you."
+      }
+    ]
+  },
+  {
+    category: "Learning Content", 
+    questions: [
+      {
+        question: "What types of English skills can I improve?",
+        answer: "Our platform focuses on four core areas: Vocabulary (build and expand your word knowledge), Grammar (master English grammar rules and usage), Reading (improve comprehension and reading speed), and Writing (develop your written communication skills)."
+      },
+      {
+        question: "What learning formats do you offer?",
+        answer: "We offer interactive exercises for hands-on practice, self-paced lessons you can complete at your own speed, and educational resources for additional learning support. All content is accessible whenever you want to dive deeper into any topic."
+      },
+      {
+        question: "Can I track my learning progress?",
+        answer: "Currently, progress tracking isn't available since no account is required. However, we're planning to introduce comprehensive progress tracking and additional features in future updates."
+      }
+    ]
+  },
+  {
+    category: "Future Features",
+    questions: [
+      {
+        question: "Will the platform always be free?",
+        answer: "Our core learning content will remain free forever. We're committed to providing accessible English education to everyone. In the future, we plan to add premium AI-powered features through an optional subscription system, but all current content will stay free."
+      },
+      {
+        question: "What premium features are you planning?",
+        answer: "We're developing AI-enhanced features that will provide personalized learning experiences, advanced feedback, and smart recommendations. These premium features will require a subscription, but all existing free content will remain available to everyone."
+      }
+    ]
+  },
+  {
+    category: "Community & Support",
+    questions: [
+      {
+        question: "Do you have a learning community?",
+        answer: "We're launching a Discord community where learners can connect, practice together, and support each other's learning journey. Stay tuned for updates!"
+      },
+      {
+        question: "How can I get help or suggest improvements?",
+        answer: "Contact us through our support channels. Once our Discord community launches, it will be another great place to get help and share feedback with fellow learners and our team."
+      }
+    ]
+  }
+] as const

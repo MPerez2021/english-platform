@@ -72,13 +72,13 @@ export function TopicsSection() {
                   </p>
 
                   <a
-                    href="#"
+                    href={`/${topic.id}`}
                     className="group/link inline-flex items-center text-sm font-bold text-primary hover:text-primary/80 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 rounded-sm"
                     tabIndex={0}
                     role="button"
-                    aria-label={`Learn more about ${topic.name}`}
+                    aria-label={`Start learning ${topic.name}`}
                   >
-                    Read More
+                    Learn
                     <ArrowUpRight className="h-4 w-4 ml-2 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform duration-200" />
                   </a>
                 </div>

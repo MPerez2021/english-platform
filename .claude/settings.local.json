@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Read(/C:\\Projects\\english-platform\\src\\app/**)",
+      "Read(/C:\\Projects\\english-platform/**)",
+      "Read(/C:\\Projects\\english-platform\\src\\components\\ui/**)"
     ],
     "deny": [],
     "ask": []

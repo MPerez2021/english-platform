@@ -16,10 +16,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
   SidebarHeader,
 } from "@/components/ui/sidebar"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   params: { topic: string };
@@ -30,7 +33,6 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
   // Ensure params.topic is a string and exists in TOPIC_DATA
   const topic = params.topic as TopicType;
   const topicData = TOPIC_DATA[topic];
-  const router = useRouter();
   const searchParams = useSearchParams();
   const selectedSubcategory = searchParams.get("subcategory");
   // Add error handling for undefined topicData
@@ -78,17 +80,17 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
               </SidebarGroupLabel>
               <CollapsibleContent>
                 <SidebarGroupContent>
-                  <SidebarMenu>
+                  <SidebarMenuSub>
                     {item.subcategories.map((subcategory) => (
-                      <SidebarMenuItem key={subcategory.id}>
-                        <SidebarMenuButton asChild isActive={subcategory.id === selectedSubcategory}>
+                      <SidebarMenuSubItem key={subcategory.id}>
+                        <SidebarMenuSubButton asChild isActive={subcategory.id === selectedSubcategory}>
                           {/* <a href={item.url}>{item.name}</a> */}
                           <Link href={`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`}>{subcategory.name}</Link>
                           {/* <a onClick={() => router.push(`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`)}>{subcategory.name}</a> */}
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
                     ))}
-                  </SidebarMenu>
+                  </SidebarMenuSub>
                 </SidebarGroupContent>
               </CollapsibleContent>
             </SidebarGroup>

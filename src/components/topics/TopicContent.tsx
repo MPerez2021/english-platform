@@ -132,7 +132,7 @@ export function TopicContent({
       {/* Header */}
 
       {/* Content */}
-      <div className="flex-1 p-6">
+      <div className="flex-1 lg:p-6">
         {/* Content Header */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-foreground mb-2">
@@ -166,13 +166,13 @@ export function TopicContent({
 
         {/* Exercises Grid */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-4">
           {filteredExercises.map((exercise) => (
             <Card
               key={exercise.id}
               className="group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-border/50 hover:border-primary/20"
             >
-              <CardHeader className="pb-3">
+              <CardHeader className="pb-2">
                 <div className="flex items-start justify-between mb-2">
                   <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
                     {exercise.title}
@@ -197,7 +197,7 @@ export function TopicContent({
 
               <CardContent>
                 {/* Exercise Meta Information */}
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3 text-xs text-muted-foreground">
                     <div className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
@@ -216,15 +216,14 @@ export function TopicContent({
                 </div>
 
                 {/* Exercise Image Placeholder */}
-                <div className="aspect-video bg-muted/30 rounded-md mb-4 flex items-center justify-center group-hover:bg-muted/50 transition-colors">
-                  <div className="text-center">
-                    <Image
-                      src="/images/topics/grammar.webp"
-                      width={500}
-                      height={500}
-                      alt="Picture of the author"
-                    />
-                  </div>
+                <div className="aspect-[4/3] bg-muted/30 rounded-md mb-3 flex items-center justify-center group-hover:bg-muted/50 transition-colors overflow-hidden">
+                  <Image
+                    src="/images/topics/grammar.webp"
+                    width={300}
+                    height={225}
+                    alt="Grammar exercise illustration"
+                    className="object-cover w-full h-full"
+                  />
                 </div>
 
                 {/* Action Button */}

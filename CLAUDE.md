@@ -227,9 +227,8 @@ Always run these commands after completing tasks:
 
 1. `npm run lint` - Code quality check
 2. `npm run build` - Production build verification
-3. `npm run dev` - Only use this command if the dev server is not running. Start development application
-4. Type check validation
-5. Manual testing across breakpoints
+3. Type check validation
+4. Manual testing across breakpoints
 
 ### Manual Testing Checklist
 

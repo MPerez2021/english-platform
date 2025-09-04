@@ -1,253 +1,101 @@
 "use client"
-
-import { useState } from "react"
-import { ChevronDown, ChevronRight, BookOpen, GraduationCap } from "lucide-react"
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarGroup, 
-  SidebarGroupContent, 
+import * as React from "react"
+import { ChevronRight } from "lucide-react"
+import { TOPIC_DATA, TopicType } from "@/lib/topic-data"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuItem
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  SidebarHeader,
 } from "@/components/ui/sidebar"
-import { 
-  Collapsible, 
-  CollapsibleContent, 
-  CollapsibleTrigger 
-} from "@/components/ui/collapsible"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
-import { type TopicData, type Level, LEVELS } from "@/lib/topic-data"
+import { useRouter, useSearchParams } from "next/navigation"
+import Link from "next/link"
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
+  params: { topic: string };
+};
 
-interface TopicSidebarProps {
-  topicData: TopicData
-  selectedLevel: Level | null
-  selectedCategory: string | null
-  selectedSubcategory: string | null
-  onLevelChange: (level: Level | null) => void
-  onCategoryChange: (category: string | null) => void
-  onSubcategoryChange: (subcategory: string | null) => void
-}
 
-export function TopicSidebar({
-  topicData,
-  selectedLevel,
-  selectedCategory,
-  selectedSubcategory,
-  onLevelChange,
-  onCategoryChange,
-  onSubcategoryChange,
-}: TopicSidebarProps) {
-  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set())
-
-  const toggleCategory = (categoryId: string) => {
-    const newOpenCategories = new Set(openCategories)
-    if (newOpenCategories.has(categoryId)) {
-      newOpenCategories.delete(categoryId)
-    } else {
-      newOpenCategories.add(categoryId)
-    }
-    setOpenCategories(newOpenCategories)
+export function AppSidebar({ params, ...props }: AppSidebarProps) {
+  // Ensure params.topic is a string and exists in TOPIC_DATA
+  const topic = params.topic as TopicType;
+  const topicData = TOPIC_DATA[topic];
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const selectedSubcategory = searchParams.get("subcategory");
+  // Add error handling for undefined topicData
+  if (!topicData) {
+    console.error(`No topic data found for topic: ${topic}`);
+    console.error("Available topics:", Object.keys(TOPIC_DATA));
+    return (
+      <Sidebar {...props} className="pt-16">
+        <SidebarContent>
+          <div className="p-4 text-red-500">
+            Error: Topic &quot;{topic}&quot; not found
+          </div>
+        </SidebarContent>
+      </Sidebar>
+    );
   }
 
-  const handleCategoryClick = (categoryId: string) => {
-    if (selectedCategory === categoryId) {
-      onCategoryChange(null)
-      onSubcategoryChange(null)
-    } else {
-      onCategoryChange(categoryId)
-      onSubcategoryChange(null)
-      toggleCategory(categoryId)
-    }
-  }
-
-  const handleSubcategoryClick = (subcategoryId: string) => {
-    if (selectedSubcategory === subcategoryId) {
-      onSubcategoryChange(null)
-    } else {
-      onSubcategoryChange(subcategoryId)
-    }
-  }
-
-  const handleLevelClick = (level: Level) => {
-    if (selectedLevel === level) {
-      onLevelChange(null)
-    } else {
-      onLevelChange(level)
-    }
-  }
 
   return (
-    <Sidebar className="w-80 border-r bg-background">
-      <SidebarContent className="p-4">
-        {/* Topic Header */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-foreground flex items-center gap-2 mb-2">
-            <BookOpen className="h-5 w-5" />
-            {topicData.name}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {topicData.description}
-          </p>
-        </div>
-
-        {/* Level Filter */}
+    <Sidebar {...props} className="pt-16">
+      <SidebarHeader>
+        <SidebarGroupLabel className="text-sidebar-foreground text-lg font-bold">{topicData.name}</SidebarGroupLabel>
+      </SidebarHeader>
+      <SidebarContent className="gap-0">
         <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">
-            <GraduationCap className="h-4 w-4" />
-            Proficiency Level
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <div className="grid grid-cols-3 gap-2">
-              {LEVELS.map((level) => (
-                <Button
-                  key={level}
-                  variant={selectedLevel === level ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => handleLevelClick(level)}
-                  className={cn(
-                    "h-8 text-xs font-medium",
-                    selectedLevel === level && "bg-primary text-primary-foreground"
-                  )}
-                >
-                  {level}
-                </Button>
-              ))}
-            </div>
-          </SidebarGroupContent>
+          <SidebarGroupLabel>Table of Contents</SidebarGroupLabel>
         </SidebarGroup>
-
-        {/* Categories */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Categories</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {topicData.categories.map((category) => {
-                const isOpen = openCategories.has(category.id)
-                const isSelected = selectedCategory === category.id
-                
-                return (
-                  <Collapsible
-                    key={category.id}
-                    open={isOpen}
-                    onOpenChange={() => toggleCategory(category.id)}
-                  >
-                    <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className={cn(
-                            "w-full justify-between gap-3 px-3 py-2 h-auto font-medium group",
-                            isSelected && "bg-accent text-accent-foreground"
-                          )}
-                          onClick={() => handleCategoryClick(category.id)}
-                        >
-                          <span className="flex items-center gap-2">
-                            <span className="font-medium">{category.name}</span>
-                            <Badge variant="secondary" className="text-xs">
-                              {category.subcategories.length}
-                            </Badge>
-                          </span>
-                          {isOpen ? (
-                            <ChevronDown className="h-4 w-4 transition-transform" />
-                          ) : (
-                            <ChevronRight className="h-4 w-4 transition-transform" />
-                          )}
-                        </Button>
-                      </CollapsibleTrigger>
-                      
-                      <CollapsibleContent className="mt-1">
-                        <div className="ml-4 space-y-1">
-                          {category.subcategories.map((subcategory) => {
-                            const isSubSelected = selectedSubcategory === subcategory.id
-                            
-                            return (
-                              <Button
-                                key={subcategory.id}
-                                variant={isSubSelected ? "secondary" : "ghost"}
-                                size="sm"
-                                className={cn(
-                                  "w-full justify-start h-8 px-3 font-normal",
-                                  isSubSelected && "bg-secondary text-secondary-foreground"
-                                )}
-                                onClick={() => handleSubcategoryClick(subcategory.id)}
-                              >
-                                <span className="flex items-center justify-between w-full">
-                                  <span className="text-sm">{subcategory.name}</span>
-                                  <Badge variant="outline" className="text-xs ml-2">
-                                    {subcategory.exercises.length}
-                                  </Badge>
-                                </span>
-                              </Button>
-                            )
-                          })}
-                        </div>
-                      </CollapsibleContent>
-                    </SidebarMenuItem>
-                  </Collapsible>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Filter Summary */}
-        {(selectedLevel || selectedCategory || selectedSubcategory) && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Active Filters</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <div className="space-y-2">
-                {selectedLevel && (
-                  <Badge 
-                    variant="default" 
-                    className="text-xs cursor-pointer"
-                    onClick={() => onLevelChange(null)}
-                  >
-                    Level: {selectedLevel} ✕
-                  </Badge>
-                )}
-                {selectedCategory && (
-                  <Badge 
-                    variant="secondary" 
-                    className="text-xs cursor-pointer"
-                    onClick={() => {
-                      onCategoryChange(null)
-                      onSubcategoryChange(null)
-                    }}
-                  >
-                    {topicData.categories.find(c => c.id === selectedCategory)?.name} ✕
-                  </Badge>
-                )}
-                {selectedSubcategory && (
-                  <Badge 
-                    variant="outline" 
-                    className="text-xs cursor-pointer"
-                    onClick={() => onSubcategoryChange(null)}
-                  >
-                    {topicData.categories
-                      .find(c => c.id === selectedCategory)
-                      ?.subcategories.find(s => s.id === selectedSubcategory)?.name} ✕
-                  </Badge>
-                )}
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-full text-xs mt-2"
-                onClick={() => {
-                  onLevelChange(null)
-                  onCategoryChange(null)
-                  onSubcategoryChange(null)
-                }}
+        {/* We create a collapsible SidebarGroup for each parent. */}
+        {topicData.categories.map((item) => (
+          <Collapsible
+            key={item.id}
+            title={item.name}
+            defaultOpen
+            className="group/collapsible"
+          >
+            <SidebarGroup>
+              <SidebarGroupLabel
+                asChild
+                className="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sm"
               >
-                Clear All Filters
-              </Button>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+                <CollapsibleTrigger>
+                  {item.name}{" "}
+                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                </CollapsibleTrigger>
+              </SidebarGroupLabel>
+              <CollapsibleContent>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {item.subcategories.map((subcategory) => (
+                      <SidebarMenuItem key={subcategory.id}>
+                        <SidebarMenuButton asChild isActive={subcategory.id === selectedSubcategory}>
+                          {/* <a href={item.url}>{item.name}</a> */}
+                          <Link href={`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`}>{subcategory.name}</Link>
+                          {/* <a onClick={() => router.push(`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`)}>{subcategory.name}</a> */}
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </CollapsibleContent>
+            </SidebarGroup>
+          </Collapsible>
+        ))}
       </SidebarContent>
+      <SidebarRail />
     </Sidebar>
   )
 }

@@ -1,7 +1,4 @@
 "use client"
-import * as React from "react"
-import { ChevronRight } from "lucide-react"
-import { TOPIC_DATA, TopicType } from "@/lib/topic-data"
 import {
   Collapsible,
   CollapsibleContent,
@@ -13,17 +10,17 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarHeader,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarRail,
-  SidebarHeader,
+  SidebarRail
 } from "@/components/ui/sidebar"
-import { useSearchParams } from "next/navigation"
+import { TOPIC_DATA, TopicType } from "@/lib/topic-data"
+import { ChevronRight } from "lucide-react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import * as React from "react"
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   params: { topic: string };
 };

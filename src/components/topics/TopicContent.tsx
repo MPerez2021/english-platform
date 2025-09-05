@@ -180,9 +180,9 @@ export function TopicContent({
                 </div>
 
                 {/* Action Button - Full width, minimal, pushed to bottom */}
-                <Button 
-                  variant="outline" 
-                  className="w-full border-border/50 hover:bg-accent/5 hover:border-accent/30 mt-auto"
+                <Button
+                  variant="outline"
+                  className="cursor-pointer w-full border-border/50 hover:bg-accent/5 hover:border-accent/30 hover:text-primary mx-auto"
                 >
                   <Play className="h-4 w-4 mr-2" />
                   Start Exercise

@@ -1,22 +1,16 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   type Exercise,
   getExercisesByCategory,
   getExercisesBySubcategory,
-  type Level,
   type TopicData
 } from "@/lib/topic-data";
-import { cn } from "@/lib/utils";
 import { BookOpen, Clock, Play } from "lucide-react";
 import Image from "next/image";
 interface TopicContentProps {
@@ -62,28 +56,6 @@ export function TopicContent({
 
   const filteredExercises = getFilteredExercises();
 
-  const getDifficultyColor = (difficulty: Exercise["difficulty"]) => {
-    switch (difficulty) {
-      case "Easy":
-        return "bg-green-100 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800";
-      case "Medium":
-        return "bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-300 dark:border-yellow-800";
-      case "Hard":
-        return "bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800";
-    }
-  };
-
-  const getLevelColor = (level: Level) => {
-    const colors = {
-      A1: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800",
-      A2: "bg-indigo-100 text-indigo-700 border-indigo-200 dark:bg-indigo-950 dark:text-indigo-300 dark:border-indigo-800",
-      B1: "bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-950 dark:text-purple-300 dark:border-purple-800",
-      B2: "bg-pink-100 text-pink-700 border-pink-200 dark:bg-pink-950 dark:text-pink-300 dark:border-pink-800",
-      C1: "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:border-orange-800",
-      C2: "bg-red-100 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800",
-    };
-    return colors[level];
-  };
 
   const getContentTitle = () => {
     if (selectedSubcategory && selectedCategory) {
@@ -166,68 +138,52 @@ export function TopicContent({
 
         {/* Exercises Grid */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-6">
           {filteredExercises.map((exercise) => (
             <Card
               key={exercise.id}
-              className="group hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border-border/50 hover:border-primary/20"
+              className="group hover:shadow-sm transition-shadow duration-200 border border-border/40 bg-card/50 h-full"
             >
-              <CardHeader className="pb-2">
-                <div className="flex items-start justify-between mb-2">
-                  <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
-                    {exercise.title}
-                  </CardTitle>
-                  <div className="flex items-center gap-1 ml-2">
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        "text-xs border",
-                        getLevelColor(exercise.level)
-                      )}
-                    >
-                      {exercise.level}
-                    </Badge>
-                  </div>
-                </div>
-
-                <CardDescription className="text-sm leading-relaxed">
-                  {exercise.description}
-                </CardDescription>
-              </CardHeader>
-
-              <CardContent>
-                {/* Exercise Meta Information */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {exercise.estimatedTime}
-                    </div>
-                  </div>
-                  <Badge
-                    variant="secondary"
-                    className={cn(
-                      "text-xs border",
-                      getDifficultyColor(exercise.difficulty)
-                    )}
-                  >
-                    {exercise.difficulty}
-                  </Badge>
-                </div>
-
-                {/* Exercise Image Placeholder */}
-                <div className="aspect-[4/3] bg-muted/30 rounded-md mb-3 flex items-center justify-center group-hover:bg-muted/50 transition-colors overflow-hidden">
+              <CardContent className="p-6 h-full flex flex-col">
+                {/* Exercise Image - Smaller and at top */}
+                <div className="aspect-[16/9] bg-muted/20 rounded-lg mb-4 overflow-hidden">
                   <Image
                     src="/images/topics/grammar.webp"
-                    width={300}
-                    height={225}
-                    alt="Grammar exercise illustration"
-                    className="object-cover w-full h-full"
+                    width={320}
+                    height={180}
+                    alt="Exercise illustration"
+                    className="object-cover w-full h-full opacity-80"
                   />
                 </div>
 
-                {/* Action Button */}
-                <Button variant="outline">
+                {/* Exercise Title */}
+                <h3 className="text-xl font-semibold text-foreground mb-2 leading-tight">
+                  {exercise.title}
+                </h3>
+
+                {/* Exercise Description - Flexible height */}
+                <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2 flex-1">
+                  {exercise.description}
+                </p>
+
+                {/* Exercise Meta - Simplified single line */}
+                <div className="flex items-center justify-between text-xs text-muted-foreground mb-6">
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
+                    <span>{exercise.estimatedTime}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{exercise.level}</span>
+                    <span className="w-1 h-1 bg-muted-foreground rounded-full"></span>
+                    <span>{exercise.difficulty}</span>
+                  </div>
+                </div>
+
+                {/* Action Button - Full width, minimal, pushed to bottom */}
+                <Button 
+                  variant="outline" 
+                  className="w-full border-border/50 hover:bg-accent/5 hover:border-accent/30 mt-auto"
+                >
                   <Play className="h-4 w-4 mr-2" />
                   Start Exercise
                 </Button>

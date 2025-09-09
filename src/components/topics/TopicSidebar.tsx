@@ -51,7 +51,7 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
   return (
     <Sidebar {...props} className="pt-16">
       <SidebarHeader>
-        <h2 className="text-sidebar-foreground text-lg font-bold">{topicData.name}</h2>
+        <h2 className="text-sidebar-foreground text-lg font-bold px-2">{topicData.name}</h2>
       </SidebarHeader>
       <SidebarContent className="gap-0">
         <SidebarGroup>

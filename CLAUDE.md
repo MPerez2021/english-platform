@@ -32,6 +32,7 @@ Create a free, high-quality English learning platform providing structured pract
 
 - ✅ Add elements only when they improve UX/functionality
 - ✅ Use Context7 MCP for up-to-date library documentation
+- ✅ Use Shadcn MCP for components and documentation
 - ❌ Never add decorative elements without purpose
 - ❌ Never deviate from established design patterns
 

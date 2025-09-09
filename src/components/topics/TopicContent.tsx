@@ -107,21 +107,28 @@ export function TopicContent({
       <div className="flex-1 lg:p-6">
         {/* Content Header */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-foreground mb-2">
+          <h1 className="text-2xl font-semibold text-foreground mb-2">
             {getContentTitle()}
-          </h2>
+          </h1>
           <p className="text-muted-foreground mb-4">
             {getContentDescription()}
           </p>
           {/* Stats */}
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <BookOpen className="h-4 w-4" />
-              <span>{filteredExercises.length} exercises</span>
+          <div className="flex items-center gap-6 text-sm text-muted-foreground" role="list" aria-label="Exercise statistics">
+            <div className="flex items-center gap-2" role="listitem">
+              <BookOpen className="h-4 w-4" aria-hidden="true" />
+              <span aria-label={`${filteredExercises.length} exercises available`}>{filteredExercises.length} exercises</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              <span>
+            <div className="flex items-center gap-2" role="listitem">
+              <Clock className="h-4 w-4" aria-hidden="true" />
+              <span aria-label={`Average time per exercise is ${Math.round(
+                  filteredExercises.reduce(
+                    (total, exercise) =>
+                      total +
+                      parseInt(exercise.estimatedTime.replace(" min", "")),
+                    0
+                  ) / filteredExercises.length
+                )} minutes`}>
                 {Math.round(
                   filteredExercises.reduce(
                     (total, exercise) =>
@@ -138,11 +145,12 @@ export function TopicContent({
 
         {/* Exercises Grid */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-6" role="list" aria-label="Available exercises">
           {filteredExercises.map((exercise) => (
             <Card
               key={exercise.id}
               className="group hover:shadow-sm transition-shadow duration-200 border border-border/40 bg-card/50 h-full"
+              role="listitem"
             >
               <CardContent className="p-6 h-full flex flex-col">
                 {/* Exercise Image - Smaller and at top */}
@@ -157,9 +165,9 @@ export function TopicContent({
                 </div>
 
                 {/* Exercise Title */}
-                <h3 className="text-xl font-semibold text-foreground mb-2 leading-tight">
+                <h2 className="text-xl font-semibold text-foreground mb-2 leading-tight">
                   {exercise.title}
-                </h3>
+                </h2>
 
                 {/* Exercise Description - Flexible height */}
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2 flex-1">
@@ -167,15 +175,15 @@ export function TopicContent({
                 </p>
 
                 {/* Exercise Meta - Simplified single line */}
-                <div className="flex items-center justify-between text-xs text-muted-foreground mb-6">
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    <span>{exercise.estimatedTime}</span>
+                <div className="flex items-center justify-between text-xs text-muted-foreground mb-6" role="list" aria-label="Exercise details">
+                  <div className="flex items-center gap-1" role="listitem">
+                    <Clock className="h-3 w-3" aria-hidden="true" />
+                    <span aria-label={`Estimated time: ${exercise.estimatedTime}`}>{exercise.estimatedTime}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{exercise.level}</span>
-                    <span className="w-1 h-1 bg-muted-foreground rounded-full"></span>
-                    <span>{exercise.difficulty}</span>
+                  <div className="flex items-center gap-2" role="listitem">
+                    <span className="font-medium" aria-label={`Proficiency level: ${exercise.level}`}>{exercise.level}</span>
+                    <span className="w-1 h-1 bg-muted-foreground rounded-full" aria-hidden="true"></span>
+                    <span aria-label={`Difficulty: ${exercise.difficulty}`}>{exercise.difficulty}</span>
                   </div>
                 </div>
 
@@ -183,8 +191,9 @@ export function TopicContent({
                 <Button
                   variant="outline"
                   className="cursor-pointer w-full border-border/50 hover:bg-accent/5 hover:border-accent/30 hover:text-primary mx-auto"
+                  aria-label={`Start ${exercise.title} exercise - ${exercise.description}`}
                 >
-                  <Play className="h-4 w-4 mr-2" />
+                  <Play className="h-4 w-4 mr-2" aria-hidden="true" />
                   Start Exercise
                 </Button>
               </CardContent>

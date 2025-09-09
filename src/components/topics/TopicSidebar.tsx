@@ -51,11 +51,11 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
   return (
     <Sidebar {...props} className="pt-16">
       <SidebarHeader>
-        <SidebarGroupLabel className="text-sidebar-foreground text-lg font-bold">{topicData.name}</SidebarGroupLabel>
+        <h2 className="text-sidebar-foreground text-lg font-bold">{topicData.name}</h2>
       </SidebarHeader>
       <SidebarContent className="gap-0">
         <SidebarGroup>
-          <SidebarGroupLabel>Table of Contents</SidebarGroupLabel>
+          <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sidebar-foreground group-data-[collapsible=icon]:hidden px-2 py-1.5">Table of Contents</h3>
         </SidebarGroup>
         {/* We create a collapsible SidebarGroup for each parent. */}
         {topicData.categories.map((item) => (
@@ -64,26 +64,33 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
             title={item.name}
             defaultOpen
             className="group/collapsible"
+            aria-label={`${item.name} category`}
           >
             <SidebarGroup>
               <SidebarGroupLabel
                 asChild
                 className="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sm"
               >
-                <CollapsibleTrigger>
-                  {item.name}{" "}
-                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                <CollapsibleTrigger aria-label={`Toggle ${item.name} subcategories`}>
+                  <h4 className="text-sm font-medium">
+                    {item.name}
+                  </h4>
+                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" aria-hidden="true" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
               <CollapsibleContent>
                 <SidebarGroupContent>
-                  <SidebarMenuSub>
+                  <SidebarMenuSub role="list" aria-label={`${item.name} subcategories`}>
                     {item.subcategories.map((subcategory) => (
-                      <SidebarMenuSubItem key={subcategory.id}>
+                      <SidebarMenuSubItem key={subcategory.id} role="listitem">
                         <SidebarMenuSubButton asChild isActive={subcategory.id === selectedSubcategory}>
-                          {/* <a href={item.url}>{item.name}</a> */}
-                          <Link href={`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`}>{subcategory.name}</Link>
-                          {/* <a onClick={() => router.push(`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`)}>{subcategory.name}</a> */}
+                          <Link 
+                            href={`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`}
+                            aria-label={`Go to ${subcategory.name} exercises in ${item.name}`}
+                            aria-current={subcategory.id === selectedSubcategory ? "page" : undefined}
+                          >
+                            {subcategory.name}
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

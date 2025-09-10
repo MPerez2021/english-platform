@@ -50,10 +50,10 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
 
   return (
     <Sidebar {...props} className="pt-16">
-      <SidebarHeader>
+      <SidebarHeader className="bg-background">
         <h2 className="text-sidebar-foreground text-lg font-bold px-2">{topicData.name}</h2>
       </SidebarHeader>
-      <SidebarContent className="gap-0">
+      <SidebarContent className="gap-0 bg-background">
         <SidebarGroup>
           <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sidebar-foreground group-data-[collapsible=icon]:hidden px-2 py-1.5">Table of Contents</h3>
         </SidebarGroup>
@@ -62,7 +62,7 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
           <Collapsible
             key={item.id}
             title={item.name}
-            defaultOpen
+            defaultOpen={false}
             className="group/collapsible"
             aria-label={`${item.name} category`}
           >
@@ -84,7 +84,7 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
                     {item.subcategories.map((subcategory) => (
                       <SidebarMenuSubItem key={subcategory.id} role="listitem">
                         <SidebarMenuSubButton asChild isActive={subcategory.id === selectedSubcategory}>
-                          <Link 
+                          <Link
                             href={`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`}
                             aria-label={`Go to ${subcategory.name} exercises in ${item.name}`}
                             aria-current={subcategory.id === selectedSubcategory ? "page" : undefined}

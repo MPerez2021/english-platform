@@ -152,9 +152,9 @@ export function TopicContent({
               className="group hover:shadow-sm transition-shadow duration-200 border border-border/40 bg-card/50 h-full"
               role="listitem"
             >
-              <CardContent className="p-6 h-full flex flex-col">
+              <CardContent className=" h-full flex flex-col">
                 {/* Exercise Image - Smaller and at top */}
-                <div className="aspect-[16/9] bg-muted/20 rounded-lg mb-4 overflow-hidden">
+                <div className="aspect-[16/9] bg-muted/20 rounded-sm mb-4 overflow-hidden">
                   <Image
                     src="/images/topics/grammar.webp"
                     width={320}

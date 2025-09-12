@@ -1,0 +1,137 @@
+"use client";
+
+import {
+    AudioWaveform,
+    BookOpen,
+    Bot,
+    Command,
+    Frame,
+    GalleryVerticalEnd,
+    LayoutDashboard,
+    Map,
+    PieChart,
+    Settings2,
+    SquareTerminal,
+} from "lucide-react";
+import * as React from "react";
+
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarRail
+} from "@/components/ui/sidebar";
+import { NavMain } from "./nav-main";
+
+// This is sample data.
+const data = {
+  navMain: [
+    {
+      title: "Topics",
+      url: "/dashboard/topics",
+      icon: SquareTerminal,
+      isActive: true,
+    },
+    {
+      title: "Categories",
+      url: "#",
+      icon: Bot,
+      subMenu: [
+        {
+          title: "Subcategories",
+          url: "#",
+        },
+        {
+          title: "Explorer",
+          url: "#",
+        },
+        {
+          title: "Quantum",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Subcategories",
+      url: "#",
+      icon: BookOpen,
+      subMenu: [
+        {
+          title: "Introduction",
+          url: "#",
+        },
+        {
+          title: "Get Started",
+          url: "#",
+        },
+        {
+          title: "Tutorials",
+          url: "#",
+        },
+        {
+          title: "Changelog",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Lessons",
+      url: "#",
+      icon: Settings2,
+      subMenu: [
+        {
+          title: "Examples",
+          url: "#",
+        },
+        {
+          title: "Images",
+          url: "#",
+        },
+        {
+          title: "Billing",
+          url: "#",
+        },
+        {
+          title: "Limits",
+          url: "#",
+        },
+      ],
+    },
+    {
+        title: "Exercises",
+        url: "#",
+        icon: Settings2,
+        subMenu: [
+          {
+            title: "Types",
+            url: "#",
+          },
+        ],
+      },
+  ],
+};
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  return (
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <SidebarMenuItem>
+          <SidebarMenuButton>
+            <LayoutDashboard />
+            <h2 className="text-sidebar-foreground text-lg font-bold px-2">
+              Dashboard
+            </h2>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={data.navMain} />
+      </SidebarContent>
+      <SidebarFooter>{/* <NavUser user={data.user} /> */}</SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
+  );
+}

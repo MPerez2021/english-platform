@@ -6,40 +6,54 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
+import { Category } from "@/lib/types/category.types";
 import { Topic } from "@/lib/types/topic.types";
 import { ColumnDef, ActionDef } from "@/lib/types/table.types";
-import { topicsService } from "@/lib/data/mock-topics";
+import { categoriesService } from "@/lib/data/mock-categories";
 import { Edit, Plus } from "lucide-react";
 
-interface TopicsTableProps {
-  initialTopics: Topic[];
+interface CategoriesTableProps {
+  initialCategories: Category[];
+  topics: Topic[];
 }
 
-export function TopicsTable({ initialTopics }: TopicsTableProps) {
-  const [topics, setTopics] = useState<Topic[]>(initialTopics);
+export function CategoriesTable({ initialCategories, topics }: CategoriesTableProps) {
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
 
-  const handleToggleActive = (topicId: number) => {
-    const updatedTopic = topicsService.toggleActive(topicId);
-    if (updatedTopic) {
-      setTopics(topicsService.getAll());
+  const handleToggleActive = (categoryId: number) => {
+    const updatedCategory = categoriesService.toggleActive(categoryId);
+    if (updatedCategory) {
+      setCategories(categoriesService.getAll());
     }
   };
 
-  const columns: ColumnDef<Topic>[] = [
+  const getTopicName = (topicId: number): string => {
+    const topic = topics.find(t => t.id === topicId);
+    return topic?.name || "Unknown Topic";
+  };
+
+  const columns: ColumnDef<Category>[] = [
     {
       key: "name",
       label: "Name",
       className: "font-medium",
     },
     {
+      key: "topic_id",
+      label: "Topic",
+      render: (value: unknown) => getTopicName(value as number),
+      className: "text-muted-foreground",
+    },
+    {
       key: "slug",
       label: "Slug",
+      responsive: "md:table-cell",
       className: "text-muted-foreground font-mono text-sm",
     },
     {
       key: "description",
       label: "Description",
-      responsive: "md:table-cell",
+      responsive: "lg:table-cell",
       className: "max-w-xs",
       render: (value: unknown) => (
         <div className="truncate" title={value as string}>
@@ -50,34 +64,34 @@ export function TopicsTable({ initialTopics }: TopicsTableProps) {
     {
       key: "display_order",
       label: "Order",
-      width: "w-24",
+      width: "w-20",
       className: "text-center",
     },
     {
       key: "is_active",
       label: "Status",
       width: "w-20",
-      render: (value: unknown, topic: Topic) => (
+      render: (value: unknown, category: Category) => (
         <Switch
           checked={value as boolean}
-          onCheckedChange={() => handleToggleActive(topic.id)}
-          aria-label={`Toggle ${topic.name} active status`}
+          onCheckedChange={() => handleToggleActive(category.id)}
+          aria-label={`Toggle ${category.name} active status`}
         />
       ),
     },
     {
       key: "created_at",
       label: "Created at",
-      responsive: "lg:table-cell",
+      responsive: "xl:table-cell",
       className: "text-sm text-muted-foreground",
     },
   ];
 
-  const actions: ActionDef<Topic>[] = [
+  const actions: ActionDef<Category>[] = [
     {
-      label: `Edit topic`,
+      label: "Edit category",
       icon: <Edit className="h-4 w-4" />,
-      href: (topic: Topic) => `/dashboard/topics/${topic.id}`,
+      href: (category: Category) => `/dashboard/categories/${category.id}`,
       variant: "ghost",
       size: "sm",
       className: "h-8 w-8 p-0",
@@ -87,20 +101,20 @@ export function TopicsTable({ initialTopics }: TopicsTableProps) {
   return (
     <Card>
       <CardHeader className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-0">
-        <CardTitle>Topics Management</CardTitle>
+        <CardTitle>Categories Management</CardTitle>
         <Button size="sm" asChild>
-          <Link href="/dashboard/topics/create">
+          <Link href="/dashboard/categories/create">
             <Plus className="h-4 w-4" />
-            Create New Topic
+            Create New Category
           </Link>
         </Button>
       </CardHeader>
       <DataTable
-        data={topics}
+        data={categories}
         columns={columns}
         actions={actions}
-        emptyMessage="No topics found. Create your first topic to get started."
-        itemCountLabel="topic"
+        emptyMessage="No categories found. Create your first category to get started."
+        itemCountLabel="category"
       />
     </Card>
   );

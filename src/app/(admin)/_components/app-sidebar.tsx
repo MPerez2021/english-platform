@@ -31,45 +31,13 @@ const data = {
     },
     {
       title: "Categories",
-      url: "#",
+      url: "/dashboard/categories",
       icon: Bot,
-      subMenu: [
-        {
-          title: "Subcategories",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Subcategories",
-      url: "#",
+      url: "/dashboard/subcategories",
       icon: BookOpen,
-      subMenu: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
     },
     {
       title: "Lessons",

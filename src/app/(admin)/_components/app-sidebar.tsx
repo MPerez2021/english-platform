@@ -1,17 +1,11 @@
 "use client";
 
 import {
-    AudioWaveform,
     BookOpen,
     Bot,
-    Command,
-    Frame,
-    GalleryVerticalEnd,
     LayoutDashboard,
-    Map,
-    PieChart,
     Settings2,
-    SquareTerminal,
+    SquareTerminal
 } from "lucide-react";
 import * as React from "react";
 

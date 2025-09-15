@@ -165,8 +165,6 @@ export function LessonForm({
                 control={form.control}
                 name="cefr_level"
                 render={({ field }) => {
-                  const selectedLevel = CEFR_LEVELS.find(level => level.value === field.value);
-
                   return (
                     <FormItem>
                       <FormLabel>CEFR Level</FormLabel>

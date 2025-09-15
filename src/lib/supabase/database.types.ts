@@ -130,6 +130,53 @@ export type Database = {
           }
         ]
       }
+      lessons: {
+        Row: {
+          id: string
+          subcategory_id: string
+          title: string
+          explanation_content: string
+          slug: string
+          cefr_level: Database["public"]["Enums"]["cefr_level"]
+          estimated_time: number | null
+          is_published: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          subcategory_id: string
+          title: string
+          explanation_content: string
+          slug: string
+          cefr_level: Database["public"]["Enums"]["cefr_level"]
+          estimated_time?: number | null
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          subcategory_id?: string
+          title?: string
+          explanation_content?: string
+          slug?: string
+          cefr_level?: Database["public"]["Enums"]["cefr_level"]
+          estimated_time?: number | null
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_subcategory_id_fkey"
+            columns: ["subcategory_id"]
+            isOneToOne: false
+            referencedRelation: "subcategories"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -138,7 +185,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      cefr_level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2"
     }
     CompositeTypes: {
       [_ in never]: never

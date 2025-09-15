@@ -19,7 +19,7 @@ interface SubcategoriesTableProps {
 export function SubcategoriesTable({ initialSubcategories, categories }: SubcategoriesTableProps) {
   const [subcategories, setSubcategories] = useState<Subcategory[]>(initialSubcategories);
 
-  const handleToggleActive = async (subcategoryId: number) => {
+  const handleToggleActive = async (subcategoryId: string) => {
     try {
       const updatedSubcategory = await subcategoriesService.toggleActive(subcategoryId);
       if (updatedSubcategory) {
@@ -31,7 +31,7 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
     }
   };
 
-  const getCategoryName = (categoryId: number): string => {
+  const getCategoryName = (categoryId: string): string => {
     const category = categories.find(c => c.id === categoryId);
     return category?.name || "Unknown Category";
   };
@@ -45,7 +45,7 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
     {
       key: "category_id",
       label: "Category",
-      render: (value: unknown) => getCategoryName(value as number),
+      render: (value: unknown) => getCategoryName(value as string),
       className: "text-muted-foreground",
     },
     {

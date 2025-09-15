@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client'
+import { generateSlug } from '@/lib/utils'
 import type { Category, CreateCategoryInput, UpdateCategoryInput } from '@/lib/types/category.types'
 import type { Database } from '@/lib/supabase/database.types'
 
@@ -7,16 +8,6 @@ type CategoryInsert = Database['public']['Tables']['categories']['Insert']
 type CategoryUpdate = Database['public']['Tables']['categories']['Update']
 
 const supabase = createClient()
-
-// Helper function to generate slug from name
-const generateSlug = (name: string): string => {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 // Helper function to convert database row to Category type
 const mapRowToCategory = (row: CategoryRow): Category => ({

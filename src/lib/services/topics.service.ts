@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client'
+import { generateSlug } from '@/lib/utils'
 import type { Topic, CreateTopicInput, UpdateTopicInput } from '@/lib/types/topic.types'
 import type { Database } from '@/lib/supabase/database.types'
 
@@ -7,16 +8,6 @@ type TopicInsert = Database['public']['Tables']['topics']['Insert']
 type TopicUpdate = Database['public']['Tables']['topics']['Update']
 
 const supabase = createClient()
-
-// Helper function to generate slug from name
-const generateSlug = (name: string): string => {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 // Helper function to convert database row to Topic type
 const mapRowToTopic = (row: TopicRow): Topic => ({

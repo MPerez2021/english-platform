@@ -41,26 +41,8 @@ const data = {
     },
     {
       title: "Lessons",
-      url: "#",
+      url: "/dashboard/lessons",
       icon: Settings2,
-      subMenu: [
-        {
-          title: "Examples",
-          url: "#",
-        },
-        {
-          title: "Images",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
     },
     {
         title: "Exercises",

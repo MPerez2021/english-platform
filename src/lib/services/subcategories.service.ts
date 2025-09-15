@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client'
+import { generateSlug } from '@/lib/utils'
 import type { Subcategory, CreateSubcategoryInput, UpdateSubcategoryInput } from '@/lib/types/category.types'
 import type { Database } from '@/lib/supabase/database.types'
 
@@ -7,16 +8,6 @@ type SubcategoryInsert = Database['public']['Tables']['subcategories']['Insert']
 type SubcategoryUpdate = Database['public']['Tables']['subcategories']['Update']
 
 const supabase = createClient()
-
-// Helper function to generate slug from name
-const generateSlug = (name: string): string => {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/[\s_-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 // Helper function to convert database row to Subcategory type
 const mapRowToSubcategory = (row: SubcategoryRow): Subcategory => ({

@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import { topicFormSchema, TopicFormSchema } from "@/lib/validations/topic.schema";
 import { Topic } from "@/lib/types/topic.types";
-import { topicsService } from "@/lib/data/mock-topics";
+import { topicsService } from "@/lib/services/topics.service";
 
 interface TopicFormProps {
   topic?: Topic;
@@ -39,12 +39,13 @@ export function TopicForm({ topic, mode }: TopicFormProps) {
     },
   });
 
-  const onSubmit = (data: TopicFormSchema) => {
+  const onSubmit = async (data: TopicFormSchema) => {
     try {
       if (mode === "create") {
-        topicsService.create(data);
+        console.log("data: "+ data);
+        await topicsService.create(data);
       } else if (topic) {
-        topicsService.update({
+        await topicsService.update({
           id: topic.id,
           ...data,
         });

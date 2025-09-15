@@ -1,18 +1,17 @@
 import { notFound } from "next/navigation";
 import { CategoryForm } from "../../_components/category-form";
-import { categoriesService } from "@/lib/data/mock-categories";
-import { topicsService } from "@/lib/data/mock-topics";
+import { categoriesService } from "@/lib/services/categories.service";
+import { topicsService } from "@/lib/services/topics.service";
 
 interface EditCategoryPageProps {
-  params: {
-    id: string;
-  };
+  params:  Promise<{ id: string}>
 }
 
-export default function EditCategoryPage({ params }: EditCategoryPageProps) {
-  const categoryId = parseInt(params.id);
-  const category = categoriesService.getById(categoryId);
-  const topics = topicsService.getAll().filter(topic => topic.is_active);
+export default async function EditCategoryPage({ params}: EditCategoryPageProps) {
+  const categoryId = (await params).id;
+  const category = await categoriesService.getById(categoryId);
+  const allTopics = await topicsService.getAll();
+  const topics = allTopics.filter((topic) => topic.is_active);
 
   if (!category) {
     notFound();

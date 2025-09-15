@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { Topic } from "@/lib/types/topic.types";
 import { ColumnDef, ActionDef } from "@/lib/types/table.types";
-import { topicsService } from "@/lib/data/mock-topics";
+import { topicsService } from "@/lib/services/topics.service";
 import { Edit, Plus } from "lucide-react";
 
 interface TopicsTableProps {
@@ -18,10 +18,16 @@ interface TopicsTableProps {
 export function TopicsTable({ initialTopics }: TopicsTableProps) {
   const [topics, setTopics] = useState<Topic[]>(initialTopics);
 
-  const handleToggleActive = (topicId: number) => {
-    const updatedTopic = topicsService.toggleActive(topicId);
-    if (updatedTopic) {
-      setTopics(topicsService.getAll());
+  const handleToggleActive = async (topicId: string) => {
+    try {
+      const updatedTopic = await topicsService.toggleActive(topicId);
+      if (updatedTopic) {
+        const updatedTopics = await topicsService.getAll();
+        setTopics(updatedTopics);
+      }
+    } catch (error) {
+      console.error('Error toggling topic status:', error);
+      // Optionally show user-friendly error message here
     }
   };
 

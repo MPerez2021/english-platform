@@ -2,9 +2,8 @@ import { z } from "zod";
 
 export const categoryFormSchema = z.object({
   topic_id: z
-    .number()
-    .min(1, "Please select a topic")
-    .int("Topic ID must be a whole number"),
+    .string()
+    .min(1, "Please select a topic"),
   name: z
     .string()
     .min(2, "Name must be at least 2 characters")
@@ -25,14 +24,13 @@ export const categoryFormSchema = z.object({
 export const createCategorySchema = categoryFormSchema;
 
 export const updateCategorySchema = categoryFormSchema.extend({
-  id: z.number().positive(),
+  id: z.string(),
 });
 
 export const subcategoryFormSchema = z.object({
   category_id: z
-    .number()
-    .min(1, "Please select a category")
-    .int("Category ID must be a whole number"),
+    .string()
+    .min(1, "Please select a category"),
   name: z
     .string()
     .min(2, "Name must be at least 2 characters")
@@ -53,7 +51,7 @@ export const subcategoryFormSchema = z.object({
 export const createSubcategorySchema = subcategoryFormSchema;
 
 export const updateSubcategorySchema = subcategoryFormSchema.extend({
-  id: z.number().positive(),
+  id: z.string(),
 });
 
 export type CategoryFormSchema = z.infer<typeof categoryFormSchema>;

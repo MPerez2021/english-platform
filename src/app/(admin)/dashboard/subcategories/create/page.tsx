@@ -1,8 +1,9 @@
 import { SubcategoryForm } from "../../_components/subcategory-form";
-import { categoriesService } from "@/lib/data/mock-categories";
+import { categoriesService } from "@/lib/services/categories.service";
 
-export default function CreateSubcategoryPage() {
-  const categories = categoriesService.getAll().filter(category => category.is_active);
+export default async function CreateSubcategoryPage() {
+  const allCategories = await categoriesService.getAll();
+  const categories = allCategories.filter(category => category.is_active);
 
   return (
     <div className="space-y-6">

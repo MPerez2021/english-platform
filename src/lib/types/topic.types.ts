@@ -1,5 +1,5 @@
 export interface Topic {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   description: string;
@@ -17,7 +17,7 @@ export interface CreateTopicInput {
 }
 
 export interface UpdateTopicInput {
-  id: number;
+  id: string;
   name: string;
   description: string;
   display_order: number;

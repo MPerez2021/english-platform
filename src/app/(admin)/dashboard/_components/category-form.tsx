@@ -27,7 +27,7 @@ import {
 import { categoryFormSchema, CategoryFormSchema } from "@/lib/validations/category.schema";
 import { Category } from "@/lib/types/category.types";
 import { Topic } from "@/lib/types/topic.types";
-import { categoriesService } from "@/lib/data/mock-categories";
+import { categoriesService } from "@/lib/services/categories.service";
 
 interface CategoryFormProps {
   category?: Category;
@@ -41,7 +41,7 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
   const form = useForm<CategoryFormSchema>({
     resolver: zodResolver(categoryFormSchema),
     defaultValues: {
-      topic_id: category?.topic_id || 0,
+      topic_id: category?.topic_id || "",
       name: category?.name || "",
       description: category?.description || "",
       display_order: category?.display_order || 1,
@@ -49,12 +49,12 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
     },
   });
 
-  const onSubmit = (data: CategoryFormSchema) => {
+  const onSubmit = async (data: CategoryFormSchema) => {
     try {
       if (mode === "create") {
-        categoriesService.create(data);
+        await categoriesService.create(data);
       } else if (category) {
-        categoriesService.update({
+        await categoriesService.update({
           id: category.id,
           ...data,
         });
@@ -85,8 +85,8 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Topic</FormLabel>
-                  <Select 
-                    onValueChange={(value) => field.onChange(parseInt(value))} 
+                  <Select
+                    onValueChange={(value) => field.onChange(value)} 
                     value={field.value ? field.value.toString() : ""}
                   >
                     <FormControl>

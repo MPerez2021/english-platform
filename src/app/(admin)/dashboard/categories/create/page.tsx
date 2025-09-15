@@ -1,8 +1,9 @@
 import { CategoryForm } from "../../_components/category-form";
-import { topicsService } from "@/lib/data/mock-topics";
+import { topicsService } from "@/lib/services/topics.service";
 
-export default function CreateCategoryPage() {
-  const topics = topicsService.getAll().filter(topic => topic.is_active);
+export default async function CreateCategoryPage() {
+  const allTopics = await topicsService.getAll();
+  const topics = allTopics.filter(topic => topic.is_active);
 
   return (
     <div className="space-y-6">

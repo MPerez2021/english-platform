@@ -9,7 +9,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { Category } from "@/lib/types/category.types";
 import { Topic } from "@/lib/types/topic.types";
 import { ColumnDef, ActionDef } from "@/lib/types/table.types";
-import { categoriesService } from "@/lib/data/mock-categories";
+import { categoriesService } from "@/lib/services/categories.service";
 import { Edit, Plus } from "lucide-react";
 
 interface CategoriesTableProps {
@@ -20,14 +20,19 @@ interface CategoriesTableProps {
 export function CategoriesTable({ initialCategories, topics }: CategoriesTableProps) {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
 
-  const handleToggleActive = (categoryId: number) => {
-    const updatedCategory = categoriesService.toggleActive(categoryId);
-    if (updatedCategory) {
-      setCategories(categoriesService.getAll());
+  const handleToggleActive = async (categoryId: string) => {
+    try {
+      const updatedCategory = await categoriesService.toggleActive(categoryId);
+      if (updatedCategory) {
+        const updatedCategories = await categoriesService.getAll();
+        setCategories(updatedCategories);
+      }
+    } catch (error) {
+      console.error('Error toggling category status:', error);
     }
   };
 
-  const getTopicName = (topicId: number): string => {
+  const getTopicName = (topicId: string): string => {
     const topic = topics.find(t => t.id === topicId);
     return topic?.name || "Unknown Topic";
   };
@@ -41,7 +46,7 @@ export function CategoriesTable({ initialCategories, topics }: CategoriesTablePr
     {
       key: "topic_id",
       label: "Topic",
-      render: (value: unknown) => getTopicName(value as number),
+      render: (value: unknown) => getTopicName(value as string),
       className: "text-muted-foreground",
     },
     {

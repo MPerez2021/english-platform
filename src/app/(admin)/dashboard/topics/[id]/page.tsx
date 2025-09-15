@@ -1,16 +1,14 @@
 import { notFound } from "next/navigation";
 import { TopicForm } from "../../_components/topic-form";
-import { topicsService } from "@/lib/data/mock-topics";
+import { topicsService } from "@/lib/services/topics.service";
 
 interface EditTopicPageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }
 
-export default function EditTopicPage({ params }: EditTopicPageProps) {
-  const topicId = parseInt(params.id);
-  const topic = topicsService.getById(topicId);
+export default async function EditTopicPage({ params }: EditTopicPageProps) {
+  const topicId = (await params).id;
+  const topic = await topicsService.getById(topicId);
 
   if (!topic) {
     notFound();

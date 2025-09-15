@@ -1,6 +1,6 @@
 export interface Category {
-  id: number;
-  topic_id: number;
+  id: string;
+  topic_id: string;
   name: string;
   slug: string;
   description: string;
@@ -11,7 +11,7 @@ export interface Category {
 }
 
 export interface CreateCategoryInput {
-  topic_id: number;
+  topic_id: string;
   name: string;
   description: string;
   display_order: number;
@@ -19,8 +19,8 @@ export interface CreateCategoryInput {
 }
 
 export interface UpdateCategoryInput {
-  id: number;
-  topic_id: number;
+  id: string;
+  topic_id: string;
   name: string;
   description: string;
   display_order: number;
@@ -28,7 +28,7 @@ export interface UpdateCategoryInput {
 }
 
 export interface CategoryFormData {
-  topic_id: number;
+  topic_id: string;
   name: string;
   description: string;
   display_order: number;
@@ -36,8 +36,8 @@ export interface CategoryFormData {
 }
 
 export interface Subcategory {
-  id: number;
-  category_id: number;
+  id: string;
+  category_id: string;
   name: string;
   slug: string;
   description: string;
@@ -48,7 +48,7 @@ export interface Subcategory {
 }
 
 export interface CreateSubcategoryInput {
-  category_id: number;
+  category_id: string;
   name: string;
   description: string;
   display_order: number;
@@ -56,8 +56,8 @@ export interface CreateSubcategoryInput {
 }
 
 export interface UpdateSubcategoryInput {
-  id: number;
-  category_id: number;
+  id: string;
+  category_id: string;
   name: string;
   description: string;
   display_order: number;
@@ -65,7 +65,7 @@ export interface UpdateSubcategoryInput {
 }
 
 export interface SubcategoryFormData {
-  category_id: number;
+  category_id: string;
   name: string;
   description: string;
   display_order: number;

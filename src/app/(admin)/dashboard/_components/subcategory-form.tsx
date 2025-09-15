@@ -24,9 +24,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { subcategoryFormSchema, SubcategoryFormSchema } from "@/lib/validations/category.schema";
+import {
+  subcategoryFormSchema,
+  SubcategoryFormSchema,
+} from "@/lib/validations/category.schema";
 import { Subcategory, Category } from "@/lib/types/category.types";
-import { subcategoriesService } from "@/lib/data/mock-subcategories";
+import { subcategoriesService } from "@/lib/services/subcategories.service";
 
 interface SubcategoryFormProps {
   subcategory?: Subcategory;
@@ -34,13 +37,17 @@ interface SubcategoryFormProps {
   mode: "create" | "edit";
 }
 
-export function SubcategoryForm({ subcategory, categories, mode }: SubcategoryFormProps) {
+export function SubcategoryForm({
+  subcategory,
+  categories,
+  mode,
+}: SubcategoryFormProps) {
   const router = useRouter();
 
   const form = useForm<SubcategoryFormSchema>({
     resolver: zodResolver(subcategoryFormSchema),
     defaultValues: {
-      category_id: subcategory?.category_id || 0,
+      category_id: subcategory?.category_id || "",
       name: subcategory?.name || "",
       description: subcategory?.description || "",
       display_order: subcategory?.display_order || 1,
@@ -48,12 +55,12 @@ export function SubcategoryForm({ subcategory, categories, mode }: SubcategoryFo
     },
   });
 
-  const onSubmit = (data: SubcategoryFormSchema) => {
+  const onSubmit = async (data: SubcategoryFormSchema) => {
     try {
       if (mode === "create") {
-        subcategoriesService.create(data);
+        await subcategoriesService.create(data);
       } else if (subcategory) {
-        subcategoriesService.update({
+        await subcategoriesService.update({
           id: subcategory.id,
           ...data,
         });
@@ -84,8 +91,8 @@ export function SubcategoryForm({ subcategory, categories, mode }: SubcategoryFo
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select 
-                    onValueChange={(value) => field.onChange(parseInt(value))} 
+                  <Select
+                    onValueChange={(value) => field.onChange(value)}
                     value={field.value ? field.value.toString() : ""}
                   >
                     <FormControl>
@@ -95,7 +102,10 @@ export function SubcategoryForm({ subcategory, categories, mode }: SubcategoryFo
                     </FormControl>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id.toString()}>
+                        <SelectItem
+                          key={category.id}
+                          value={category.id.toString()}
+                        >
                           {category.name}
                         </SelectItem>
                       ))}
@@ -119,7 +129,8 @@ export function SubcategoryForm({ subcategory, categories, mode }: SubcategoryFo
                     <Input placeholder="Enter subcategory name" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The display name for this subcategory (e.g., &ldquo;Present Simple&rdquo;, &ldquo;Food&rdquo;)
+                    The display name for this subcategory (e.g., &ldquo;Present
+                    Simple&rdquo;, &ldquo;Food&rdquo;)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -159,11 +170,14 @@ export function SubcategoryForm({ subcategory, categories, mode }: SubcategoryFo
                       min="1"
                       placeholder="Enter display order"
                       {...field}
-                      onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                      onChange={(e) =>
+                        field.onChange(parseInt(e.target.value) || 1)
+                      }
                     />
                   </FormControl>
                   <FormDescription>
-                    The order in which this subcategory appears within its category (lower numbers appear first)
+                    The order in which this subcategory appears within its
+                    category (lower numbers appear first)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -193,7 +207,9 @@ export function SubcategoryForm({ subcategory, categories, mode }: SubcategoryFo
 
             <div className="flex gap-4 pt-4">
               <Button type="submit" className="flex-1">
-                {mode === "create" ? "Create Subcategory" : "Update Subcategory"}
+                {mode === "create"
+                  ? "Create Subcategory"
+                  : "Update Subcategory"}
               </Button>
               <Button
                 type="button"

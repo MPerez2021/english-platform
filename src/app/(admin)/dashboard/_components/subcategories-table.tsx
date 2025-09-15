@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { Subcategory, Category } from "@/lib/types/category.types";
 import { ColumnDef, ActionDef } from "@/lib/types/table.types";
-import { subcategoriesService } from "@/lib/data/mock-subcategories";
+import { subcategoriesService } from "@/lib/services/subcategories.service";
 import { Edit, Plus } from "lucide-react";
 
 interface SubcategoriesTableProps {
@@ -19,10 +19,15 @@ interface SubcategoriesTableProps {
 export function SubcategoriesTable({ initialSubcategories, categories }: SubcategoriesTableProps) {
   const [subcategories, setSubcategories] = useState<Subcategory[]>(initialSubcategories);
 
-  const handleToggleActive = (subcategoryId: number) => {
-    const updatedSubcategory = subcategoriesService.toggleActive(subcategoryId);
-    if (updatedSubcategory) {
-      setSubcategories(subcategoriesService.getAll());
+  const handleToggleActive = async (subcategoryId: number) => {
+    try {
+      const updatedSubcategory = await subcategoriesService.toggleActive(subcategoryId);
+      if (updatedSubcategory) {
+        const updatedSubcategories = await subcategoriesService.getAll();
+        setSubcategories(updatedSubcategories);
+      }
+    } catch (error) {
+      console.error('Error toggling subcategory status:', error);
     }
   };
 

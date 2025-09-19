@@ -7,13 +7,7 @@ export default async function CategoriesPage() {
   const topics = await topicsService.getAll();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
-        <p className="text-muted-foreground">
-          Manage the learning categories within your topics.
-        </p>
-      </div>
+    <div className="space-y-6 pt-8 px-4">
       <CategoriesTable initialCategories={categories} topics={topics} />
     </div>
   );

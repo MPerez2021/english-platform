@@ -1,7 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
+/* @import '../styles/_variables.scss';
+@import '../styles/_keyframe-animations.scss'; */
+@plugin "@tailwindcss/typography";
 
 :root {
   --background: oklch(1.0000 0 0);

@@ -63,6 +63,27 @@ export const lessonsService = {
   },
 
   /**
+   * Get a single lesson by slug
+   */
+  getBySlug: async (slug: string): Promise<Lesson | null> => {
+    const { data, error } = await supabase
+      .from('lessons')
+      .select('*')
+      .eq('slug', slug)
+      .single()
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return null // Lesson not found
+      }
+      console.error('Error fetching lesson by slug:', error)
+      throw new Error(`Failed to fetch lesson by slug: ${error.message}`)
+    }
+
+    return mapRowToLesson(data)
+  },
+
+  /**
    * Get lessons by subcategory ID
    */
   getBySubcategoryId: async (subcategoryId: string): Promise<Lesson[]> => {

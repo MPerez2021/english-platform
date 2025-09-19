@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -100,8 +99,7 @@ export function DataTable<T>({
   };
 
   return (
-    <CardContent>
-      <div className="rounded-md border">
+      <div className="rounded-sm border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -173,6 +171,5 @@ export function DataTable<T>({
           </TableBody>
         </Table>
       </div>
-    </CardContent>
   );
 }

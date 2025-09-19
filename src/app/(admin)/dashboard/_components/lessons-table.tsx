@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { Lesson } from "@/lib/types/lesson.types";
 import { Subcategory } from "@/lib/types/category.types";
@@ -159,17 +158,18 @@ export function LessonsTable({
   ];
 
   return (
-    <Card>
-      <CardHeader className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-0">
-        <CardTitle>Lessons Management</CardTitle>
+    <div>
+      <div className="flex flex-col items-start gap-4 mb-6 md:flex-row md:justify-between md:items-center">
+        <h1 className="text-3xl font-bold tracking-tight">Lessons</h1>
         <Button size="sm" asChild>
           <Link href="/dashboard/lessons/create">
-            <Plus className="h-4 w-4" />
+            <Plus className="h-4 w-4"/>
             Add Lesson
           </Link>
         </Button>
-      </CardHeader>
+      </div>
+
       <DataTable data={lessons} columns={columns} actions={actions} />
-    </Card>
+    </div>
   );
 }

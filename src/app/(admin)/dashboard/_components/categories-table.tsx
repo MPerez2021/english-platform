@@ -1,23 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
-import { Category } from "@/lib/types/category.types";
-import { Topic } from "@/lib/types/topic.types";
-import { ColumnDef, ActionDef } from "@/lib/types/table.types";
+import { Switch } from "@/components/ui/switch";
 import { categoriesService } from "@/lib/services/categories.service";
+import { Category } from "@/lib/types/category.types";
+import { ActionDef, ColumnDef } from "@/lib/types/table.types";
+import { Topic } from "@/lib/types/topic.types";
 import { Edit, Plus } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 interface CategoriesTableProps {
   initialCategories: Category[];
   topics: Topic[];
 }
 
-export function CategoriesTable({ initialCategories, topics }: CategoriesTableProps) {
+export function CategoriesTable({
+  initialCategories,
+  topics,
+}: CategoriesTableProps) {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
 
   const handleToggleActive = async (categoryId: string) => {
@@ -28,12 +30,12 @@ export function CategoriesTable({ initialCategories, topics }: CategoriesTablePr
         setCategories(updatedCategories);
       }
     } catch (error) {
-      console.error('Error toggling category status:', error);
+      console.error("Error toggling category status:", error);
     }
   };
 
   const getTopicName = (topicId: string): string => {
-    const topic = topics.find(t => t.id === topicId);
+    const topic = topics.find((t) => t.id === topicId);
     return topic?.name || "Unknown Topic";
   };
 
@@ -104,16 +106,17 @@ export function CategoriesTable({ initialCategories, topics }: CategoriesTablePr
   ];
 
   return (
-    <Card>
-      <CardHeader className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-0">
-        <CardTitle>Categories Management</CardTitle>
+    <div>
+      <div className="flex flex-col items-start gap-4 mb-6 md:flex-row md:justify-between md:items-center">
+        <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
         <Button size="sm" asChild>
           <Link href="/dashboard/categories/create">
-            <Plus className="h-4 w-4" />
-            Create New Category
+            <Plus className="h-4 w-4"/>
+            Add Category
           </Link>
         </Button>
-      </CardHeader>
+      </div>
+
       <DataTable
         data={categories}
         columns={columns}
@@ -121,6 +124,6 @@ export function CategoriesTable({ initialCategories, topics }: CategoriesTablePr
         emptyMessage="No categories found. Create your first category to get started."
         itemCountLabel="category"
       />
-    </Card>
+    </div>
   );
 }

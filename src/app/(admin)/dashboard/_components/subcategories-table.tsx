@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { Subcategory, Category } from "@/lib/types/category.types";
 import { ColumnDef, ActionDef } from "@/lib/types/table.types";
@@ -103,16 +102,17 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
   ];
 
   return (
-    <Card>
-      <CardHeader className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-0">
-        <CardTitle>Subcategories Management</CardTitle>
+    <div>
+      <div className="flex flex-col items-start gap-4 mb-6 md:flex-row md:justify-between md:items-center">
+        <h1 className="text-3xl font-bold tracking-tight">Subcategories</h1>
         <Button size="sm" asChild>
           <Link href="/dashboard/subcategories/create">
-            <Plus className="h-4 w-4" />
-            Create New Subcategory
+            <Plus className="h-4 w-4"/>
+            Add Subcategory
           </Link>
         </Button>
-      </CardHeader>
+      </div>
+
       <DataTable
         data={subcategories}
         columns={columns}
@@ -120,6 +120,6 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
         emptyMessage="No subcategories found. Create your first subcategory to get started."
         itemCountLabel="subcategory"
       />
-    </Card>
+    </div>
   );
 }

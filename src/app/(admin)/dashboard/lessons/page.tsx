@@ -9,13 +9,7 @@ export default async function LessonsPage() {
   ]);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Lessons</h1>
-        <p className="text-muted-foreground">
-          Manage all lessons
-        </p>
-      </div>
+    <div className="space-y-6 pt-8 px-4">
       <LessonsTable initialLessons={lessons} subcategories={subcategories} />
     </div>
   );

@@ -6,12 +6,9 @@ export default async function CreateCategoryPage() {
   const topics = allTopics.filter(topic => topic.is_active);
 
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="space-y-8">
+      <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">Create Category</h1>
-        <p className="text-muted-foreground">
-          Add a new learning category to organize your content.
-        </p>
       </div>
       <CategoryForm mode="create" topics={topics} />
     </div>

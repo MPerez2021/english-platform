@@ -5,13 +5,7 @@ export default async function TopicsPage() {
   const topics = await topicsService.getAll();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Topics</h1>
-        <p className="text-muted-foreground">
-          Manage the learning topics available on the platform.
-        </p>
-      </div>
+    <div className="space-y-6 pt-8 px-4">
       <TopicsTable initialTopics={topics} />
     </div>
   );

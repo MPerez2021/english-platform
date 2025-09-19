@@ -1,13 +1,12 @@
 "use client";
 
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -31,6 +30,8 @@ import {
 import { Lesson, CEFR_LEVELS } from "@/lib/types/lesson.types";
 import { Subcategory } from "@/lib/types/category.types";
 import { lessonsService } from "@/lib/services/lessons.service";
+import { FormSimpleEditor } from "../../_components/text-editor/form-simple-editor";
+import HtmlWrapper from "@/components/lessons/html-wrapper";
 
 interface LessonFormProps {
   lesson?: Lesson;
@@ -38,11 +39,7 @@ interface LessonFormProps {
   mode: "create" | "edit";
 }
 
-export function LessonForm({
-  lesson,
-  subcategories,
-  mode,
-}: LessonFormProps) {
+export function LessonForm({ lesson, subcategories, mode }: LessonFormProps) {
   const router = useRouter();
 
   const form = useForm<LessonFormSchema>({
@@ -75,91 +72,75 @@ export function LessonForm({
   };
 
   return (
-    <Card className="mx-auto max-w-4xl">
-      <CardHeader>
-        <CardTitle>
-          {mode === "create" ? "Create New Lesson" : "Edit Lesson"}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Subcategory Selection */}
-            <FormField
-              control={form.control}
-              name="subcategory_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Subcategory</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+    <div className="mx-auto max-w-4xl space-y-8">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Lesson Setup Section */}
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold">Lesson Details</h2>
+              <p className="text-muted-foreground">
+                Set up the basic information for your lesson
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              {/* Subcategory Selection */}
+              <FormField
+                control={form.control}
+                name="subcategory_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Subcategory *</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a subcategory" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {subcategories.map((subcategory) => (
+                          <SelectItem
+                            key={subcategory.id}
+                            value={subcategory.id}
+                          >
+                            {subcategory.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Choose the subcategory this lesson belongs to
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Title */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title *</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a subcategory" />
-                      </SelectTrigger>
+                      <Input
+                        placeholder="e.g., Present Simple Basics"
+                        {...field}
+                      />
                     </FormControl>
-                    <SelectContent>
-                      {subcategories.map((subcategory) => (
-                        <SelectItem key={subcategory.id} value={subcategory.id}>
-                          {subcategory.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Choose the subcategory this lesson belongs to
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormDescription>
+                      The main title for this lesson
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* Title */}
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g., Present Simple Basics"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    The main title for this lesson
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Explanation Content */}
-            <FormField
-              control={form.control}
-              name="explanation_content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Explanation Content</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Provide detailed explanation of the lesson content..."
-                      className="min-h-[200px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    The main content and explanation for this lesson
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* CEFR Level */}
               <FormField
                 control={form.control}
@@ -167,7 +148,7 @@ export function LessonForm({
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>CEFR Level</FormLabel>
+                      <FormLabel>CEFR Level *</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -184,13 +165,13 @@ export function LessonForm({
                               value={level.value}
                               className="cursor-pointer"
                             >
-                              <span >{level.label}</span>
+                              <span>{level.label}</span>
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormDescription className="space-y-1">
-                        <FormLabel>Choose the appropriate difficulty level</FormLabel>
+                      <FormDescription>
+                        Choose the appropriate difficulty level
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -226,50 +207,78 @@ export function LessonForm({
                   </FormItem>
                 )}
               />
+
+              {/* Published Status */}
+              <FormField
+                control={form.control}
+                name="is_published"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Published</FormLabel>
+                      <FormDescription>
+                        Make this lesson visible to students
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          {/* Content Creation Section */}
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold">Content Creation</h2>
+              <p className="text-muted-foreground">
+                Write your lesson content - this preview matches the final lesson width
+              </p>
             </div>
 
-            {/* Published Status */}
-            <FormField
-              control={form.control}
-              name="is_published"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Published</FormLabel>
-                    <FormDescription>
-                      Make this lesson visible to students
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting
-                  ? "Saving..."
-                  : mode === "create"
-                  ? "Create Lesson"
-                  : "Update Lesson"}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.back()}
-              >
-                Cancel
-              </Button>
+            <div className="min-h-[600px]">
+              <FormField
+                control={form.control}
+                name="explanation_content"
+                render={({ field }) => (
+                  <FormItem className="h-full">
+                    <FormControl>
+                      <HtmlWrapper>
+                        <FormSimpleEditor
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Write your lesson content here..."
+                          className="min-h-[500px]"
+                        />
+                      </HtmlWrapper>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex justify-end space-x-4 pb-6">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.back()}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">
+              {mode === "create" ? "Create Lesson" : "Update Lesson"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

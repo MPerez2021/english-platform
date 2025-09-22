@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -52,15 +53,25 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
     try {
       if (mode === "create") {
         await categoriesService.create(data);
+        toast.success("Category created successfully", {
+          description: data.name,
+        });
       } else if (category) {
         await categoriesService.update({
           id: category.id,
           ...data,
         });
+        toast.success("Category updated successfully", {
+          description: data.name,
+        });
       }
       router.push("/dashboard/categories");
+      router.refresh();
     } catch (error) {
       console.error("Error saving category:", error);
+      toast.error("Failed to save category", {
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+      });
     }
   };
 

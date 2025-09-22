@@ -4,13 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/components/ui/data-table";
+import { CefrLevelBadge } from "@/components/ui/cefr-level-badge";
 import { Lesson } from "@/lib/types/lesson.types";
 import { Subcategory } from "@/lib/types/category.types";
 import { ColumnDef, ActionDef } from "@/lib/types/table.types";
 import { lessonsService } from "@/lib/services/lessons.service";
 import { Edit, Plus, Eye, Clock } from "lucide-react";
+import { toast } from "sonner";
 
 interface LessonsTableProps {
   initialLessons: Lesson[];
@@ -29,9 +30,13 @@ export function LessonsTable({
       if (updatedLesson) {
         const updatedLessons = await lessonsService.getAll();
         setLessons(updatedLessons);
+        toast.success("Lesson status updated successfully");
       }
     } catch (error) {
       console.error("Error toggling lesson published status:", error);
+      toast.error("Failed to update lesson status", {
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+      });
     }
   };
 
@@ -40,22 +45,6 @@ export function LessonsTable({
     return subcategory?.name || "Unknown Subcategory";
   };
 
-  const getCefrLevelBadge = (level: string) => {
-    const colorMap: Record<string, string> = {
-      A1: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-      A2: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-      B1: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-      B2: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
-      C1: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
-      C2: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
-    };
-
-    return (
-      <Badge variant="secondary" className={colorMap[level] || ""}>
-        {level}
-      </Badge>
-    );
-  };
 
   const formatEstimatedTime = (minutes: number | null): string => {
     if (!minutes) return "—";
@@ -84,7 +73,7 @@ export function LessonsTable({
       label: "Level",
       width: "w-20",
       className: "text-center",
-      render: (value: unknown) => getCefrLevelBadge(value as string),
+      render: (value: unknown) => <CefrLevelBadge level={value as string} />,
     },
     {
       key: "estimated_time",
@@ -97,22 +86,6 @@ export function LessonsTable({
           {formatEstimatedTime(value as number | null)}
         </div>
       ),
-    },
-    {
-      key: "explanation_content",
-      label: "Content Preview",
-      responsive: "lg:table-cell",
-      className: "max-w-xs",
-      render: (value: unknown) => {
-        const content = value as string;
-        const preview =
-          content.length > 100 ? `${content.substring(0, 100)}...` : content;
-        return (
-          <div className="truncate" title={content}>
-            {preview}
-          </div>
-        );
-      },
     },
     {
       key: "slug",

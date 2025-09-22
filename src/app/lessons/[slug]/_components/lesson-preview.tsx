@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge";
 import { Lesson } from "@/lib/types/lesson.types";
 import { Clock } from "lucide-react";
+import { CefrLevelBadge } from "@/components/ui/cefr-level-badge";
 import { LessonRender } from "./lesson-render";
 
 interface LessonPreviewProps {
@@ -9,22 +9,6 @@ interface LessonPreviewProps {
 
 export async function LessonPreview({ lesson }: LessonPreviewProps) {
 
-  const getCefrLevelBadge = (level: string) => {
-    const colorMap: Record<string, string> = {
-      A1: "bg-chart-1 text-primary-foreground",
-      A2: "bg-chart-2 text-primary-foreground",
-      B1: "bg-chart-3 text-primary-foreground",
-      B2: "bg-chart-4 text-primary-foreground",
-      C1: "bg-destructive text-destructive-foreground",
-      C2: "bg-primary text-primary-foreground",
-    };
-
-    return (
-      <Badge variant="secondary" className={colorMap[level] || ""}>
-        {level}
-      </Badge>
-    );
-  };
 
   const formatEstimatedTime = (minutes: number | null): string => {
     if (!minutes) return "—";
@@ -45,7 +29,7 @@ export async function LessonPreview({ lesson }: LessonPreviewProps) {
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-muted-foreground">Level:</span>
-                  {getCefrLevelBadge(lesson.cefr_level)}
+                  <CefrLevelBadge level={lesson.cefr_level} />
                 </div>
 
                 {lesson.estimated_time && (

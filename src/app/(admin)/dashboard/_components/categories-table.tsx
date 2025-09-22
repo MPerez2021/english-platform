@@ -10,6 +10,7 @@ import { Topic } from "@/lib/types/topic.types";
 import { Edit, Plus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface CategoriesTableProps {
   initialCategories: Category[];
@@ -28,9 +29,13 @@ export function CategoriesTable({
       if (updatedCategory) {
         const updatedCategories = await categoriesService.getAll();
         setCategories(updatedCategories);
+        toast.success("Category status updated successfully");
       }
     } catch (error) {
       console.error("Error toggling category status:", error);
+      toast.error("Failed to update category status", {
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+      });
     }
   };
 

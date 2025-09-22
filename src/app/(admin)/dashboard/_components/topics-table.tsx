@@ -9,6 +9,7 @@ import { Topic } from "@/lib/types/topic.types";
 import { ColumnDef, ActionDef } from "@/lib/types/table.types";
 import { topicsService } from "@/lib/services/topics.service";
 import { Edit, Plus } from "lucide-react";
+import { toast } from "sonner";
 
 interface TopicsTableProps {
   initialTopics: Topic[];
@@ -23,10 +24,13 @@ export function TopicsTable({ initialTopics }: TopicsTableProps) {
       if (updatedTopic) {
         const updatedTopics = await topicsService.getAll();
         setTopics(updatedTopics);
+        toast.success("Topic status updated successfully");
       }
     } catch (error) {
       console.error('Error toggling topic status:', error);
-      // Optionally show user-friendly error message here
+      toast.error("Failed to update topic status", {
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+      });
     }
   };
 

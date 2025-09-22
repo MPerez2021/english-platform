@@ -9,6 +9,7 @@ import { Subcategory, Category } from "@/lib/types/category.types";
 import { ColumnDef, ActionDef } from "@/lib/types/table.types";
 import { subcategoriesService } from "@/lib/services/subcategories.service";
 import { Edit, Plus } from "lucide-react";
+import { toast } from "sonner";
 
 interface SubcategoriesTableProps {
   initialSubcategories: Subcategory[];
@@ -24,9 +25,13 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
       if (updatedSubcategory) {
         const updatedSubcategories = await subcategoriesService.getAll();
         setSubcategories(updatedSubcategories);
+        toast.success("Subcategory status updated successfully");
       }
     } catch (error) {
       console.error('Error toggling subcategory status:', error);
+      toast.error("Failed to update subcategory status", {
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+      });
     }
   };
 

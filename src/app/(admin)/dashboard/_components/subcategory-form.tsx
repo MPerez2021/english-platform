@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -58,15 +59,25 @@ export function SubcategoryForm({
     try {
       if (mode === "create") {
         await subcategoriesService.create(data);
+        toast.success("Subcategory created successfully", {
+          description: data.name,
+        });
       } else if (subcategory) {
         await subcategoriesService.update({
           id: subcategory.id,
           ...data,
         });
+        toast.success("Subcategory updated successfully", {
+          description: data.name,
+        });
       }
       router.push("/dashboard/subcategories");
+      router.refresh();
     } catch (error) {
       console.error("Error saving subcategory:", error);
+      toast.error("Failed to save subcategory", {
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+      });
     }
   };
 

@@ -199,7 +199,7 @@ export function FormSimpleEditor({
         autocorrect: "off",
         autocapitalize: "off",
         "aria-label": "Lesson content editor, start typing to enter text.",
-        class: "prose focus:outline-none",
+        class: "prose focus:outline-none px-4 min-h-80",
       },
     },
     extensions: [

@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,17 +42,26 @@ export function TopicForm({ topic, mode }: TopicFormProps) {
   const onSubmit = async (data: TopicFormSchema) => {
     try {
       if (mode === "create") {
-        console.log("data: "+ data);
         await topicsService.create(data);
+        toast.success("Topic created successfully", {
+          description: data.name,
+        });
       } else if (topic) {
         await topicsService.update({
           id: topic.id,
           ...data,
         });
+        toast.success("Topic updated successfully", {
+          description: data.name,
+        });
       }
       router.push("/dashboard/topics");
+      router.refresh();
     } catch (error) {
       console.error("Error saving topic:", error);
+      toast.error("Failed to save topic", {
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+      });
     }
   };
 

@@ -85,41 +85,6 @@ export function LessonForm({ lesson, subcategories, mode }: LessonFormProps) {
             </div>
 
             <div className="space-y-6">
-              {/* Subcategory Selection */}
-              <FormField
-                control={form.control}
-                name="subcategory_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subcategory *</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a subcategory" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {subcategories.map((subcategory) => (
-                          <SelectItem
-                            key={subcategory.id}
-                            value={subcategory.id}
-                          >
-                            {subcategory.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      Choose the subcategory this lesson belongs to
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               {/* Title */}
               <FormField
                 control={form.control}
@@ -140,74 +105,116 @@ export function LessonForm({ lesson, subcategories, mode }: LessonFormProps) {
                   </FormItem>
                 )}
               />
-
-              {/* CEFR Level */}
-              <FormField
-                control={form.control}
-                name="cefr_level"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormLabel>CEFR Level *</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+              <div className="grid grid-cols-3 gap-4">
+                {/* Subcategory Selection */}
+                <div className="col-span-3 lg:col-span-1">
+                  <FormField
+                    control={form.control}
+                    name="subcategory_id"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Subcategory *</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a subcategory" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {subcategories.map((subcategory) => (
+                              <SelectItem
+                                key={subcategory.id}
+                                value={subcategory.id}
+                              >
+                                {subcategory.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Choose the subcategory this lesson belongs to
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                {/* CEFR Level */}
+                <div className="col-span-3 lg:col-span-1">
+                  <FormField
+                    control={form.control}
+                    name="cefr_level"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormLabel>CEFR Level *</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select difficulty level" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {CEFR_LEVELS.map((level) => (
+                                <SelectItem
+                                  key={level.value}
+                                  value={level.value}
+                                  className="cursor-pointer"
+                                >
+                                  <span>{level.label}</span>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            Choose the appropriate difficulty level
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+                {/* Estimated Time */}
+                <div className="col-span-3 lg:col-span-1">
+                  <FormField
+                    control={form.control}
+                    name="estimated_time"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Estimated Time (minutes)</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select difficulty level" />
-                          </SelectTrigger>
+                          <Input
+                            type="number"
+                            min="1"
+                            max="300"
+                            placeholder="30"
+                            className="w-fit"
+                            {...field}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              field.onChange(
+                                value ? parseInt(value, 10) : null
+                              );
+                            }}
+                            value={field.value || ""}
+                          />
                         </FormControl>
-                        <SelectContent>
-                          {CEFR_LEVELS.map((level) => (
-                            <SelectItem
-                              key={level.value}
-                              value={level.value}
-                              className="cursor-pointer"
-                            >
-                              <span>{level.label}</span>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Choose the appropriate difficulty level
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-
-              {/* Estimated Time */}
-              <FormField
-                control={form.control}
-                name="estimated_time"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Estimated Time (minutes)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min="1"
-                        max="300"
-                        placeholder="30"
-                        {...field}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          field.onChange(value ? parseInt(value, 10) : null);
-                        }}
-                        value={field.value || ""}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Expected completion time in minutes (optional)
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
+                        <FormDescription>
+                          Expected completion time in minutes (optional)
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
               {/* Published Status */}
               <FormField
                 control={form.control}
@@ -237,7 +244,8 @@ export function LessonForm({ lesson, subcategories, mode }: LessonFormProps) {
             <div className="space-y-2">
               <h2 className="text-xl font-semibold">Content Creation</h2>
               <p className="text-muted-foreground">
-                Write your lesson content - this preview matches the final lesson width
+                Write your lesson content - this preview matches the final
+                lesson width
               </p>
             </div>
 

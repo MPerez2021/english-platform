@@ -28,6 +28,7 @@ import { categoryFormSchema, CategoryFormSchema } from "@/lib/validations/catego
 import { Category } from "@/lib/types/category.types";
 import { Topic } from "@/lib/types/topic.types";
 import { categoriesService } from "@/lib/services/categories.service";
+import { FormActionButtons } from "./form-action-buttons";
 
 interface CategoryFormProps {
   category?: Category;
@@ -76,7 +77,7 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
   };
 
   const handleCancel = () => {
-    router.push("/dashboard/categories");
+    router.back();
   };
 
   return (
@@ -196,19 +197,12 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
             )}
           />
 
-          <div className="flex gap-4 pt-4">
-            <Button type="submit" className="flex-1">
-              {mode === "create" ? "Create Category" : "Update Category"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCancel}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-          </div>
+          <FormActionButtons
+            mode={mode}
+            entityName="Category"
+            isSubmitting={form.formState.isSubmitting}
+            onCancel={handleCancel}
+          />
         </form>
       </Form>
     </div>

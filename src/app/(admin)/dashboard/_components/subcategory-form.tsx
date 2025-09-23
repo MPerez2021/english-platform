@@ -30,6 +30,7 @@ import {
 } from "@/lib/validations/category.schema";
 import { Subcategory, Category } from "@/lib/types/category.types";
 import { subcategoriesService } from "@/lib/services/subcategories.service";
+import { FormActionButtons } from "./form-action-buttons";
 
 interface SubcategoryFormProps {
   subcategory?: Subcategory;
@@ -82,7 +83,7 @@ export function SubcategoryForm({
   };
 
   const handleCancel = () => {
-    router.push("/dashboard/subcategories");
+    router.back();
   };
 
   return (
@@ -209,21 +210,12 @@ export function SubcategoryForm({
             )}
           />
 
-          <div className="flex gap-4 pt-4">
-            <Button type="submit" className="flex-1">
-              {mode === "create"
-                ? "Create Subcategory"
-                : "Update Subcategory"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCancel}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-          </div>
+          <FormActionButtons
+            mode={mode}
+            entityName="Subcategory"
+            isSubmitting={form.formState.isSubmitting}
+            onCancel={handleCancel}
+          />
         </form>
       </Form>
     </div>

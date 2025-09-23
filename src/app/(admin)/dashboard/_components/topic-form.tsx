@@ -20,6 +20,7 @@ import {
 import { topicFormSchema, TopicFormSchema } from "@/lib/validations/topic.schema";
 import { Topic } from "@/lib/types/topic.types";
 import { topicsService } from "@/lib/services/topics.service";
+import { FormActionButtons } from "./form-action-buttons";
 
 interface TopicFormProps {
   topic?: Topic;
@@ -66,7 +67,7 @@ export function TopicForm({ topic, mode }: TopicFormProps) {
   };
 
   const handleCancel = () => {
-    router.push("/dashboard/topics");
+    router.back();
   };
 
   return (
@@ -155,19 +156,12 @@ export function TopicForm({ topic, mode }: TopicFormProps) {
             )}
           />
 
-          <div className="flex gap-4 pt-4">
-            <Button type="submit" className="flex-1">
-              {mode === "create" ? "Create Topic" : "Update Topic"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCancel}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
-          </div>
+          <FormActionButtons
+            mode={mode}
+            entityName="Topic"
+            isSubmitting={form.formState.isSubmitting}
+            onCancel={handleCancel}
+          />
         </form>
       </Form>
     </div>

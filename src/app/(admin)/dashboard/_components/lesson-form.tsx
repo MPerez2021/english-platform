@@ -39,6 +39,7 @@ import { Subcategory } from "@/lib/types/category.types";
 import { lessonsService } from "@/lib/services/lessons.service";
 import { FormSimpleEditor } from "../../_components/text-editor/form-simple-editor";
 import HtmlWrapper from "@/components/lessons/html-wrapper";
+import { FormActionButtons } from "./form-action-buttons";
 
 interface LessonFormProps {
   lesson?: Lesson;
@@ -100,7 +101,9 @@ export function LessonForm({ lesson, subcategories, mode }: LessonFormProps) {
       });
     }
   };
-
+  const handleCancel = () => {
+    router.back();
+  };
   return (
     <div className="mx-auto max-w-4xl space-y-8">
       <Form {...form}>
@@ -318,18 +321,12 @@ export function LessonForm({ lesson, subcategories, mode }: LessonFormProps) {
           </Tabs>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-4 pb-6">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.back()}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">
-              {mode === "create" ? "Create Lesson" : "Update Lesson"}
-            </Button>
-          </div>
+          <FormActionButtons
+            mode={mode}
+            entityName="Lesson"
+            isSubmitting={form.formState.isSubmitting}
+            onCancel={handleCancel}
+          />
         </form>
       </Form>
     </div>

@@ -1,20 +1,6 @@
 "use client";
 
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import HtmlWrapper from "@/components/lessons/html-wrapper";
 import {
   Form,
   FormControl,
@@ -24,21 +10,33 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import { lessonsService } from "@/lib/services/lessons.service";
+import { Subcategory } from "@/lib/types/category.types";
+import { CEFR_LEVELS, Lesson } from "@/lib/types/lesson.types";
 import {
   lessonFormSchema,
   LessonFormSchema,
 } from "@/lib/validations/lesson.schema";
-import { Lesson, CEFR_LEVELS } from "@/lib/types/lesson.types";
-import { Subcategory } from "@/lib/types/category.types";
-import { lessonsService } from "@/lib/services/lessons.service";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { FormSimpleEditor } from "../../_components/text-editor/form-simple-editor";
-import HtmlWrapper from "@/components/lessons/html-wrapper";
 import { FormActionButtons } from "./form-action-buttons";
 
 interface LessonFormProps {

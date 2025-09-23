@@ -1,20 +1,5 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -24,10 +9,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { categoryFormSchema, CategoryFormSchema } from "@/lib/validations/category.schema";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { categoriesService } from "@/lib/services/categories.service";
 import { Category } from "@/lib/types/category.types";
 import { Topic } from "@/lib/types/topic.types";
-import { categoriesService } from "@/lib/services/categories.service";
+import { categoryFormSchema, CategoryFormSchema } from "@/lib/validations/category.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { FormActionButtons } from "./form-action-buttons";
 
 interface CategoryFormProps {

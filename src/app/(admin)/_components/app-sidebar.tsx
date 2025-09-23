@@ -1,24 +1,25 @@
 "use client";
 
 import {
-    BookOpen,
-    Bot,
-    LayoutDashboard,
-    Settings2,
-    SquareTerminal
+  BookOpen,
+  Bot,
+  LayoutDashboard,
+  Settings2,
+  SquareTerminal,
 } from "lucide-react";
 import * as React from "react";
 
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarRail
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenuButton,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
+import Link from "next/link";
+import { NavUser } from "./nav-user";
 
 // This is sample data.
 const data = {
@@ -45,36 +46,36 @@ const data = {
       icon: Settings2,
     },
     {
-        title: "Exercises",
-        url: "#",
-        icon: Settings2,
-        subMenu: [
-          {
-            title: "Types",
-            url: "#",
-          },
-        ],
-      },
+      title: "Exercises",
+      url: "#",
+      icon: Settings2,
+      subMenu: [
+        {
+          title: "Types",
+          url: "#",
+        },
+      ],
+    },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar variant="floating" collapsible="icon" {...props}>
       <SidebarHeader>
-        <SidebarMenuItem>
-          <SidebarMenuButton>
+        <SidebarMenuButton asChild tooltip={"Dashboard"}>
+          <Link href="/dashboard">
             <LayoutDashboard />
-            <h2 className="text-sidebar-foreground text-lg font-bold px-2">
-              Dashboard
-            </h2>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+            Dashboard
+          </Link>
+        </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>{/* <NavUser user={data.user} /> */}</SidebarFooter>
+      <SidebarFooter>
+        <NavUser user={{name:'Jorge Lucas', email:'jorge@hotmail.com', avatar:'pnpm dlx shadcn@latest add avatar'}}/>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

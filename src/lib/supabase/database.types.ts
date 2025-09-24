@@ -177,6 +177,87 @@ export type Database = {
           }
         ]
       }
+      exercise_types: {
+        Row: {
+          id: string
+          code: string
+          name: string
+          description: string | null
+          json_schema: Json
+          is_active: boolean | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          code: string
+          name: string
+          description?: string | null
+          json_schema: Json
+          is_active?: boolean | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          code?: string
+          name?: string
+          description?: string | null
+          json_schema?: Json
+          is_active?: boolean | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      exercises: {
+        Row: {
+          id: string
+          lesson_id: string
+          exercise_types_id: string
+          content: Json
+          instructions: string
+          display_order: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          lesson_id: string
+          exercise_types_id: string
+          content: Json
+          instructions: string
+          display_order?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          lesson_id?: string
+          exercise_types_id?: string
+          content?: Json
+          instructions?: string
+          display_order?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercises_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercises_exercise_types_id_fkey"
+            columns: ["exercise_types_id"]
+            isOneToOne: false
+            referencedRelation: "exercise_types"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never

@@ -4,33 +4,12 @@ import type { Database } from '@/lib/supabase/database.types'
 export type ExerciseRow = Database['public']['Tables']['exercises']['Row']
 export type ExerciseType = Database['public']['Enums']['exercise_types']
 
-// Exercise Content Schema Types
-export interface FillBlankContent {
+export interface ExerciseContent {
   question: string
-  answer: string[]
-  options: string[]
+  answers: { value: string }[]
+  options: { value: string }[] | null
   answer_explanation: string
 }
-
-export interface FillBlankFreeContent {
-  question: string
-  answer: string[]
-  options: null
-  answer_explanation: string
-}
-
-export interface ReadingComprehensionContent {
-  question: string
-  answer: string[]
-  options: string[]
-  answer_explanation: string
-}
-
-// Union type for all exercise content types
-export type ExerciseContent =
-  | FillBlankContent
-  | FillBlankFreeContent
-  | ReadingComprehensionContent
 
 // Exercise Interfaces
 export interface Exercise {
@@ -83,19 +62,3 @@ export const EXERCISE_TYPE_NAMES = {
   FILL_BLANK_FREE: 'Fill Blank - Free Text',
   READING_COMPREHENSION: 'Reading Comprehension',
 } as const
-
-// Helper type guards
-export function isFillBlankContent(content: ExerciseContent): content is FillBlankContent {
-  return Array.isArray((content as FillBlankContent).options) &&
-         (content as FillBlankContent).options !== null
-}
-
-export function isFillBlankFreeContent(content: ExerciseContent): content is FillBlankFreeContent {
-  return (content as FillBlankFreeContent).options === null
-}
-
-export function isReadingComprehensionContent(content: ExerciseContent): content is ReadingComprehensionContent {
-  return Array.isArray((content as ReadingComprehensionContent).options) &&
-         (content as ReadingComprehensionContent).options !== null &&
-         (content as ReadingComprehensionContent).options.length > 0
-}

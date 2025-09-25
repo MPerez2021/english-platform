@@ -19,20 +19,20 @@ const baseContentSchema = z.object({
     .trim(),
 })
 
-// Fill Blank Choice Content Schema
-export const fillBlankChoiceContentSchema = baseContentSchema.extend({
+// Fill Blank Content Schema (with options)
+export const fillBlankContentSchema = baseContentSchema.extend({
   options: z
     .array(z.string().min(1, "Option cannot be empty"))
     .min(2, "At least 2 options are required")
     .max(6, "Maximum 6 options allowed"),
 })
 
-// Fill Blank Free Content Schema
+// Fill Blank Free Content Schema (no options)
 export const fillBlankFreeContentSchema = baseContentSchema.extend({
   options: z.literal(null),
 })
 
-// Reading Comprehension Content Schema
+// Reading Comprehension Content Schema (with options)
 export const readingComprehensionContentSchema = baseContentSchema.extend({
   options: z
     .array(z.string().min(1, "Option cannot be empty"))
@@ -42,47 +42,20 @@ export const readingComprehensionContentSchema = baseContentSchema.extend({
 
 // Union schema for all exercise content types
 export const exerciseContentSchema = z.union([
-  fillBlankChoiceContentSchema,
+  fillBlankContentSchema,
   fillBlankFreeContentSchema,
   readingComprehensionContentSchema,
 ])
 
-// Exercise Type Schemas
-export const exerciseTypeFormSchema = z.object({
-  code: z
-    .string()
-    .min(3, "Code must be at least 3 characters")
-    .max(50, "Code must be less than 50 characters")
-    .regex(/^[a-z0-9_]+$/, "Code must contain only lowercase letters, numbers, and underscores")
-    .trim(),
-  name: z
-    .string()
-    .min(3, "Name must be at least 3 characters")
-    .max(100, "Name must be less than 100 characters")
-    .trim(),
-  description: z
-    .string()
-    .max(500, "Description must be less than 500 characters")
-    .trim()
-    .optional()
-    .nullable(),
-  json_schema: z.any(),
-  is_active: z.boolean().default(true),
-})
-
-export const createExerciseTypeSchema = exerciseTypeFormSchema
-export const updateExerciseTypeSchema = exerciseTypeFormSchema.extend({
-  id: z.string(),
-})
 
 // Exercise Schemas
 export const exerciseFormSchema = z.object({
   lesson_id: z
     .string()
     .min(1, "Please select a lesson"),
-  exercise_types_id: z
-    .string()
-    .min(1, "Please select an exercise type"),
+  exercise_types: z.enum(['FILL_BLANK', 'FILL_BLANK_FREE', 'READING_COMPREHENSION'], {
+    required_error: "Please select an exercise type",
+  }),
   content: exerciseContentSchema,
   instructions: z
     .string()
@@ -106,118 +79,26 @@ export const updateExerciseSchema = exerciseFormSchema.extend({
 // Validation schemas for specific exercise type content
 export const validateExerciseContentByType = (
   content: unknown,
-  exerciseTypeCode: string
+  exerciseType: string
 ) => {
-  switch (exerciseTypeCode) {
-    case EXERCISE_TYPE_CODES.FILL_BLANK_CHOICE:
-      return fillBlankChoiceContentSchema.parse(content)
+  switch (exerciseType) {
+    case EXERCISE_TYPE_CODES.FILL_BLANK:
+      return fillBlankContentSchema.parse(content)
     case EXERCISE_TYPE_CODES.FILL_BLANK_FREE:
       return fillBlankFreeContentSchema.parse(content)
     case EXERCISE_TYPE_CODES.READING_COMPREHENSION:
       return readingComprehensionContentSchema.parse(content)
     default:
-      throw new Error(`Unknown exercise type code: ${exerciseTypeCode}`)
+      throw new Error(`Unknown exercise type: ${exerciseType}`)
   }
 }
 
-// JSON Schema definitions for database storage
-export const EXERCISE_TYPE_JSON_SCHEMAS = {
-  [EXERCISE_TYPE_CODES.FILL_BLANK_CHOICE]: {
-    type: "object",
-    required: ["question", "answer", "options", "answer_explanation"],
-    properties: {
-      question: {
-        type: "string",
-        minLength: 5,
-        maxLength: 1000
-      },
-      answer: {
-        type: "array",
-        items: { type: "string", minLength: 1 },
-        minItems: 1,
-        maxItems: 10
-      },
-      options: {
-        type: "array",
-        items: { type: "string", minLength: 1 },
-        minItems: 2,
-        maxItems: 6
-      },
-      answer_explanation: {
-        type: "string",
-        minLength: 10,
-        maxLength: 500
-      }
-    },
-    additionalProperties: false
-  },
-  [EXERCISE_TYPE_CODES.FILL_BLANK_FREE]: {
-    type: "object",
-    required: ["question", "answer", "options", "answer_explanation"],
-    properties: {
-      question: {
-        type: "string",
-        minLength: 5,
-        maxLength: 1000
-      },
-      answer: {
-        type: "array",
-        items: { type: "string", minLength: 1 },
-        minItems: 1,
-        maxItems: 10
-      },
-      options: {
-        type: "null"
-      },
-      answer_explanation: {
-        type: "string",
-        minLength: 10,
-        maxLength: 500
-      }
-    },
-    additionalProperties: false
-  },
-  [EXERCISE_TYPE_CODES.READING_COMPREHENSION]: {
-    type: "object",
-    required: ["question", "answer", "options", "answer_explanation"],
-    properties: {
-      question: {
-        type: "string",
-        minLength: 5,
-        maxLength: 1000
-      },
-      answer: {
-        type: "array",
-        items: { type: "string", minLength: 1 },
-        minItems: 1,
-        maxItems: 10
-      },
-      options: {
-        type: "array",
-        items: { type: "string", minLength: 1 },
-        minItems: 2,
-        maxItems: 6
-      },
-      answer_explanation: {
-        type: "string",
-        minLength: 10,
-        maxLength: 500
-      }
-    },
-    additionalProperties: false
-  }
-} as const
-
 // Type inference
-export type ExerciseTypeFormSchema = z.infer<typeof exerciseTypeFormSchema>
-export type CreateExerciseTypeSchema = z.infer<typeof createExerciseTypeSchema>
-export type UpdateExerciseTypeSchema = z.infer<typeof updateExerciseTypeSchema>
-
 export type ExerciseFormSchema = z.infer<typeof exerciseFormSchema>
 export type CreateExerciseSchema = z.infer<typeof createExerciseSchema>
 export type UpdateExerciseSchema = z.infer<typeof updateExerciseSchema>
 
-export type FillBlankChoiceContentSchema = z.infer<typeof fillBlankChoiceContentSchema>
+export type FillBlankContentSchema = z.infer<typeof fillBlankContentSchema>
 export type FillBlankFreeContentSchema = z.infer<typeof fillBlankFreeContentSchema>
 export type ReadingComprehensionContentSchema = z.infer<typeof readingComprehensionContentSchema>
 export type ExerciseContentSchema = z.infer<typeof exerciseContentSchema>

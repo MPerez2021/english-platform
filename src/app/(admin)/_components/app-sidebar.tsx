@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Settings2,
   SquareTerminal,
+  Zap,
 } from "lucide-react";
 import * as React from "react";
 
@@ -47,14 +48,8 @@ const data = {
     },
     {
       title: "Exercises",
-      url: "#",
-      icon: Settings2,
-      subMenu: [
-        {
-          title: "Types",
-          url: "#",
-        },
-      ],
+      url: "/dashboard/exercises",
+      icon: Zap,
     },
   ],
 };
@@ -74,7 +69,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={{name:'Jorge Lucas', email:'jorge@hotmail.com', avatar:'pnpm dlx shadcn@latest add avatar'}}/>
+        <NavUser user={{name:'Jorge Lucas', email:'jorge@hotmail.com', avatar:'https://github.com/evilrabbit.png'}}/>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

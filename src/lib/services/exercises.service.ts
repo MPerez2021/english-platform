@@ -1,13 +1,12 @@
 import { createClient } from '@/lib/supabase/client'
 import type {
   Exercise,
-  ExerciseWithType,
   CreateExerciseInput,
   UpdateExerciseInput,
   ExerciseRow,
-  ExerciseContent
+  ExerciseContent,
+  ExerciseType
 } from '@/lib/types/exercise.types'
-import { exerciseTypesService } from './exercise-types.service'
 import type { Database, Json } from '@/lib/supabase/database.types'
 
 type ExerciseInsert = Database['public']['Tables']['exercises']['Insert']
@@ -19,7 +18,7 @@ const supabase = createClient()
 const mapRowToExercise = (row: ExerciseRow): Exercise => ({
   id: row.id,
   lesson_id: row.lesson_id,
-  exercise_types_id: row.exercise_types_id,
+  exercise_types: row.exercise_types,
   content: row.content as unknown as ExerciseContent,
   instructions: row.instructions,
   display_order: row.display_order,
@@ -67,25 +66,6 @@ export const exercisesService = {
     return mapRowToExercise(data)
   },
 
-  /**
-   * Get a single exercise by ID with exercise type information
-   */
-  getByIdWithType: async (id: string): Promise<ExerciseWithType | null> => {
-    const exercise = await exercisesService.getById(id)
-    if (!exercise) {
-      return null
-    }
-
-    const exerciseType = await exerciseTypesService.getById(exercise.exercise_types_id)
-    if (!exerciseType) {
-      throw new Error(`Exercise type not found for exercise ${id}`)
-    }
-
-    return {
-      ...exercise,
-      exercise_type: exerciseType,
-    }
-  },
 
   /**
    * Get exercises by lesson ID
@@ -106,48 +86,15 @@ export const exercisesService = {
     return data.map(mapRowToExercise)
   },
 
-  /**
-   * Get exercises by lesson ID with exercise type information
-   */
-  getByLessonIdWithType: async (lessonId: string): Promise<ExerciseWithType[]> => {
-    const exercises = await exercisesService.getByLessonId(lessonId)
-
-    // Get all unique exercise type IDs
-    const exerciseTypeIds = [...new Set(exercises.map(ex => ex.exercise_types_id))]
-
-    // Fetch all exercise types in parallel
-    const exerciseTypes = await Promise.all(
-      exerciseTypeIds.map(id => exerciseTypesService.getById(id))
-    )
-
-    // Create a map for quick lookup
-    const exerciseTypeMap = new Map(
-      exerciseTypes
-        .filter(et => et !== null)
-        .map(et => [et!.id, et!])
-    )
-
-    // Map exercises with their types
-    return exercises.map(exercise => {
-      const exerciseType = exerciseTypeMap.get(exercise.exercise_types_id)
-      if (!exerciseType) {
-        throw new Error(`Exercise type not found for exercise ${exercise.id}`)
-      }
-      return {
-        ...exercise,
-        exercise_type: exerciseType,
-      }
-    })
-  },
 
   /**
-   * Get exercises by exercise type ID
+   * Get exercises by exercise type
    */
-  getByExerciseTypeId: async (exerciseTypeId: string): Promise<Exercise[]> => {
+  getByExerciseType: async (exerciseType: ExerciseType): Promise<Exercise[]> => {
     const { data, error } = await supabase
       .from('exercises')
       .select('*')
-      .eq('exercise_types_id', exerciseTypeId)
+      .eq('exercise_types', exerciseType)
       .order('display_order', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false })
 
@@ -276,7 +223,7 @@ export const exercisesService = {
 
     const duplicateData: CreateExerciseInput = {
       lesson_id: targetLesson,
-      exercise_types_id: originalExercise.exercise_types_id,
+      exercise_types: originalExercise.exercise_types,
       content: originalExercise.content,
       instructions: `${originalExercise.instructions} (Copy)`,
       display_order: maxOrder + 1,
@@ -293,7 +240,7 @@ export const exercisesService = {
     offset: number = 0,
     filters?: {
       lesson_id?: string
-      exercise_types_id?: string
+      exercise_types?: ExerciseType
     }
   ): Promise<{ exercises: Exercise[]; total: number }> => {
     let query = supabase
@@ -304,8 +251,8 @@ export const exercisesService = {
     if (filters?.lesson_id) {
       query = query.eq('lesson_id', filters.lesson_id)
     }
-    if (filters?.exercise_types_id) {
-      query = query.eq('exercise_types_id', filters.exercise_types_id)
+    if (filters?.exercise_types) {
+      query = query.eq('exercise_types', filters.exercise_types)
     }
 
     const { data, error, count } = await query
@@ -344,11 +291,11 @@ export const exercisesService = {
   /**
    * Count exercises by exercise type
    */
-  countByExerciseTypeId: async (exerciseTypeId: string): Promise<number> => {
+  countByExerciseType: async (exerciseType: ExerciseType): Promise<number> => {
     const { count, error } = await supabase
       .from('exercises')
       .select('*', { count: 'exact', head: true })
-      .eq('exercise_types_id', exerciseTypeId)
+      .eq('exercise_types', exerciseType)
 
     if (error) {
       console.error('Error counting exercises by exercise type:', error)

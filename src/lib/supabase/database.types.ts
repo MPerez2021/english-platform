@@ -177,44 +177,11 @@ export type Database = {
           }
         ]
       }
-      exercise_types: {
-        Row: {
-          id: string
-          code: string
-          name: string
-          description: string | null
-          json_schema: Json
-          is_active: boolean | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          code: string
-          name: string
-          description?: string | null
-          json_schema: Json
-          is_active?: boolean | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          code?: string
-          name?: string
-          description?: string | null
-          json_schema?: Json
-          is_active?: boolean | null
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       exercises: {
         Row: {
           id: string
           lesson_id: string
-          exercise_types_id: string
+          exercise_types: Database["public"]["Enums"]["exercise_types"]
           content: Json
           instructions: string
           display_order: number | null
@@ -224,7 +191,7 @@ export type Database = {
         Insert: {
           id?: string
           lesson_id: string
-          exercise_types_id: string
+          exercise_types: Database["public"]["Enums"]["exercise_types"]
           content: Json
           instructions: string
           display_order?: number | null
@@ -234,7 +201,7 @@ export type Database = {
         Update: {
           id?: string
           lesson_id?: string
-          exercise_types_id?: string
+          exercise_types?: Database["public"]["Enums"]["exercise_types"]
           content?: Json
           instructions?: string
           display_order?: number | null
@@ -248,13 +215,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "lessons"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "exercises_exercise_types_id_fkey"
-            columns: ["exercise_types_id"]
-            isOneToOne: false
-            referencedRelation: "exercise_types"
-            referencedColumns: ["id"]
           }
         ]
       }
@@ -267,6 +227,7 @@ export type Database = {
     }
     Enums: {
       cefr_level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2"
+      exercise_types: "FILL_BLANK" | "FILL_BLANK_FREE" | "READING_COMPREHENSION"
     }
     CompositeTypes: {
       [_ in never]: never

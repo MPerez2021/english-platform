@@ -1,40 +1,11 @@
-import type { Database, Json } from '@/lib/supabase/database.types'
+import type { Database } from '@/lib/supabase/database.types'
 
 // Database types from Supabase
-export type ExerciseTypeRow = Database['public']['Tables']['exercise_types']['Row']
 export type ExerciseRow = Database['public']['Tables']['exercises']['Row']
-
-// Exercise Type Interfaces
-export interface ExerciseType {
-  id: string
-  code: string
-  name: string
-  description: string | null
-  json_schema: Json
-  is_active: boolean | null
-  created_at: Date
-  updated_at: Date
-}
-
-export interface CreateExerciseTypeInput {
-  code: string
-  name: string
-  description?: string | null
-  json_schema: Json
-  is_active?: boolean | null
-}
-
-export interface UpdateExerciseTypeInput {
-  id: string
-  code: string
-  name: string
-  description?: string | null
-  json_schema: Json
-  is_active?: boolean | null
-}
+export type ExerciseType = Database['public']['Enums']['exercise_types']
 
 // Exercise Content Schema Types
-export interface FillBlankChoiceContent {
+export interface FillBlankContent {
   question: string
   answer: string[]
   options: string[]
@@ -57,7 +28,7 @@ export interface ReadingComprehensionContent {
 
 // Union type for all exercise content types
 export type ExerciseContent =
-  | FillBlankChoiceContent
+  | FillBlankContent
   | FillBlankFreeContent
   | ReadingComprehensionContent
 
@@ -65,7 +36,7 @@ export type ExerciseContent =
 export interface Exercise {
   id: string
   lesson_id: string
-  exercise_types_id: string
+  exercise_types: ExerciseType
   content: ExerciseContent
   instructions: string
   display_order: number | null
@@ -73,14 +44,9 @@ export interface Exercise {
   updated_at: Date
 }
 
-// Extended Exercise interface with exercise type information
-export interface ExerciseWithType extends Exercise {
-  exercise_type: ExerciseType
-}
-
 export interface CreateExerciseInput {
   lesson_id: string
-  exercise_types_id: string
+  exercise_types: ExerciseType
   content: ExerciseContent
   instructions: string
   display_order?: number | null
@@ -89,7 +55,7 @@ export interface CreateExerciseInput {
 export interface UpdateExerciseInput {
   id: string
   lesson_id: string
-  exercise_types_id: string
+  exercise_types: ExerciseType
   content: ExerciseContent
   instructions: string
   display_order?: number | null
@@ -98,33 +64,30 @@ export interface UpdateExerciseInput {
 // Form data types for admin interface
 export interface ExerciseFormData {
   lesson_id: string
-  exercise_types_id: string
+  exercise_types: ExerciseType
   content: ExerciseContent
   instructions: string
   display_order?: number | null
 }
 
-export interface ExerciseTypeFormData {
-  code: string
-  name: string
-  description?: string | null
-  json_schema: Json
-  is_active?: boolean | null
-}
-
-// Exercise type constants based on the JSON schemas
+// Exercise type constants matching the enum
 export const EXERCISE_TYPE_CODES = {
-  FILL_BLANK_CHOICE: 'fill_blank_choice',
-  FILL_BLANK_FREE: 'fill_blank_free',
-  READING_COMPREHENSION: 'reading_comprehension',
+  FILL_BLANK: 'FILL_BLANK',
+  FILL_BLANK_FREE: 'FILL_BLANK_FREE',
+  READING_COMPREHENSION: 'READING_COMPREHENSION',
 } as const
 
-export type ExerciseTypeCode = typeof EXERCISE_TYPE_CODES[keyof typeof EXERCISE_TYPE_CODES]
+// Exercise type display names
+export const EXERCISE_TYPE_NAMES = {
+  FILL_BLANK: 'Fill Blank - Multiple Choice',
+  FILL_BLANK_FREE: 'Fill Blank - Free Text',
+  READING_COMPREHENSION: 'Reading Comprehension',
+} as const
 
 // Helper type guards
-export function isFillBlankChoiceContent(content: ExerciseContent): content is FillBlankChoiceContent {
-  return Array.isArray((content as FillBlankChoiceContent).options) &&
-         (content as FillBlankChoiceContent).options !== null
+export function isFillBlankContent(content: ExerciseContent): content is FillBlankContent {
+  return Array.isArray((content as FillBlankContent).options) &&
+         (content as FillBlankContent).options !== null
 }
 
 export function isFillBlankFreeContent(content: ExerciseContent): content is FillBlankFreeContent {

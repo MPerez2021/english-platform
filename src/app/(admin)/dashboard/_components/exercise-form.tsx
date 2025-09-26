@@ -53,10 +53,15 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
       exercise_types: exercise?.exercise_types,
       instructions: exercise?.instructions || "",
       display_order: exercise?.display_order || 1,
-      content: {
+      content: exercise?.content ? {
+        question: exercise.content.question || "",
+        answers: exercise.content.answers?.length ? exercise.content.answers : [{ value: "" }],
+        options: exercise.content.options?.length ? exercise.content.options : undefined,
+        answer_explanation: exercise.content.answer_explanation || "",
+      } : {
         question: "",
         answers: [{ value: "" }],
-        options: [{ value: "" }],
+        options: undefined,
         answer_explanation: "",
       },
     },
@@ -105,13 +110,22 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
 
   const onSubmit = async (data: ExerciseFormSchema) => {
     try {
+      // Transform form data to match database expectations
+      const transformedData = {
+        ...data,
+        content: {
+          ...data.content,
+          options: data.content.options || null
+        }
+      };
+
       if (mode === "create") {
-        await exercisesService.create(data);
+        await exercisesService.create(transformedData);
         toast.success("Exercise created successfully");
       } else if (exercise) {
         await exercisesService.update({
           id: exercise.id,
-          ...data,
+          ...transformedData,
         });
         toast.success("Exercise updated successfully");
       }
@@ -178,7 +192,7 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
                       form.setValue("content.answer_explanation", "");
 
                       if (value === EXERCISE_TYPE_CODES.FILL_BLANK_FREE) {
-                        form.setValue("content.options", []);
+                        form.setValue("content.options", undefined);
                       } else {
                         form.setValue("content.options", [{ value: "" }]);
                       }

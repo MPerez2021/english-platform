@@ -63,69 +63,44 @@ export const topicsService = {
   /**
    * Create a new topic
    */
-  create: async (input: CreateTopicInput): Promise<Topic> => {
+  create: async (input: CreateTopicInput): Promise<void> => {
     const insertData: TopicInsert = {
       ...input,
       slug: generateSlug(input.name),
     }
     console.log(input);
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('topics')
       .insert(insertData)
-      .select()
-      .single()
 
     if (error) {
       console.error('Error creating topic:', error)
       throw new Error(`Failed to create topic: ${error.message}`)
     }
-
-    return mapRowToTopic(data)
   },
 
   /**
    * Update an existing topic
    */
-  update: async (input: UpdateTopicInput): Promise<Topic | null> => {
+  update: async (input: UpdateTopicInput): Promise<void> => {
     const { id, ...updateData } = input
     const updatePayload: TopicUpdate = {
       ...updateData,
       ...(updateData.name && { slug: generateSlug(updateData.name) }),
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('topics')
       .update(updatePayload)
       .eq('id', id)
-      .select()
-      .single()
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return null // Topic not found
+        throw new Error('Topic not found')
       }
       console.error('Error updating topic:', error)
       throw new Error(`Failed to update topic: ${error.message}`)
     }
-
-    return mapRowToTopic(data)
-  },
-
-  /**
-   * Delete a topic
-   */
-  delete: async (id: string): Promise<boolean> => {
-    const { error } = await supabase
-      .from('topics')
-      .delete()
-      .eq('id', id)
-
-    if (error) {
-      console.error('Error deleting topic:', error)
-      throw new Error(`Failed to delete topic: ${error.message}`)
-    }
-
-    return true
   },
 
   /**

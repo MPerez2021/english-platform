@@ -42,24 +42,6 @@ export const subcategoriesService = {
   },
 
   /**
-   * Get subcategories by category ID
-   */
-  getByCategoryId: async (categoryId: string): Promise<Subcategory[]> => {
-    const { data, error } = await supabase
-      .from('subcategories')
-      .select('*')
-      .eq('category_id', categoryId)
-      .order('display_order', { ascending: true })
-
-    if (error) {
-      console.error('Error fetching subcategories by category:', error)
-      throw new Error(`Failed to fetch subcategories by category: ${error.message}`)
-    }
-
-    return data.map(mapRowToSubcategory)
-  },
-
-  /**
    * Get a single subcategory by ID
    */
   getById: async (id: string): Promise<Subcategory | null> => {
@@ -83,69 +65,44 @@ export const subcategoriesService = {
   /**
    * Create a new subcategory
    */
-  create: async (input: CreateSubcategoryInput): Promise<Subcategory> => {
+  create: async (input: CreateSubcategoryInput): Promise<void> => {
     const insertData: SubcategoryInsert = {
       ...input,
       slug: generateSlug(input.name),
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('subcategories')
       .insert(insertData)
-      .select()
-      .single()
 
     if (error) {
       console.error('Error creating subcategory:', error)
       throw new Error(`Failed to create subcategory: ${error.message}`)
     }
-
-    return mapRowToSubcategory(data)
   },
 
   /**
    * Update an existing subcategory
    */
-  update: async (input: UpdateSubcategoryInput): Promise<Subcategory | null> => {
+  update: async (input: UpdateSubcategoryInput): Promise<void> => {
     const { id, ...updateData } = input
     const updatePayload: SubcategoryUpdate = {
       ...updateData,
       ...(updateData.name && { slug: generateSlug(updateData.name) }),
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('subcategories')
       .update(updatePayload)
       .eq('id', id)
-      .select()
-      .single()
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return null // Subcategory not found
+        throw new Error('Subcategory not found')
       }
       console.error('Error updating subcategory:', error)
       throw new Error(`Failed to update subcategory: ${error.message}`)
     }
-
-    return mapRowToSubcategory(data)
-  },
-
-  /**
-   * Delete a subcategory
-   */
-  delete: async (id: string): Promise<boolean> => {
-    const { error } = await supabase
-      .from('subcategories')
-      .delete()
-      .eq('id', id)
-
-    if (error) {
-      console.error('Error deleting subcategory:', error)
-      throw new Error(`Failed to delete subcategory: ${error.message}`)
-    }
-
-    return true
   },
 
   /**

@@ -5,7 +5,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { Exercise, ExerciseType, EXERCISE_TYPE_NAMES } from "@/lib/types/exercise.types";
 import { Lesson } from "@/lib/types/lesson.types";
 import { ActionDef, ColumnDef } from "@/lib/types/table.types";
-import { Edit, Plus } from "lucide-react";
+import { Edit, Plus, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -89,12 +89,20 @@ export function ExercisesTable({
     <div>
       <div className="flex flex-col items-start gap-4 mb-6 md:flex-row md:justify-between md:items-center">
         <h1 className="text-3xl font-bold tracking-tight">Exercises</h1>
-        <Button size="sm" asChild>
-          <Link href="/dashboard/exercises/create">
-            <Plus className="h-4 w-4" />
-            Add Exercise
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" asChild>
+            <Link href="/dashboard/exercises/create">
+              <Plus className="h-4 w-4" />
+              Add Single
+            </Link>
+          </Button>
+          <Button size="sm" asChild>
+            <Link href="/dashboard/exercises/create-multiple">
+              <PlusCircle className="h-4 w-4" />
+              Add Multiple
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <DataTable

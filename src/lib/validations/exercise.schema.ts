@@ -12,11 +12,11 @@ const baseContentSchema = z.object({
       value: z.string().trim().min(3, "Answer must be at least 3 characters")
     })
   ),
-  options:  z.array(
+  options: z.array(
     z.object({
       value: z.string().trim().min(3, "Option must bet at least 3 characters"),
     })
-  ),
+  ).optional(),
   answer_explanation: z
     .string()
     .min(10, "Answer explanation must be at least 10 characters")
@@ -53,7 +53,19 @@ export const updateExerciseSchema = exerciseFormSchema.extend({
   id: z.string(),
 });
 
+// Multiple exercises form schema
+export const multipleExerciseFormSchema = z.object({
+  lesson_id: z.string().min(1, "Please select a lesson"),
+  exercises: z.array(exerciseFormSchema.omit({ lesson_id: true }))
+    .min(1, "At least one exercise is required")
+    .max(10, "Maximum 10 exercises allowed per batch"),
+});
+
+export const createMultipleExercisesSchema = multipleExerciseFormSchema;
+
 // Type inference
 export type ExerciseFormSchema = z.infer<typeof exerciseFormSchema>;
 export type CreateExerciseSchema = z.infer<typeof createExerciseSchema>;
 export type UpdateExerciseSchema = z.infer<typeof updateExerciseSchema>;
+export type MultipleExerciseFormSchema = z.infer<typeof multipleExerciseFormSchema>;
+export type CreateMultipleExercisesSchema = z.infer<typeof createMultipleExercisesSchema>;

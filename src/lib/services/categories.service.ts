@@ -42,24 +42,6 @@ export const categoriesService = {
   },
 
   /**
-   * Get categories by topic ID
-   */
-  getByTopicId: async (topicId: string): Promise<Category[]> => {
-    const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .eq('topic_id', topicId)
-      .order('display_order', { ascending: true })
-
-    if (error) {
-      console.error('Error fetching categories by topic:', error)
-      throw new Error(`Failed to fetch categories by topic: ${error.message}`)
-    }
-
-    return data.map(mapRowToCategory)
-  },
-
-  /**
    * Get a single category by ID
    */
   getById: async (id: string): Promise<Category | null> => {
@@ -83,69 +65,44 @@ export const categoriesService = {
   /**
    * Create a new category
    */
-  create: async (input: CreateCategoryInput): Promise<Category> => {
+  create: async (input: CreateCategoryInput): Promise<void> => {
     const insertData: CategoryInsert = {
       ...input,
       slug: generateSlug(input.name),
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('categories')
       .insert(insertData)
-      .select()
-      .single()
 
     if (error) {
       console.error('Error creating category:', error)
       throw new Error(`Failed to create category: ${error.message}`)
     }
-
-    return mapRowToCategory(data)
   },
 
   /**
    * Update an existing category
    */
-  update: async (input: UpdateCategoryInput): Promise<Category | null> => {
+  update: async (input: UpdateCategoryInput): Promise<void> => {
     const { id, ...updateData } = input
     const updatePayload: CategoryUpdate = {
       ...updateData,
       ...(updateData.name && { slug: generateSlug(updateData.name) }),
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('categories')
       .update(updatePayload)
       .eq('id', id)
-      .select()
-      .single()
 
     if (error) {
       if (error.code === 'PGRST116') {
-        return null // Category not found
+        throw new Error('Category not found')
       }
       console.error('Error updating category:', error)
       throw new Error(`Failed to update category: ${error.message}`)
     }
-
-    return mapRowToCategory(data)
-  },
-
-  /**
-   * Delete a category
-   */
-  delete: async (id: string): Promise<boolean> => {
-    const { error } = await supabase
-      .from('categories')
-      .delete()
-      .eq('id', id)
-
-    if (error) {
-      console.error('Error deleting category:', error)
-      throw new Error(`Failed to delete category: ${error.message}`)
-    }
-
-    return true
   },
 
   /**

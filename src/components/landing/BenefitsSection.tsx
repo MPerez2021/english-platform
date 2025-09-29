@@ -1,78 +1,85 @@
-import { Gift, Clock, Award, Zap, TrendingUp, Smartphone, Target, ArrowRight } from "lucide-react"
-import { BENEFITS } from "@/lib/constants"
-import Link from "next/link"
-
-const iconMap = {
-  Gift,
-  Clock,
-  Award,
-  Zap,
-  TrendingUp,
-  Smartphone,
-} as const
-
-
+import { ArrowRight, Check } from "lucide-react";
+import { BENEFITS } from "@/lib/constants";
+import Link from "next/link";
+import Image from "next/image";
 
 export function BenefitsSection() {
-  // Strategic color assignment based on benefit themes and existing design patterns
-  const benefitColors = [
-    'text-primary',    // Learn Without Limits (Gift) - accessibility theme
-    'text-chart-3',    // Your Schedule (Clock) - time/progress theme
-    'text-chart-4',    // Expert Content (Award) - quality/achievement theme
-    'text-chart-1',    // Learn by Doing (Zap) - interactive/energy theme
-    'text-chart-4',    // See Your Growth (TrendingUp) - progress/achievement
-    'text-primary',    // Learn Anywhere (Smartphone) - accessibility theme
-  ]
-
   return (
     <section className="py-20 bg-background" aria-labelledby="benefits-heading">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Headline */}
-        <div className="text-center mb-16">
-          <h3 id="benefits-heading" className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Why Choose Our Platform?
-          </h3>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Experience the advantages of modern, accessible English education
-          </p>
-        </div>
+        {/* Two-Column Layout */}
+        <div className="flex flex-col lg:flex-row items-stretch gap-12 lg:gap-16">
+          {/* Left Side - Image */}
+          <div className="w-full relative hidden lg:flex">
+            <div className="w-full  max-w-md mx-auto">
+              <Image
+                src="/images/benefits/learning_with_no_limit.jpg"
+                alt="English learning platform interface"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
 
-        {/* Benefits Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-12" role="list" aria-label="Platform benefits">
-          {BENEFITS.map((benefit, index) => {
-            const IconComponent = iconMap[benefit.icon]
-            const iconColor = benefitColors[index]
+          {/* Right Side - Content */}
+          <div className="w-full  space-y-8">
+            {/* Headline */}
+            <div>
+              <h3
+                id="benefits-heading"
+                className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4"
+              >
+                Why Choose Our Platform?
+              </h3>
+              <p className="text-lg text-muted-foreground">
+                Experience the advantages of modern, accessible English education designed for every learning style and level.
+              </p>
+            </div>
 
-            return (
-              <div key={index} className={`text-center sm:text-left p-6 rounded-2xl `} role="listitem">
-                {/* Icon */}
-                <div className="flex justify-center sm:justify-start mb-4">
-                  <IconComponent className={`h-8 w-8 ${iconColor}`} aria-hidden="true" />
-                </div>
+            {/* Benefits Checklist */}
+            <ul
+              className="space-y-4"
+              role="list"
+              aria-label="Platform benefits"
+            >
+              {BENEFITS.map((benefit, index) => (
+                <li
+                  key={index}
+                  className="flex items-center gap-3"
+                  role="listitem"
+                >
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Check
+                      className="w-4 h-4 text-primary"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <span className="text-lg text-foreground font-medium">
+                    {benefit.title}
+                  </span>
+                </li>
+              ))}
+            </ul>
 
-                {/* Title */}
-                <h4 className="text-xl font-semibold text-foreground mb-3">
-                  {benefit.title}
-                </h4>
-
-                {/* Description */}
-                <p className="text-muted-foreground leading-relaxed">
-                  {benefit.description}
-                </p>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Enhanced Call to Action */}
-        <div className="flex justify-center mt-20">
-        <Link href="/vocabulary" className="group flex items-center px-6 py-3 border-2 rounded-full border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2" aria-label="Get started with English learning today">
-              <Target className="h-5 w-5 mr-2" aria-hidden="true" />
-              Get Started
-              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
-            </Link>
+            {/* Call to Action */}
+            <div className="pt-4">
+              <Link
+                href="/vocabulary"
+                className="group inline-flex items-center px-8 py-4 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity duration-300 font-semibold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                aria-label="Get started with English learning today"
+              >
+                Start Learning Free
+                <ArrowRight
+                  className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

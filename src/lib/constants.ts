@@ -88,16 +88,18 @@ export const BENEFITS = [
     title: "Learn Without Limits",
     description: "Access premium English education at no cost. Quality learning shouldn't depend on your budget.",
     icon: "Gift" as const,
+    image: '/images/topics/vocabulary.webp'
   },
   {
     title: "Your Schedule, Your Progress",
-    description: "Master English at your own pace. No deadlines, no pressure—just steady improvement when it works for you.",
+    description: "Master English at your own pace. No deadlines, no pressure, just steady improvement when it works for you.",
     icon: "Clock" as const,
   },
   {
     title: "Expert-Designed Content",
     description: "Every lesson crafted by education professionals using proven teaching methodologies that actually work.",
     icon: "Award" as const,
+    image: '/images/benefits/teachers.jpg'
   },
   {
     title: "Learn by Doing",

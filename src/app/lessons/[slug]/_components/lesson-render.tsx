@@ -1,10 +1,12 @@
 import HtmlWrapper from "@/components/lessons/html-wrapper";
 import parse from "html-react-parser";
+import DOMPurify from "isomorphic-dompurify";
 
-export function LessonRender({ data }: { data: string }) {
+export function LessonRender({ html }: { html: string }) {
+  const sanitizedContent = DOMPurify.sanitize(html);
   return (
    <HtmlWrapper>
-      {parse(data)}
+      {parse(sanitizedContent)}
     </HtmlWrapper>
   );
 }

@@ -230,7 +230,7 @@ export function FormSimpleEditor({
     content: value,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
-      console.log(editor.getHTML());
+      //console.log(editor.getHTML());
       onChange?.(html);
     },
   });

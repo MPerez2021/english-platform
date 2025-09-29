@@ -38,7 +38,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { FormSimpleEditor } from "../../_components/text-editor/form-simple-editor";
 import { FormActionButtons } from "./form-action-buttons";
-
+import DOMPurify from "isomorphic-dompurify";
 interface LessonFormProps {
   lesson?: Lesson;
   subcategories: Subcategory[];
@@ -76,6 +76,7 @@ export function LessonForm({ lesson, subcategories, mode }: LessonFormProps) {
 
   const onSubmit = async (data: LessonFormSchema) => {
     try {
+      data.explanation_content = DOMPurify.sanitize(data.explanation_content);
       if (mode === "create") {
         await lessonsService.create(data);
         toast.success("Lesson created successfully", {

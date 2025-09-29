@@ -54,7 +54,7 @@ export async function LessonPreview({ lesson }: LessonPreviewProps) {
               content={lesson.explanation_content}
               className="leading-relaxed"
             /> */}
-            <LessonRender data={lesson.explanation_content}/>
+            <LessonRender html={lesson.explanation_content}/>
       </div>
     </div>
   );

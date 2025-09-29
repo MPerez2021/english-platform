@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Separator } from "@/app/(admin)/_components/text-editor/tiptap-ui-primitive/separator"
-import "@/app/(admin)/_components/text-editor/tiptap-ui-primitive/toolbar/toolbar.scss"
 import { cn } from "@/app/(admin)/_components/text-editor/tiptap-utils"
 import { useMenuNavigation } from "@/app/(admin)/_components/text-editor/hooks/use-menu-navigation"
 import { useComposedRef } from "@/app/(admin)/_components/text-editor/hooks/use-composed-ref"
@@ -91,7 +90,14 @@ export const Toolbar = React.forwardRef<HTMLDivElement, ToolbarProps>(
         role="toolbar"
         aria-label="toolbar"
         data-variant={variant}
-        className={cn("tiptap-toolbar bg-background", className)}
+        className={cn(
+          "flex items-center gap-2 bg-background",
+          variant === "fixed" &&
+            "sticky top-0 z-50 w-full min-h-11 border-b border-border px-1.5 overflow-x-auto overscroll-x-contain scrollbar-hide max-sm:absolute max-sm:top-auto max-sm:bottom-0 max-sm:h-[calc(2.5rem+env(safe-area-inset-bottom,0px))] max-sm:border-t max-sm:border-b-0 max-sm:pb-[env(safe-area-inset-bottom,0px)] max-sm:flex-nowrap max-sm:justify-start",
+          variant === "floating" &&
+            "p-0.5 rounded-lg border border-border bg-background shadow-lg outline-none overflow-hidden max-sm:w-full max-sm:rounded-none max-sm:border-none max-sm:shadow-none",
+          className
+        )}
         {...props}
       >
         {children}
@@ -106,7 +112,10 @@ export const ToolbarGroup = React.forwardRef<HTMLDivElement, BaseProps>(
     <div
       ref={ref}
       role="group"
-      className={cn("tiptap-toolbar-group", className)}
+      className={cn(
+        "flex items-center gap-0.5 empty:hidden [&:empty+[role=separator]]:hidden [&+[role=separator]:has(+&:empty)]:hidden",
+        className
+      )}
       {...props}
     >
       {children}

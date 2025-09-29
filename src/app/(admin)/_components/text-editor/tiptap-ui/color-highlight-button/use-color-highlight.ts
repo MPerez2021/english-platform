@@ -17,54 +17,29 @@ import { HighlighterIcon } from "@/app/(admin)/_components/text-editor/tiptap-ic
 export const COLOR_HIGHLIGHT_SHORTCUT_KEY = "mod+shift+h"
 export const HIGHLIGHT_COLORS = [
   {
-    label: "Default background",
-    value: "var(--tt-bg-color)",
-    border: "var(--tt-bg-color-contrast)",
-  },
-  {
-    label: "Gray background",
-    value: "var(--tt-color-highlight-gray)",
-    border: "var(--tt-color-highlight-gray-contrast)",
-  },
-  {
-    label: "Brown background",
-    value: "var(--tt-color-highlight-brown)",
-    border: "var(--tt-color-highlight-brown-contrast)",
-  },
-  {
-    label: "Orange background",
-    value: "var(--tt-color-highlight-orange)",
-    border: "var(--tt-color-highlight-orange-contrast)",
-  },
-  {
     label: "Yellow background",
-    value: "var(--tt-color-highlight-yellow)",
-    border: "var(--tt-color-highlight-yellow-contrast)",
+    value: "hsl(48 96% 89%)",
+    border: "hsl(48 96% 70%)",
   },
   {
     label: "Green background",
-    value: "var(--tt-color-highlight-green)",
-    border: "var(--tt-color-highlight-green-contrast)",
+    value: "hsl(142 76% 85%)",
+    border: "hsl(142 76% 65%)",
   },
   {
     label: "Blue background",
-    value: "var(--tt-color-highlight-blue)",
-    border: "var(--tt-color-highlight-blue-contrast)",
+    value: "hsl(199 89% 85%)",
+    border: "hsl(199 89% 65%)",
   },
   {
     label: "Purple background",
-    value: "var(--tt-color-highlight-purple)",
-    border: "var(--tt-color-highlight-purple-contrast)",
-  },
-  {
-    label: "Pink background",
-    value: "var(--tt-color-highlight-pink)",
-    border: "var(--tt-color-highlight-pink-contrast)",
+    value: "hsl(270 89% 90%)",
+    border: "hsl(270 89% 70%)",
   },
   {
     label: "Red background",
-    value: "var(--tt-color-highlight-red)",
-    border: "var(--tt-color-highlight-red-contrast)",
+    value: "hsl(0 93% 88%)",
+    border: "hsl(0 93% 68%)",
   },
 ]
 export type HighlightColor = (typeof HIGHLIGHT_COLORS)[number]

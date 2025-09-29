@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import "@/app/(admin)/_components/text-editor/tiptap-ui-primitive/separator/separator.scss"
 import { cn } from "@/app/(admin)/_components/text-editor/tiptap-utils"
 
 export type Orientation = "horizontal" | "vertical"
@@ -20,7 +19,13 @@ export const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
 
     return (
       <div
-        className={cn("tiptap-separator", className)}
+        className={cn(
+          "shrink-0 bg-border",
+          orientation === "horizontal"
+            ? "h-px w-full my-1.5"
+            : "h-5 w-px",
+          className
+        )}
         data-orientation={orientation}
         {...semanticProps}
         {...divProps}

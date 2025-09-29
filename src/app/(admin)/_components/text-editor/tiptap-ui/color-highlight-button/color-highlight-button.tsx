@@ -20,9 +20,6 @@ import type { ButtonProps } from "@/app/(admin)/_components/text-editor/tiptap-u
 import { Button } from "@/app/(admin)/_components/text-editor/tiptap-ui-primitive/button"
 import { Badge } from "@/app/(admin)/_components/text-editor/tiptap-ui-primitive/badge"
 
-// --- Styles ---
-import "@/app/(admin)/_components/text-editor/tiptap-ui/color-highlight-button/color-highlight-button.scss"
-
 export interface ColorHighlightButtonProps
   extends Omit<ButtonProps, "type">,
     UseColorHighlightConfig {

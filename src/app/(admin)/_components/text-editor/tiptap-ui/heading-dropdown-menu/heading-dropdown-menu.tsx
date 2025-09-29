@@ -80,7 +80,7 @@ export const HeadingDropdownMenu = React.forwardRef<
     }
 
     return (
-      <DropdownMenu modal open={isOpen} onOpenChange={handleOpenChange}>
+      <DropdownMenu open={isOpen} onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger asChild>
           <Button
             type="button"

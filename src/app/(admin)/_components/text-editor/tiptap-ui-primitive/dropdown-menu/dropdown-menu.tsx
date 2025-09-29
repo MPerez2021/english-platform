@@ -3,12 +3,11 @@
 import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { cn } from "@/app/(admin)/_components/text-editor/tiptap-utils"
-import "@/app/(admin)/_components/text-editor/tiptap-ui-primitive/dropdown-menu/dropdown-menu.scss"
 
 function DropdownMenu({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
-  return <DropdownMenuPrimitive.Root modal={false} {...props} />
+  return <DropdownMenuPrimitive.Root {...props} />
 }
 
 function DropdownMenuPortal({
@@ -42,7 +41,15 @@ const DropdownMenuSubContent = React.forwardRef<
   const content = (
     <DropdownMenuPrimitive.SubContent
       ref={ref}
-      className={cn("tiptap-dropdown-menu", className)}
+      className={cn(
+        "z-50 outline-none origin-[var(--radix-dropdown-menu-content-transform-origin)] max-h-[var(--radix-dropdown-menu-content-available-height)]",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out",
+        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+        "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+        "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2",
+        "data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        className
+      )}
       {...props}
     />
   )
@@ -68,8 +75,15 @@ const DropdownMenuContent = React.forwardRef<
     <DropdownMenuPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}
-      onCloseAutoFocus={(e) => e.preventDefault()}
-      className={cn("tiptap-dropdown-menu", className)}
+      className={cn(
+        "z-50 outline-none origin-[var(--radix-dropdown-menu-content-transform-origin)] max-h-[var(--radix-dropdown-menu-content-available-height)]",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out",
+        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+        "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+        "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2",
+        "data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        className
+      )}
       {...props}
     />
   )

@@ -18,28 +18,28 @@ export const COLOR_HIGHLIGHT_SHORTCUT_KEY = "mod+shift+h"
 export const HIGHLIGHT_COLORS = [
   {
     label: "Yellow background",
-    value: "hsl(48 96% 89%)",
-    border: "hsl(48 96% 70%)",
+    value: "var(--highlight-yellow)",
+    border: "var(--highlight-yellow-border)",
   },
   {
     label: "Green background",
-    value: "hsl(142 76% 85%)",
-    border: "hsl(142 76% 65%)",
+    value: "var(--highlight-green)",
+    border: "var(--highlight-green-border)",
   },
   {
     label: "Blue background",
-    value: "hsl(199 89% 85%)",
-    border: "hsl(199 89% 65%)",
+    value: "var(--highlight-blue)",
+    border: "var(--highlight-blue-border)",
   },
   {
     label: "Purple background",
-    value: "hsl(270 89% 90%)",
-    border: "hsl(270 89% 70%)",
+    value: "var(--highlight-purple)",
+    border: "var(--highlight-purple-border)",
   },
   {
     label: "Red background",
-    value: "hsl(0 93% 88%)",
-    border: "hsl(0 93% 68%)",
+    value: "var(--highlight-red)",
+    border: "var(--highlight-red-border)",
   },
 ]
 export type HighlightColor = (typeof HIGHLIGHT_COLORS)[number]

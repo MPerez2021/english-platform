@@ -49,6 +49,16 @@
   --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.40);
   --tracking-normal: -0.025em;
   --spacing: 0.27rem;
+  --highlight-yellow: rgb(254 240 138);
+  --highlight-yellow-border: rgb(250 204 21);
+  --highlight-green: rgb(187 247 208);
+  --highlight-green-border: rgb(74 222 128);
+  --highlight-blue: rgb(186 230 253);
+  --highlight-blue-border: rgb(56 189 248);
+  --highlight-purple: rgb(233 213 255);
+  --highlight-purple-border: rgb(192 132 252);
+  --highlight-red: rgb(254 202 202);
+  --highlight-red-border: rgb(248 113 113);
 }
 
 .dark {
@@ -96,6 +106,16 @@
   --shadow-lg: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 4px 6px -1px hsl(0 0% 0% / 0.16);
   --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 8px 10px -1px hsl(0 0% 0% / 0.16);
   --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.40);
+  --highlight-yellow: rgb(161 98 7);
+  --highlight-yellow-border: rgb(202 138 4);
+  --highlight-green: rgb(21 128 61);
+  --highlight-green-border: rgb(34 197 94);
+  --highlight-blue: rgb(7 89 133);
+  --highlight-blue-border: rgb(14 165 233);
+  --highlight-purple: rgb(107 33 168);
+  --highlight-purple-border: rgb(168 85 247);
+  --highlight-red: rgb(185 28 28);
+  --highlight-red-border: rgb(239 68 68);
 }
 
 @theme inline {

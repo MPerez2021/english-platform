@@ -33,7 +33,7 @@ export function BenefitsSection() {
               >
                 Why Choose Our Platform?
               </h3>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-lg text-muted-foreground lg:w-2/3">
                 Experience the advantages of modern, accessible English
                 education designed for every learning style and level.
               </p>

@@ -21,10 +21,10 @@ export function HowItWorksSection() {
     <section className="py-20 bg-background" aria-labelledby="how-it-works-heading">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Two Column Layout */}
-        <div className="max-w-7xl mx-auto">
+        <div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left Side - Content */}
-            <div>
+            <div >
               {/* Headline */}
               <div className="mb-8 lg:mb-12">
                 <h3 id="how-it-works-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
@@ -89,6 +89,7 @@ export function HowItWorksSection() {
                 src="/images/benefits/learning_with_no_limit.jpg"
                 alt="English learning experience"
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
                 priority
               />

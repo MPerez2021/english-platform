@@ -14,24 +14,6 @@ import Link from "next/link";
 export function HeroSection() {
   return (
     <section className="relative py-20 md:py-32 flex flex-col justify-center items-center bg-gradient-to-br min-h-screen overflow-hidden" aria-labelledby="hero-heading">
-      {/* Floating Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Top left floating circle */}
-        <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-sm animate-float" />
-
-        {/* Top right gradient orb */}
-        <div className="absolute top-32 right-20 w-48 h-48 bg-gradient-to-br from-primary/8 to-purple-500/8 rounded-full blur-md animate-float-reverse" />
-
-        {/* Bottom left shape */}
-        <div className="absolute bottom-32 left-16 w-24 h-24 bg-accent/10 rounded-full animate-pulse" />
-
-        {/* Middle right floating element */}
-        <div className="absolute top-1/2 right-8 w-16 h-16 bg-primary/10 rounded-full animate-float-slow" />
-
-        {/* Bottom center subtle pattern */}
-        <div className="absolute bottom-20 left-1/3 w-40 h-40 bg-gradient-to-tr from-primary/5 to-transparent rounded-full blur-lg animate-float" />
-      </div>
-
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}

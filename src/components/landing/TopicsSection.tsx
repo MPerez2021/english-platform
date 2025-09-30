@@ -81,26 +81,21 @@ export function TopicsSection() {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center w-fulL">
-          <h4 className="text-xl font-semibold text-foreground mb-4">
-            Ready to Start Learning?
+        <div className="text-center w-full py-12 px-8 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/10 to-primary/10">
+          <h4 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-foreground mb-4">
+            You&apos;re Not Learning Alone
           </h4>
-          <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
-            Join thousands of learners improving their English skills with our
-            comprehensive platform
+          <p className="text-base text-muted-foreground mb-8 max-w-lg mx-auto">
+            Connect with thousands of learners from around the world. Share progress, exchange tips, and motivate each other on your English learning journey.
           </p>
 
           <Button
             size="lg"
             className="px-8 py-3 font-semibold"
-            aria-label="Begin learning English today - completely free"
+            aria-label="Join our learning community"
           >
-            Begin Learning Today - It&apos;s Free!
+            Join our community
           </Button>
-
-          <p className="text-xs text-muted-foreground mt-3">
-            No account required • Start in 30 seconds
-          </p>
         </div>
       </div>
     </section>

@@ -21,7 +21,7 @@ export function HowItWorksSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Headline */}
         <div className="text-center mb-16">
-          <h3 id="how-it-works-heading" className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h3 id="how-it-works-heading" className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             How it Works?
           </h3>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">

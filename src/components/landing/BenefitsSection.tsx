@@ -10,13 +10,13 @@ export function BenefitsSection() {
         {/* Two-Column Layout */}
         <div className="flex flex-col lg:flex-row items-stretch gap-12 lg:gap-16">
           {/* Left Side - Image */}
-          <div className="w-full relative hidden lg:flex">
-            <div className="w-full  max-w-md mx-auto">
+          <div className="hidden lg:flex w-full">
+            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-lg">
               <Image
                 src="/images/benefits/learning_with_no_limit.jpg"
                 alt="English learning platform interface"
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
                 priority
               />
@@ -34,7 +34,8 @@ export function BenefitsSection() {
                 Why Choose Our Platform?
               </h3>
               <p className="text-lg text-muted-foreground">
-                Experience the advantages of modern, accessible English education designed for every learning style and level.
+                Experience the advantages of modern, accessible English
+                education designed for every learning style and level.
               </p>
             </div>
 

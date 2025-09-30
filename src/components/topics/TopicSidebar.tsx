@@ -13,8 +13,7 @@ import {
   SidebarHeader,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem,
-  SidebarRail
+  SidebarMenuSubItem
 } from "@/components/ui/sidebar"
 import { TOPIC_DATA, TopicType } from "@/lib/topic-data"
 import { ChevronRight } from "lucide-react"
@@ -37,7 +36,7 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
     console.error(`No topic data found for topic: ${topic}`);
     console.error("Available topics:", Object.keys(TOPIC_DATA));
     return (
-      <Sidebar {...props} className="pt-16">
+      <Sidebar {...props}>
         <SidebarContent>
           <div className="p-4 text-red-500">
             Error: Topic &quot;{topic}&quot; not found
@@ -53,7 +52,7 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
       <SidebarHeader className="bg-background">
         <h2 className="text-sidebar-foreground text-lg font-bold px-2">{topicData.name}</h2>
       </SidebarHeader>
-      <SidebarContent className="gap-0 bg-background">
+      <SidebarContent className="gap-0 bg-background rounded-2xl">
         <SidebarGroup>
           <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sidebar-foreground group-data-[collapsible=icon]:hidden px-2 py-1.5">Table of Contents</h3>
         </SidebarGroup>
@@ -62,7 +61,7 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
           <Collapsible
             key={item.id}
             title={item.name}
-            defaultOpen={false}
+            defaultOpen={true}
             className="group/collapsible"
             aria-label={`${item.name} category`}
           >
@@ -101,7 +100,6 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
           </Collapsible>
         ))}
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
   )
 }

@@ -2,17 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
-import {
   type Exercise,
   getExercisesByCategory,
   getExercisesBySubcategory,
-  type TopicData
+  type TopicData,
 } from "@/lib/topic-data";
-import { BookOpen, Clock, Play } from "lucide-react";
-import Image from "next/image";
+import { BookOpen, Clock } from "lucide-react";
+import Link from "next/link";
+
 interface TopicContentProps {
   topicData: TopicData;
   //selectedLevel: Level | null
@@ -55,7 +52,6 @@ export function TopicContent({
   };
 
   const filteredExercises = getFilteredExercises();
-
 
   const getContentTitle = () => {
     if (selectedSubcategory && selectedCategory) {
@@ -114,21 +110,31 @@ export function TopicContent({
             {getContentDescription()}
           </p>
           {/* Stats */}
-          <div className="flex items-center gap-6 text-sm text-muted-foreground" role="list" aria-label="Exercise statistics">
+          <div
+            className="flex items-center gap-6 text-sm text-muted-foreground"
+            role="list"
+            aria-label="Exercise statistics"
+          >
             <div className="flex items-center gap-2" role="listitem">
               <BookOpen className="h-4 w-4" aria-hidden="true" />
-              <span aria-label={`${filteredExercises.length} exercises available`}>{filteredExercises.length} exercises</span>
+              <span
+                aria-label={`${filteredExercises.length} exercises available`}
+              >
+                {filteredExercises.length} exercises
+              </span>
             </div>
             <div className="flex items-center gap-2" role="listitem">
               <Clock className="h-4 w-4" aria-hidden="true" />
-              <span aria-label={`Average time per exercise is ${Math.round(
+              <span
+                aria-label={`Average time per exercise is ${Math.round(
                   filteredExercises.reduce(
                     (total, exercise) =>
                       total +
                       parseInt(exercise.estimatedTime.replace(" min", "")),
                     0
                   ) / filteredExercises.length
-                )} minutes`}>
+                )} minutes`}
+              >
                 {Math.round(
                   filteredExercises.reduce(
                     (total, exercise) =>
@@ -145,59 +151,34 @@ export function TopicContent({
 
         {/* Exercises Grid */}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-6" role="list" aria-label="Available exercises">
+        <div
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          role="list"
+          aria-label="Available exercises"
+        >
           {filteredExercises.map((exercise) => (
-            <Card
+            <Button
+              variant={"outline"}
               key={exercise.id}
-              className="group hover:shadow-sm transition-shadow duration-200 border border-border/40 bg-card/50 h-full"
-              role="listitem"
+              className="h-full w-full py-6 px-6 "
+              asChild
             >
-              <CardContent className=" h-full flex flex-col">
-                {/* Exercise Image - Smaller and at top */}
-                <div className="aspect-[16/9] bg-muted/20 rounded-sm mb-4 overflow-hidden">
-                  <Image
-                    src="/images/topics/grammar.webp"
-                    width={320}
-                    height={180}
-                    alt="Exercise illustration"
-                    className="object-cover w-full h-full opacity-80"
-                  />
-                </div>
-
-                {/* Exercise Title */}
-                <h2 className="text-xl font-semibold text-foreground mb-2 leading-tight">
-                  {exercise.title}
-                </h2>
-
-                {/* Exercise Description - Flexible height */}
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2 flex-1">
-                  {exercise.description}
-                </p>
-
-                {/* Exercise Meta - Simplified single line */}
-                <div className="flex items-center justify-between text-xs text-muted-foreground mb-6" role="list" aria-label="Exercise details">
-                  <div className="flex items-center gap-1" role="listitem">
-                    <Clock className="h-3 w-3" aria-hidden="true" />
-                    <span aria-label={`Estimated time: ${exercise.estimatedTime}`}>{exercise.estimatedTime}</span>
+              <Link
+                href={"https://google.com"}
+                className="flex items-center gap-6 w-full !hover:!bg-red-500"
+              >
+                {/* Left Section: Text Content */}
+                <div className="flex flex-col w-full text-wrap gap-3">
+                  <div className="flex justify-between">
+                    <h2 className="text-xl font-semibold text-foreground leading-tight">{exercise.title}</h2>
+                    <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-2xl w-fit">{exercise.level}</span>
                   </div>
-                  <div className="flex items-center gap-2" role="listitem">
-                    <span className="font-medium" aria-label={`Proficiency level: ${exercise.level}`}>{exercise.level}</span>
-                    <span className="w-1 h-1 bg-muted-foreground rounded-full" aria-hidden="true"></span>
-                    <span aria-label={`Difficulty: ${exercise.difficulty}`}>{exercise.difficulty}</span>
-                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {exercise.description}
+                  </p>
                 </div>
-
-                {/* Action Button - Full width, minimal, pushed to bottom */}
-                <Button
-                  variant="outline"
-                  className="cursor-pointer w-full border-border/50 hover:bg-accent/5 hover:border-accent/30 hover:text-primary mx-auto"
-                  aria-label={`Start ${exercise.title} exercise - ${exercise.description}`}
-                >
-                  <Play className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Start Exercise
-                </Button>
-              </CardContent>
-            </Card>
+              </Link>
+            </Button>
           ))}
         </div>
       </div>

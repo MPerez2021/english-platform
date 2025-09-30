@@ -1,10 +1,9 @@
 "use client"
 
-import { SidebarProvider } from "@/components/ui/sidebar"
+import { Header } from "@/components/layout/Header"
 import { isValidTopic } from "@/lib/topic-data"
 import { notFound } from "next/navigation"
 import { use } from "react"
-import { Header } from "@/components/layout/Header"
 
 interface TopicLayoutProps {
   children: React.ReactNode
@@ -24,11 +23,9 @@ export default function TopicLayout({ children, params }: TopicLayoutProps) {
   return (
     <>
     <Header />
-    <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-screen w-full">
         {children}
       </div>
-    </SidebarProvider>
     </>
   )
 }

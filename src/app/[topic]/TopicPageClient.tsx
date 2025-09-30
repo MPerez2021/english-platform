@@ -28,10 +28,10 @@ export default function TopicPageClient({
 
   return (
     <SidebarProvider>
-      <AppSidebar params={{ topic }} variant="floating"/>
+      <AppSidebar params={{ topic }} />
       <SidebarInset>
-        <div className="flex flex-1 flex-col gap-4 p-4 mt-16">
-          <SidebarTrigger className="-ml-1 flex md:hidden" />
+        <div className="flex flex-1 flex-col gap-4 p-4 mt-16 relative">
+          <SidebarTrigger className="-ml-1 flex sticky top-16 md:hidden bg-background" />
           <TopicContent
             topicData={topicData}
             selectedCategory={selectedCategory}

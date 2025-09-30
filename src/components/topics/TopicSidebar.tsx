@@ -48,11 +48,11 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
 
 
   return (
-    <Sidebar {...props} className="pt-16">
+    <Sidebar {...props} className="mt-16">
       <SidebarHeader className="bg-background">
         <h2 className="text-sidebar-foreground text-lg font-bold px-2">{topicData.name}</h2>
       </SidebarHeader>
-      <SidebarContent className="gap-0 bg-background rounded-2xl">
+      <SidebarContent className="bg-background">
         <SidebarGroup>
           <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sidebar-foreground group-data-[collapsible=icon]:hidden px-2 py-1.5">Table of Contents</h3>
         </SidebarGroup>

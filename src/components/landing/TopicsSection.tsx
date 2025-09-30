@@ -13,7 +13,7 @@ export function TopicsSection() {
         <div className="text-center mb-12">
           <h3
             id="topics-heading"
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4"
+            className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-4"
           >
             Master All English Skills
           </h3>
@@ -81,7 +81,7 @@ export function TopicsSection() {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center">
+        <div className="text-center w-fulL">
           <h4 className="text-xl font-semibold text-foreground mb-4">
             Ready to Start Learning?
           </h4>

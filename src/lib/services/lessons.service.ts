@@ -1,3 +1,4 @@
+import { LessonWithSubcategoryAndCategory } from './../types/lesson.types';
 import { createClient } from '@/lib/supabase/client'
 import { generateSlug } from '@/lib/utils'
 import type { Lesson, CreateLessonInput, UpdateLessonInput } from '@/lib/types/lesson.types'
@@ -41,6 +42,31 @@ export const lessonsService = {
     return data.map(mapRowToLesson)
   },
 
+  getAllWithSubcategoriesAndCategories: async():Promise<LessonWithSubcategoryAndCategory[]> => {
+    const {data,error} = await supabase
+    .from('lessons')
+    .select('id,title, slug, cefr_level, estimated_time, is_published,created_at, subcategories(name, categories(name, topics(name)))')
+    .order('created_at',{ascending:false})
+
+    if(error){
+      console.error('Error fetching lessons with subcategories and categories:',error)
+      throw new Error(`Failed to fetch lessons with subcategories and categories: ${error.message}`)
+    }
+
+    const lessonWithSubcategoryAndCategory: LessonWithSubcategoryAndCategory[] = data.map((lesson)=>({
+      id: lesson.id,
+      topic: lesson.subcategories.categories.topics.name,
+      subcategory: lesson.subcategories.name,
+      category: lesson.subcategories.categories.name,
+      title: lesson.title,
+      slug: lesson.slug,
+      cefr_level: lesson.cefr_level,
+      estimated_time: lesson.estimated_time,
+      is_published: lesson.is_published,
+      created_at: new Date(lesson.created_at),
+    }));
+    return lessonWithSubcategoryAndCategory;
+  },
   /**
    * Get a single lesson by ID
    */

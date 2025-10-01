@@ -1,14 +1,11 @@
-import { SubcategoriesTable } from "../_components/subcategories-table";
 import { subcategoriesService } from "@/lib/services/subcategories.service";
-import { categoriesService } from "@/lib/services/categories.service";
+import { SubcategoriesTable } from "../_components/subcategories-table";
 
 export default async function SubcategoriesPage() {
-  const subcategories = await subcategoriesService.getAll();
-  const categories = await categoriesService.getAll();
-
+  const subcategories = await subcategoriesService.getAllWithCategories();
   return (
     <div className="space-y-6 pt-8 px-4">
-      <SubcategoriesTable initialSubcategories={subcategories} categories={categories} />
+      <SubcategoriesTable initialSubcategories={subcategories}/>
     </div>
   );
 }

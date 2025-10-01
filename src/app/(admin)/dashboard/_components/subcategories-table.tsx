@@ -1,46 +1,51 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { DataTable } from "@/components/ui/data-table";
-import { Subcategory, Category } from "@/lib/types/category.types";
-import { ColumnDef, ActionDef } from "@/lib/types/table.types";
+import { Switch } from "@/components/ui/switch";
 import { subcategoriesService } from "@/lib/services/subcategories.service";
+import {
+  SubcategoryWithCategory
+} from "@/lib/types/category.types";
+import { ActionDef, ColumnDef } from "@/lib/types/table.types";
 import { Edit, Plus } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface SubcategoriesTableProps {
-  initialSubcategories: Subcategory[];
-  categories: Category[];
+  initialSubcategories: SubcategoryWithCategory[];
 }
 
-export function SubcategoriesTable({ initialSubcategories, categories }: SubcategoriesTableProps) {
-  const [subcategories, setSubcategories] = useState<Subcategory[]>(initialSubcategories);
+export function SubcategoriesTable({
+  initialSubcategories,
+}: SubcategoriesTableProps) {
+  const [subcategories, setSubcategories] =
+    useState<SubcategoryWithCategory[]>(initialSubcategories);
 
   const handleToggleActive = async (subcategoryId: string) => {
     try {
-      const updatedSubcategory = await subcategoriesService.toggleActive(subcategoryId);
+      const updatedSubcategory = await subcategoriesService.toggleActive(
+        subcategoryId
+      );
       if (updatedSubcategory) {
-        const updatedSubcategories = await subcategoriesService.getAll();
+        const updatedSubcategories =
+          await subcategoriesService.getAllWithCategories();
         setSubcategories(updatedSubcategories);
         toast.success("Subcategory status updated successfully");
       }
     } catch (error) {
-      console.error('Error toggling subcategory status:', error);
+      console.error("Error toggling subcategory status:", error);
       toast.error("Failed to update subcategory status", {
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
       });
     }
   };
 
-  const getCategoryName = (categoryId: string): string => {
-    const category = categories.find(c => c.id === categoryId);
-    return category?.name || "Unknown Category";
-  };
-
-  const columns: ColumnDef<Subcategory>[] = [
+  const columns: ColumnDef<SubcategoryWithCategory>[] = [
     {
       key: "name",
       label: "Name",
@@ -49,7 +54,9 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
     {
       key: "category_id",
       label: "Category",
-      render: (value: unknown) => getCategoryName(value as string),
+      render: (value: unknown, subcategory: SubcategoryWithCategory) => (
+        <span>{subcategory.category}</span>
+      ),
       className: "text-muted-foreground",
     },
     {
@@ -79,7 +86,7 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
       key: "is_active",
       label: "Status",
       width: "w-20",
-      render: (value: unknown, subcategory: Subcategory) => (
+      render: (value: unknown, subcategory: SubcategoryWithCategory) => (
         <Switch
           checked={value as boolean}
           onCheckedChange={() => handleToggleActive(subcategory.id)}
@@ -95,11 +102,12 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
     },
   ];
 
-  const actions: ActionDef<Subcategory>[] = [
+  const actions: ActionDef<SubcategoryWithCategory>[] = [
     {
       label: "Edit subcategory",
       icon: <Edit className="h-4 w-4" />,
-      href: (subcategory: Subcategory) => `/dashboard/subcategories/${subcategory.id}`,
+      href: (subcategory: SubcategoryWithCategory) =>
+        `/dashboard/subcategories/${subcategory.id}`,
       variant: "ghost",
       size: "sm",
       className: "h-8 w-8 p-0",
@@ -112,7 +120,7 @@ export function SubcategoriesTable({ initialSubcategories, categories }: Subcate
         <h1 className="text-3xl font-bold tracking-tight">Subcategories</h1>
         <Button size="sm" asChild>
           <Link href="/dashboard/subcategories/create">
-            <Plus className="h-4 w-4"/>
+            <Plus className="h-4 w-4" />
             Add Subcategory
           </Link>
         </Button>

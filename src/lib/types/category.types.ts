@@ -71,3 +71,25 @@ export interface SubcategoryFormData {
   display_order: number;
   is_active: boolean;
 }
+
+export interface CategoryWithTopic {
+  id: string;
+  name: string;
+  topic: string;
+  slug: string;
+  description: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: Date;
+}
+
+export interface SubcategoryWithCategory {
+  id: string;
+  category_id: string;
+  name: string;
+  category: string;
+  slug: string;
+  description: string;
+  display_order: number;
+  is_active: boolean;
+}

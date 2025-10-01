@@ -1,50 +1,44 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { DataTable } from "@/components/ui/data-table";
 import { CefrLevelBadge } from "@/components/ui/cefr-level-badge";
-import { Lesson } from "@/lib/types/lesson.types";
-import { Subcategory } from "@/lib/types/category.types";
-import { ColumnDef, ActionDef } from "@/lib/types/table.types";
+import { DataTable } from "@/components/ui/data-table";
+import { Switch } from "@/components/ui/switch";
 import { lessonsService } from "@/lib/services/lessons.service";
-import { Edit, Plus, Eye, Clock } from "lucide-react";
+import { LessonWithSubcategoryAndCategory } from "@/lib/types/lesson.types";
+import { ActionDef, ColumnDef } from "@/lib/types/table.types";
+import { Clock, Edit, Eye, Plus } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface LessonsTableProps {
-  initialLessons: Lesson[];
-  subcategories: Subcategory[];
+  initialLessons: LessonWithSubcategoryAndCategory[];
 }
 
-export function LessonsTable({
-  initialLessons,
-  subcategories,
-}: LessonsTableProps) {
-  const [lessons, setLessons] = useState<Lesson[]>(initialLessons);
+export function LessonsTable({ initialLessons }: LessonsTableProps) {
+  const [lessons, setLessons] =
+    useState<LessonWithSubcategoryAndCategory[]>(initialLessons);
 
   const handleTogglePublished = async (lessonId: string) => {
     try {
       const updatedLesson = await lessonsService.togglePublished(lessonId);
       if (updatedLesson) {
-        const updatedLessons = await lessonsService.getAll();
+        const updatedLessons =
+          await lessonsService.getAllWithSubcategoriesAndCategories();
         setLessons(updatedLessons);
         toast.success("Lesson status updated successfully");
       }
     } catch (error) {
       console.error("Error toggling lesson published status:", error);
       toast.error("Failed to update lesson status", {
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
       });
     }
   };
-
-  const getSubcategoryName = (subcategoryId: string): string => {
-    const subcategory = subcategories.find((s) => s.id === subcategoryId);
-    return subcategory?.name || "Unknown Subcategory";
-  };
-
 
   const formatEstimatedTime = (minutes: number | null): string => {
     if (!minutes) return "—";
@@ -56,16 +50,30 @@ export function LessonsTable({
       : `${hours}h`;
   };
 
-  const columns: ColumnDef<Lesson>[] = [
+  const columns: ColumnDef<LessonWithSubcategoryAndCategory>[] = [
     {
       key: "title",
       label: "Title",
     },
     {
+      key: "topic",
+      label: "Topic",
+      render: (value: unknown, lesson: LessonWithSubcategoryAndCategory) => (
+        <div>{lesson.topic}</div>
+      ),
+    },
+    {
+      key: "category",
+      label: "Category",
+      render: (value: unknown, lesson: LessonWithSubcategoryAndCategory) => (
+        <div>{lesson.category}</div>
+      ),
+    },
+    {
       key: "sub-category",
       label: "Sub Category",
-      render: (value: unknown, lesson: Lesson) => (
-        <div>{getSubcategoryName(lesson.subcategory_id)}</div>
+      render: (value: unknown, lesson: LessonWithSubcategoryAndCategory) => (
+        <div>{lesson.subcategory}</div>
       ),
     },
     {
@@ -97,7 +105,7 @@ export function LessonsTable({
       key: "is_published",
       label: "Published",
       width: "w-24",
-      render: (value: unknown, lesson: Lesson) => (
+      render: (value: unknown, lesson: LessonWithSubcategoryAndCategory) => (
         <div className="flex items-center justify-center">
           <Switch
             checked={value as boolean}
@@ -115,17 +123,19 @@ export function LessonsTable({
     },
   ];
 
-  const actions: ActionDef<Lesson>[] = [
+  const actions: ActionDef<LessonWithSubcategoryAndCategory>[] = [
     {
       label: "View lesson",
       icon: <Eye className="h-4 w-4" />,
-      href: (lesson: Lesson) => `/lessons/${lesson.slug}`,
+      href: (lesson: LessonWithSubcategoryAndCategory) =>
+        `/lessons/${lesson.slug}`,
       variant: "ghost",
     },
     {
       label: "Edit lesson",
       icon: <Edit className="h-4 w-4" />,
-      href: (lesson: Lesson) => `/dashboard/lessons/${lesson.id}`,
+      href: (lesson: LessonWithSubcategoryAndCategory) =>
+        `/dashboard/lessons/${lesson.id}`,
       variant: "ghost",
     },
   ];
@@ -136,7 +146,7 @@ export function LessonsTable({
         <h1 className="text-3xl font-bold tracking-tight">Lessons</h1>
         <Button size="sm" asChild>
           <Link href="/dashboard/lessons/create">
-            <Plus className="h-4 w-4"/>
+            <Plus className="h-4 w-4" />
             Add Lesson
           </Link>
         </Button>

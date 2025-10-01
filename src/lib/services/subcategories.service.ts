@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/client'
 import { generateSlug } from '@/lib/utils'
-import type { Subcategory, CreateSubcategoryInput, UpdateSubcategoryInput } from '@/lib/types/category.types'
+import type { Subcategory, CreateSubcategoryInput, UpdateSubcategoryInput, SubcategoryWithCategory } from '@/lib/types/category.types'
 import type { Database } from '@/lib/supabase/database.types'
 
 type SubcategoryRow = Database['public']['Tables']['subcategories']['Row']
@@ -39,6 +39,31 @@ export const subcategoriesService = {
     }
 
     return data.map(mapRowToSubcategory)
+  },
+
+  getAllWithCategories: async (): Promise<SubcategoryWithCategory[]> => {
+    const { data, error } = await supabase
+      .from('subcategories')
+      .select('*, categories(name)')
+      .order('category_id', { ascending: true })
+      .order('display_order', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching subcategories with categories:', error)
+      throw new Error(`Failed to fetch subcategories with categories: ${error.message}`)
+    }
+    const subcategoriesWithCategories: SubcategoryWithCategory[] = data.map((subcategory) => ({
+      id: subcategory.id,
+      category_id: subcategory.category_id,
+      name: subcategory.name,
+      category: subcategory.categories.name,
+      slug: subcategory.slug,
+      description: subcategory.description,
+      display_order: subcategory.display_order,
+      is_active: subcategory.is_active,
+      created_at: new Date(subcategory.created_at),
+    }))
+    return subcategoriesWithCategories;
   },
 
   /**

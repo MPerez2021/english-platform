@@ -1,3 +1,4 @@
+import { CategoryWithTopic } from './../types/category.types';
 import { createClient } from '@/lib/supabase/client'
 import { generateSlug } from '@/lib/utils'
 import type { Category, CreateCategoryInput, UpdateCategoryInput } from '@/lib/types/category.types'
@@ -41,6 +42,28 @@ export const categoriesService = {
     return data.map(mapRowToCategory)
   },
 
+  getAllWithTopics: async (): Promise<CategoryWithTopic[]> => {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*, topics(name)')
+      .order('topic_id', { ascending: true })
+      .order('display_order', { ascending: true })
+
+    if (error) {
+      throw new Error(`Failed to fetch categories with topics: ${error.message}`)
+    }
+    const categoriesWithTopics: CategoryWithTopic[] = data.map((category) => ({
+      id: category.id,
+      name: category.name,
+      slug: category.slug,
+      description: category.description,
+      topic: category.topics.name,
+      display_order: category.display_order,
+      is_active: category.is_active,
+      created_at: new Date(category.created_at),
+    }))
+    return categoriesWithTopics;
+  },
   /**
    * Get a single category by ID
    */

@@ -43,6 +43,19 @@ export interface LessonFormData {
   is_published: boolean;
 }
 
+export interface LessonWithSubcategoryAndCategory{
+  id: string;
+  topic: string;
+  subcategory: string;
+  category:string;
+  title: string;
+  slug: string;
+  cefr_level: CefrLevel;
+  estimated_time: number | null;
+  is_published: boolean;
+  created_at: Date;
+}
+
 // Helper constant for CEFR level options
 export const CEFR_LEVELS: { value: CefrLevel; label: string; description: string }[] = [
   { value: 'A1', label: 'A1 - Beginner', description: 'Basic level - Can understand and use familiar everyday expressions' },

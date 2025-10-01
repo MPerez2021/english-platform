@@ -3,11 +3,10 @@
 import {
   Boxes,
   ClipboardCheck,
-  FolderKanban,
   FolderOpen,
   GraduationCap,
   Layers,
-  LayoutDashboard,
+  LayoutDashboard
 } from "lucide-react";
 import * as React from "react";
 
@@ -19,8 +18,8 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { NavMain } from "./nav-main";
 import Link from "next/link";
+import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 
 // This is sample data.

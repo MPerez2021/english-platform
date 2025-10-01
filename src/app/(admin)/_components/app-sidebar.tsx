@@ -1,12 +1,13 @@
 "use client";
 
 import {
-  BookOpen,
-  Bot,
+  Boxes,
+  ClipboardCheck,
+  FolderKanban,
+  FolderOpen,
+  GraduationCap,
+  Layers,
   LayoutDashboard,
-  Settings2,
-  SquareTerminal,
-  Zap,
 } from "lucide-react";
 import * as React from "react";
 
@@ -28,28 +29,28 @@ const data = {
     {
       title: "Topics",
       url: "/dashboard/topics",
-      icon: SquareTerminal,
+      icon: Layers,
       isActive: true,
     },
     {
       title: "Categories",
       url: "/dashboard/categories",
-      icon: Bot,
+      icon: FolderOpen,
     },
     {
       title: "Subcategories",
       url: "/dashboard/subcategories",
-      icon: BookOpen,
+      icon: Boxes,
     },
     {
       title: "Lessons",
       url: "/dashboard/lessons",
-      icon: Settings2,
+      icon: GraduationCap,
     },
     {
       title: "Exercises",
       url: "/dashboard/exercises",
-      icon: Zap,
+      icon: ClipboardCheck,
     },
   ],
 };

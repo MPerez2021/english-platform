@@ -1,18 +1,28 @@
-import { Lesson } from "@/lib/types/lesson.types";
-import { Clock } from "lucide-react";
+"use client";
+
+import { LessonBreadcrumb } from "@/components/lessons/lesson-breadcrumb";
+import { LessonToc } from "@/components/lessons/lesson-toc";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { CefrLevelBadge } from "@/components/ui/cefr-level-badge";
+import { Separator } from "@/components/ui/separator";
+import { Lesson } from "@/lib/types/lesson.types";
+import { Clock, Share2, Tag } from "lucide-react";
 import { LessonRender } from "./lesson-render";
 
 interface LessonPreviewProps {
   lesson: Lesson;
+  breadcrumb: {
+    topic: string;
+    category: string;
+    subcategory: string;
+  };
 }
 
-export async function LessonPreview({ lesson }: LessonPreviewProps) {
-
-
+export function LessonPreview({ lesson, breadcrumb }: LessonPreviewProps) {
   const formatEstimatedTime = (minutes: number | null): string => {
     if (!minutes) return "—";
-    if (minutes < 60) return `${minutes}m`;
+    if (minutes < 60) return `${minutes} min`;
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
     return remainingMinutes > 0
@@ -22,39 +32,57 @@ export async function LessonPreview({ lesson }: LessonPreviewProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto max-w-4xl px-4 py-8">
+      <div className="container mx-auto max-w-7xl px-4 py-8">
+        {/* Breadcrumb Navigation */}
+        <LessonBreadcrumb
+          topic={breadcrumb.topic}
+          category={breadcrumb.category}
+          subcategory={breadcrumb.subcategory}
+          className="mb-6"
+        />
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
+          {/* Left Column - Main Content */}
+          <div className="space-y-6">
+            {/* Header Section */}
             <div className="space-y-4">
-              <h1 className="text-3xl font-bold tracking-tight">{lesson.title}</h1>
+              <h1 className="text-4xl font-bold tracking-tight">
+                {lesson.title}
+              </h1>
 
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-muted-foreground">Level:</span>
-                  <CefrLevelBadge level={lesson.cefr_level} />
-                </div>
-
+              {/* Metadata Cards */}
+              <div className="flex flex-wrap items-center gap-3">
+                <Badge variant="secondary" className="gap-1.5">
+                  <Tag className="h-3.5 w-3.5" />
+                  {breadcrumb.topic}
+                </Badge>
+                <CefrLevelBadge level={lesson.cefr_level} />
                 {lesson.estimated_time && (
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      {formatEstimatedTime(lesson.estimated_time)}
-                    </span>
+                  <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                    <Clock className="h-4 w-4" />
+                    <span>{formatEstimatedTime(lesson.estimated_time)}</span>
                   </div>
                 )}
-
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-muted-foreground">Created:</span>
-                  <span className="text-sm text-muted-foreground">
-                    {lesson.created_at.toLocaleDateString()}
-                  </span>
-                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Share this lesson"
+                >
+                  <Share2 className="h-4 w-4" />
+                </Button>
               </div>
             </div>
+            <Separator />
+            {/* Lesson Content */}
+            <LessonRender html={lesson.explanation_content} />
+          </div>
 
-         {/*    <LessonContentRenderer
-              content={lesson.explanation_content}
-              className="leading-relaxed"
-            /> */}
-            <LessonRender html={lesson.explanation_content}/>
+          {/* Right Column - Table of Contents */}
+          <div className="hidden lg:block">
+            <LessonToc htmlContent={lesson.explanation_content} />
+          </div>
+        </div>
       </div>
     </div>
   );

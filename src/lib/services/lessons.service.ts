@@ -110,6 +110,34 @@ export const lessonsService = {
   },
 
   /**
+   * Get a single lesson by slug with breadcrumb data (topic, category, subcategory)
+   */
+  getBySlugWithBreadcrumb: async (slug: string) => {
+    const { data, error } = await supabase
+      .from('lessons')
+      .select('*, subcategories(name, categories(name, topics(name)))')
+      .eq('slug', slug)
+      .single()
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return null // Lesson not found
+      }
+      console.error('Error fetching lesson by slug with breadcrumb:', error)
+      throw new Error(`Failed to fetch lesson by slug with breadcrumb: ${error.message}`)
+    }
+
+    return {
+      lesson: mapRowToLesson(data),
+      breadcrumb: {
+        topic: data.subcategories.categories.topics.name,
+        category: data.subcategories.categories.name,
+        subcategory: data.subcategories.name,
+      }
+    }
+  },
+
+  /**
    * Create a new lesson
    */
   create: async (input: CreateLessonInput): Promise<void> => {

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { lessonsService } from "@/lib/services/lessons.service";
 import { LessonPreview } from "./_components/lesson-preview";
+import { Header } from "@/components/layout/Header";
 
 interface LessonPageProps {
   params: Promise<{ slug: string }>;
@@ -8,11 +9,13 @@ interface LessonPageProps {
 
 export default async function LessonPage({ params }: LessonPageProps) {
   const { slug } = await params;
-  const lesson = await lessonsService.getBySlug(slug);
+  const result = await lessonsService.getBySlugWithBreadcrumb(slug);
 
-  if (!lesson) {
+  if (!result) {
     notFound();
   }
+
+  const { lesson, breadcrumb } = result;
 
   // Only show published lessons to non-admin users
   // For now, we'll show all lessons, but you can add auth check here
@@ -20,7 +23,14 @@ export default async function LessonPage({ params }: LessonPageProps) {
     notFound();
   }
 
-  return <LessonPreview lesson={lesson} />;
+  return (
+    <>
+      <Header />
+      <div className="mt-16">
+      <LessonPreview lesson={lesson} breadcrumb={breadcrumb} />
+      </div>
+    </>
+  );
 }
 
 export async function generateMetadata({ params }: LessonPageProps) {

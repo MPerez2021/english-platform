@@ -48,14 +48,6 @@ export function LessonToc({ htmlContent, className = "" }: LessonTocProps) {
 
     setTocItems(items);
 
-    // Add IDs to actual headings in the document
-    setTimeout(() => {
-      const actualHeadings = document.querySelectorAll("h1, h2, h3, h4, h5");
-      actualHeadings.forEach((heading, index) => {
-        heading.id = `heading-${index}`;
-      });
-    }, 100);
-
     // Set up intersection observer for active section tracking
     const observer = new IntersectionObserver(
       (entries) => {

@@ -97,12 +97,10 @@ export function TopicContent({
 
   return (
     <div className="flex-1 flex flex-col">
-      {/* Header */}
-
       {/* Content */}
       <div className="flex-1 lg:p-6">
         {/* Content Header */}
-        <div className="mb-8">
+        <div className="flex flex-col mb-8">
           <h1 className="text-2xl font-semibold text-foreground mb-2">
             {getContentTitle()}
           </h1>
@@ -150,9 +148,8 @@ export function TopicContent({
         </div>
 
         {/* Exercises Grid */}
-
         <div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6"
           role="list"
           aria-label="Available exercises"
         >

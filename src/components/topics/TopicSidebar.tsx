@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -14,16 +14,17 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem
-} from "@/components/ui/sidebar"
-import { TOPIC_DATA, TopicType } from "@/lib/topic-data"
-import { ChevronRight } from "lucide-react"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import * as React from "react"
+} from "@/components/ui/sidebar";
+import { NAVIGATION_ITEMS } from "@/lib/constants";
+import { TOPIC_DATA, TopicType } from "@/lib/topic-data";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import * as React from "react";
+import { ThemeToggleButton } from "../layout/ThemeToggleButton";
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   params: { topic: string };
 };
-
 
 export function AppSidebar({ params, ...props }: AppSidebarProps) {
   // Ensure params.topic is a string and exists in TOPIC_DATA
@@ -31,6 +32,9 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
   const topicData = TOPIC_DATA[topic];
   const searchParams = useSearchParams();
   const selectedSubcategory = searchParams.get("subcategory");
+  const menu = NAVIGATION_ITEMS.filter((item) => {
+    return item.href.replace("/", "") != topic;
+  });
   // Add error handling for undefined topicData
   if (!topicData) {
     console.error(`No topic data found for topic: ${topic}`);
@@ -46,15 +50,30 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
     );
   }
 
-
   return (
     <Sidebar {...props}>
       <SidebarHeader className="bg-background">
-        <h2 className="text-sidebar-foreground text-lg font-bold px-2">{topicData.name}</h2>
+        <div className="flex justify-between items-center">
+        <h2 className="text-sidebar-foreground text-lg font-bold px-2">
+          {topicData.name}
+        </h2>
+        <ThemeToggleButton />
+        </div>
       </SidebarHeader>
       <SidebarContent className="bg-background">
-        <SidebarGroup>
-          <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-sidebar-foreground group-data-[collapsible=icon]:hidden px-2 py-1.5">Table of Contents</h3>
+        <SidebarGroup className="flex xl:hidden">
+          <div className="flex flex-col pl-3 gap-2">
+            {menu.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-sm font-normal text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={`Navigate to ${item.name} section`}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
         </SidebarGroup>
         {/* We create a collapsible SidebarGroup for each parent. */}
         {topicData.categories.map((item) => (
@@ -70,23 +89,36 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
                 asChild
                 className="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sm"
               >
-                <CollapsibleTrigger aria-label={`Toggle ${item.name} subcategories`}>
-                  <h4 className="text-sm font-medium">
-                    {item.name}
-                  </h4>
-                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" aria-hidden="true" />
+                <CollapsibleTrigger
+                  aria-label={`Toggle ${item.name} subcategories`}
+                >
+                  {item.name}
+                  <ChevronRight
+                    className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90"
+                    aria-hidden="true"
+                  />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
               <CollapsibleContent>
                 <SidebarGroupContent>
-                  <SidebarMenuSub role="list" aria-label={`${item.name} subcategories`}>
+                  <SidebarMenuSub
+                    role="list"
+                    aria-label={`${item.name} subcategories`}
+                  >
                     {item.subcategories.map((subcategory) => (
                       <SidebarMenuSubItem key={subcategory.id} role="listitem">
-                        <SidebarMenuSubButton asChild isActive={subcategory.id === selectedSubcategory}>
+                        <SidebarMenuSubButton
+                          asChild
+                          isActive={subcategory.id === selectedSubcategory}
+                        >
                           <Link
                             href={`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`}
                             aria-label={`Go to ${subcategory.name} exercises in ${item.name}`}
-                            aria-current={subcategory.id === selectedSubcategory ? "page" : undefined}
+                            aria-current={
+                              subcategory.id === selectedSubcategory
+                                ? "page"
+                                : undefined
+                            }
                           >
                             {subcategory.name}
                           </Link>
@@ -101,5 +133,5 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
         ))}
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

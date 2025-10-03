@@ -66,7 +66,7 @@ export function Header() {
           <div className="md:hidden py-4 border-t" id="mobile-navigation">
             <nav className="flex flex-col space-y-3" role="navigation" aria-label="Mobile navigation">
               {NAVIGATION_ITEMS.map((item) => (
-                <a
+                <Link
                   key={item.name}
                   href={item.href}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2"
@@ -74,7 +74,7 @@ export function Header() {
                   aria-label={`Navigate to ${item.name} section`}
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>

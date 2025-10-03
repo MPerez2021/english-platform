@@ -1,6 +1,5 @@
 "use client"
 
-import { Header } from "@/components/layout/Header"
 import { isValidTopic } from "@/lib/topic-data"
 import { notFound } from "next/navigation"
 import { use } from "react"
@@ -14,7 +13,6 @@ interface TopicLayoutProps {
 
 export default function TopicLayout({ children, params }: TopicLayoutProps) {
   const { topic } = use(params)
-  
   // Validate the topic parameter
   if (!isValidTopic(topic)) {
     notFound()

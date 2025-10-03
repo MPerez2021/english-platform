@@ -1,4 +1,5 @@
 "use client";
+import { ThemeToggleButton } from "@/components/layout/ThemeToggleButton";
 import { TopicContent } from "@/components/topics/TopicContent";
 import { AppSidebar } from "@/components/topics/TopicSidebar";
 import {
@@ -30,8 +31,11 @@ export default function TopicPageClient({
     <SidebarProvider>
       <AppSidebar params={{ topic }} />
       <SidebarInset>
-        <div className="flex flex-1 flex-col gap-4 p-4 mt-16 relative">
-          <SidebarTrigger className="-ml-1 flex sticky top-16 md:hidden bg-background" />
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <SidebarTrigger className="-ml-1 flex sticky md:hidden bg-background" />
+          <ThemeToggleButton />
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4 relative">
           <TopicContent
             topicData={topicData}
             selectedCategory={selectedCategory}

@@ -22,7 +22,6 @@ export default function TopicLayout({ children, params }: TopicLayoutProps) {
 
   return (
     <>
-    <Header />
       <div className="flex min-h-screen w-full">
         {children}
       </div>

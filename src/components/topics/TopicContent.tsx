@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   type Exercise,
   getExercisesByCategory,
@@ -9,6 +8,7 @@ import {
 } from "@/lib/topic-data";
 import { BookOpen, Clock } from "lucide-react";
 import Link from "next/link";
+import { CefrLevelBadge } from "../ui/cefr-level-badge";
 
 interface TopicContentProps {
   topicData: TopicData;
@@ -154,28 +154,28 @@ export function TopicContent({
           aria-label="Available exercises"
         >
           {filteredExercises.map((exercise) => (
-            <Button
-              variant={"outline"}
+            <Link
+              href={"https://google.com"}
+              className="flex items-center gap-6 w-full h-full p-6 border-b-2 rounded bg-card-background hover:bg-muted"
               key={exercise.id}
-              className="h-full w-full py-6 px-6 "
-              asChild
             >
-              <Link
-                href={"https://google.com"}
-                className="flex items-center gap-6 w-full !hover:!bg-red-500"
-              >
-                {/* Left Section: Text Content */}
-                <div className="flex flex-col w-full text-wrap gap-3">
-                  <div className="flex justify-between">
-                    <h2 className="text-xl font-semibold text-foreground leading-tight">{exercise.title}</h2>
-                    <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-2xl w-fit">{exercise.level}</span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {exercise.description}
-                  </p>
-                </div>
-              </Link>
-            </Button>
+              {/* Left Section: Text Content */}
+              <span className="flex flex-col w-full text-wrap gap-3">
+                <span className="flex justify-between">
+                  <h2 className="text-xl font-semibold text-foreground leading-tight">
+                    {exercise.title}
+                  </h2>
+                  <CefrLevelBadge
+                    key={exercise.level}
+                    level={exercise.level}
+                    className="h-full"
+                  />
+                </span>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {exercise.description}
+                </p>
+              </span>
+            </Link>
           ))}
         </div>
       </div>

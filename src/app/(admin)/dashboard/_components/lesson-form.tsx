@@ -1,6 +1,6 @@
 "use client";
 
-import HtmlWrapper from "@/components/lessons/html-wrapper";
+import HtmlWrapper from "@/components/lessons/HtmlWrapper";
 import {
   Form,
   FormControl,

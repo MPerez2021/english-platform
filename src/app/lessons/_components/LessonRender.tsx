@@ -1,5 +1,5 @@
 import React from "react";
-import HtmlWrapper from "@/components/lessons/html-wrapper";
+import HtmlWrapper from "@/components/lessons/HtmlWrapper";
 import parse, {
   Element,
   domToReact,

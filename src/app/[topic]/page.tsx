@@ -1,7 +1,4 @@
-import type { Metadata } from "next"
-import { getTopicData } from "@/lib/topic-data"
-import TopicPageClient from "@/app/[topic]/TopicPageClient"
-
+import type { Metadata } from "next";
 interface PageProps {
   params: Promise<{ topic: string }>
 }
@@ -11,9 +8,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { topic } = await params
 
-  const topicData = getTopicData(topic)
-
-  if (!topicData) {
+  if (!topic) {
     return {
       title: "Topic Not Found",
       description: "The requested topic could not be found.",
@@ -21,27 +16,32 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${topicData.name}`,
-    description: `${topicData.description}`,
+    title: `${topic}`,
+    description: `${topic}`,
     keywords: [
       "English learning",
-      topicData.name.toLowerCase(),
+      topic,
       "English exercises",
       "free English learning",
     ],
     openGraph: {
-      title: `${topicData.name}`,
-      description: topicData.description,
+      title: `${topic}`,
+      description: topic,
       type: "website",
     },
     twitter: {
       card: "summary",
-      title: `${topicData.name}`,
-      description: topicData.description,
+      title: `${topic}`,
+      description: topic,
     },
   }
 }
 
-export default function Page({ params }: PageProps) {
-  return <TopicPageClient params={params} />
+
+export default async function Page() {
+  return (
+    <>
+      Overview
+    </>
+  );
 }

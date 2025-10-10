@@ -10,11 +10,9 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export interface LessonBreadcrumbProps {
-  /** Topic name */
   topic: string;
-  /** Category name */
+  topicSlug: string;
   category: string;
-  /** Subcategory name */
   subcategory: string;
   /** Additional CSS classes */
   className?: string;
@@ -26,6 +24,7 @@ export interface LessonBreadcrumbProps {
  */
 export function LessonBreadcrumb({
   topic,
+  topicSlug,
   category,
   subcategory,
   className = "",
@@ -45,20 +44,14 @@ export function LessonBreadcrumb({
 
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href={`/topics/${topic.toLowerCase().replace(/\s+/g, "-")}`}>
-              {topic}
-            </Link>
+            <Link href={`/${topicSlug}`}>{topic}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbSeparator />
 
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href={`/topics/${topic.toLowerCase().replace(/\s+/g, "-")}`}>
-              {category}
-            </Link>
-          </BreadcrumbLink>
+          <BreadcrumbLink>{category}</BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbSeparator />

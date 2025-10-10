@@ -1,25 +1,26 @@
-"use client";
-
-import { LessonBreadcrumb } from "@/components/lessons/lesson-breadcrumb";
-import { LessonToc } from "@/components/lessons/lesson-toc";
+import { LessonBreadcrumb } from "@/components/lessons/LessonBreadcrumb";
+import { LessonToc } from "@/components/lessons/LessonToc";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CefrLevelBadge } from "@/components/ui/cefr-level-badge";
 import { Separator } from "@/components/ui/separator";
-import { Lesson } from "@/lib/types/lesson.types";
+import { lessonsService } from "@/lib/services/lessons.service";
 import { Clock, Share2, Tag } from "lucide-react";
-import { LessonRender } from "./lesson-render";
+import { notFound } from "next/navigation";
+import { LessonBackButton } from "./LessonBackButton";
+import { LessonRender } from "./LessonRender";
 
-interface LessonPreviewProps {
-  lesson: Lesson;
-  breadcrumb: {
-    topic: string;
-    category: string;
-    subcategory: string;
-  };
+interface LessonContentProps {
+  subcategory: string;
 }
 
-export function LessonPreview({ lesson, breadcrumb }: LessonPreviewProps) {
+export default async function LessonContent({subcategory}: LessonContentProps) {
+  const result = await lessonsService.getBySlugWithBreadcrumb(subcategory);
+  if (!result) {
+    notFound();
+  }
+  const {lesson, breadcrumb} = result;
+
   const formatEstimatedTime = (minutes: number | null): string => {
     if (!minutes) return "—";
     if (minutes < 60) return `${minutes} min`;
@@ -29,13 +30,13 @@ export function LessonPreview({ lesson, breadcrumb }: LessonPreviewProps) {
       ? `${hours}h ${remainingMinutes}m`
       : `${hours}h`;
   };
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-7xl px-4 py-8">
         {/* Breadcrumb Navigation */}
         <LessonBreadcrumb
           topic={breadcrumb.topic}
+          topicSlug={breadcrumb.topicSlug}
           category={breadcrumb.category}
           subcategory={breadcrumb.subcategory}
           className="mb-6"
@@ -53,6 +54,7 @@ export function LessonPreview({ lesson, breadcrumb }: LessonPreviewProps) {
 
               {/* Metadata Cards */}
               <div className="flex flex-wrap items-center gap-3">
+                <LessonBackButton />
                 <Badge variant="secondary" className="gap-1.5">
                   <Tag className="h-3.5 w-3.5" />
                   {breadcrumb.topic}

@@ -1,63 +1,101 @@
 "use client";
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarMenuSubItem
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { NAVIGATION_ITEMS } from "@/lib/constants";
-import { TOPIC_DATA, TopicType } from "@/lib/topic-data";
-import { ChevronRight } from "lucide-react";
+import { sidebarService } from "@/lib/services/sidebar.service";
+import { SidebarData } from "@/lib/types/sidebar.type";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import * as React from "react";
+import { notFound, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { ThemeToggleButton } from "../layout/ThemeToggleButton";
+
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
   params: { topic: string };
 };
 
-export function AppSidebar({ params, ...props }: AppSidebarProps) {
+export function AppSidebar({ ...props }: AppSidebarProps) {
   // Ensure params.topic is a string and exists in TOPIC_DATA
-  const topic = params.topic as TopicType;
-  const topicData = TOPIC_DATA[topic];
-  const searchParams = useSearchParams();
-  const selectedSubcategory = searchParams.get("subcategory");
+  const { topic, subcategory } = useParams<{
+    topic: string;
+    subcategory?: string;
+  }>();
+
+  const [sidebarData, setTopicData] = useState<SidebarData[]>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    sidebarService
+      .getSidebarTopicData(topic)
+      .then((data) => {
+        if (data) {
+          setTopicData(data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching sidebar data:", error);
+        setError("Failed to load sidebar content.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [topic]);
+
   const menu = NAVIGATION_ITEMS.filter((item) => {
     return item.href.replace("/", "") != topic;
   });
-  // Add error handling for undefined topicData
-  if (!topicData) {
-    console.error(`No topic data found for topic: ${topic}`);
-    console.error("Available topics:", Object.keys(TOPIC_DATA));
+
+  if (loading) {
     return (
       <Sidebar {...props}>
         <SidebarContent>
-          <div className="p-4 text-red-500">
-            Error: Topic &quot;{topic}&quot; not found
+          <div className="flex flex-col space-y-3">
+            <SidebarMenuSkeleton showIcon />
           </div>
         </SidebarContent>
       </Sidebar>
     );
   }
 
+  // Error state
+  if (error) {
+    return (
+      <Sidebar {...props}>
+        <SidebarContent>
+          <div className="p-4 text-red-500 text-sm">{error}</div>
+        </SidebarContent>
+      </Sidebar>
+    );
+  }
+
+  // Add error handling for undefined topicData
+  if (!sidebarData || sidebarData.length == 0) {
+    return notFound();
+  }
+
   return (
     <Sidebar {...props}>
       <SidebarHeader className="bg-background">
         <div className="flex justify-between items-center">
-        <h2 className="text-sidebar-foreground text-lg font-bold px-2">
-          {topicData.name}
-        </h2>
-        <ThemeToggleButton />
+          <Link
+            href={`/${topic}`}
+            className="text-sidebar-foreground text-lg font-bold px-2"
+          >
+            {sidebarData.at(0)?.topicName}
+          </Link>
+          <ThemeToggleButton />
         </div>
       </SidebarHeader>
       <SidebarContent className="bg-background">
@@ -76,60 +114,37 @@ export function AppSidebar({ params, ...props }: AppSidebarProps) {
           </div>
         </SidebarGroup>
         {/* We create a collapsible SidebarGroup for each parent. */}
-        {topicData.categories.map((item) => (
-          <Collapsible
-            key={item.id}
-            title={item.name}
-            defaultOpen={true}
-            className="group/collapsible"
-            aria-label={`${item.name} category`}
-          >
+        {sidebarData.map((item, i) => (
+          <div key={i}>
             <SidebarGroup>
-              <SidebarGroupLabel
-                asChild
-                className="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sm"
-              >
-                <CollapsibleTrigger
-                  aria-label={`Toggle ${item.name} subcategories`}
-                >
-                  {item.name}
-                  <ChevronRight
-                    className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90"
-                    aria-hidden="true"
-                  />
-                </CollapsibleTrigger>
-              </SidebarGroupLabel>
-              <CollapsibleContent>
-                <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarGroupLabel>{item.categoryName}</SidebarGroupLabel>
                   <SidebarMenuSub
                     role="list"
-                    aria-label={`${item.name} subcategories`}
+                    aria-label={`${item.categoryName} subcategories`}
                   >
-                    {item.subcategories.map((subcategory) => (
-                      <SidebarMenuSubItem key={subcategory.id} role="listitem">
+                    {item.subcategories.map((sub) => (
+                      <SidebarMenuSubItem key={sub.name} role="listitem">
                         <SidebarMenuSubButton
                           asChild
-                          isActive={subcategory.id === selectedSubcategory}
+                          isActive={sub.slug === subcategory}
                         >
                           <Link
-                            href={`/${params.topic}?category=${item.id}&subcategory=${subcategory.id}`}
-                            aria-label={`Go to ${subcategory.name} exercises in ${item.name}`}
-                            aria-current={
-                              subcategory.id === selectedSubcategory
-                                ? "page"
-                                : undefined
-                            }
+                            href={`/${topic}/${item.categorySlug}/${sub.slug}`}
+                            aria-label={`Go to ${sub.name} exercises in ${item.categoryName}`}
+                            /* aria-current={} */
                           >
-                            {subcategory.name}
+                            {sub.name}
                           </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
                   </SidebarMenuSub>
-                </SidebarGroupContent>
-              </CollapsibleContent>
+                </SidebarMenuItem>
+              </SidebarMenu>
             </SidebarGroup>
-          </Collapsible>
+          </div>
         ))}
       </SidebarContent>
     </Sidebar>

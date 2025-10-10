@@ -1,14 +1,18 @@
-import { CategoryWithTopic } from './../types/category.types';
-import { createClient } from '@/lib/supabase/client'
-import { generateSlug } from '@/lib/utils'
-import type { Category, CreateCategoryInput, UpdateCategoryInput } from '@/lib/types/category.types'
-import type { Database } from '@/lib/supabase/database.types'
+import { createClient } from "@/lib/supabase/client";
+import type { Database } from "@/lib/supabase/database.types";
+import type {
+  Category,
+  CreateCategoryInput,
+  UpdateCategoryInput
+} from "@/lib/types/category.types";
+import { generateSlug } from "@/lib/utils";
+import { CategoryWithTopic } from "./../types/category.types";
 
-type CategoryRow = Database['public']['Tables']['categories']['Row']
-type CategoryInsert = Database['public']['Tables']['categories']['Insert']
-type CategoryUpdate = Database['public']['Tables']['categories']['Update']
+type CategoryRow = Database["public"]["Tables"]["categories"]["Row"];
+type CategoryInsert = Database["public"]["Tables"]["categories"]["Insert"];
+type CategoryUpdate = Database["public"]["Tables"]["categories"]["Update"];
 
-const supabase = createClient()
+const supabase = createClient();
 
 // Helper function to convert database row to Category type
 const mapRowToCategory = (row: CategoryRow): Category => ({
@@ -21,7 +25,7 @@ const mapRowToCategory = (row: CategoryRow): Category => ({
   is_active: row.is_active,
   created_at: new Date(row.created_at),
   updated_at: new Date(row.updated_at),
-})
+});
 
 export const categoriesService = {
   /**
@@ -29,28 +33,30 @@ export const categoriesService = {
    */
   getAll: async (): Promise<Category[]> => {
     const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .order('topic_id', { ascending: true })
-      .order('display_order', { ascending: true })
+      .from("categories")
+      .select("*")
+      .order("topic_id", { ascending: true })
+      .order("display_order", { ascending: true });
 
     if (error) {
-      console.error('Error fetching categories:', error)
-      throw new Error(`Failed to fetch categories: ${error.message}`)
+      console.error("Error fetching categories:", error);
+      throw new Error(`Failed to fetch categories: ${error.message}`);
     }
 
-    return data.map(mapRowToCategory)
+    return data.map(mapRowToCategory);
   },
 
   getAllWithTopics: async (): Promise<CategoryWithTopic[]> => {
     const { data, error } = await supabase
-      .from('categories')
-      .select('*, topics(name)')
-      .order('topic_id', { ascending: true })
-      .order('display_order', { ascending: true })
+      .from("categories")
+      .select("*, topics(name)")
+      .order("topic_id", { ascending: true })
+      .order("display_order", { ascending: true });
 
     if (error) {
-      throw new Error(`Failed to fetch categories with topics: ${error.message}`)
+      throw new Error(
+        `Failed to fetch categories with topics: ${error.message}`
+      );
     }
     const categoriesWithTopics: CategoryWithTopic[] = data.map((category) => ({
       id: category.id,
@@ -61,7 +67,7 @@ export const categoriesService = {
       display_order: category.display_order,
       is_active: category.is_active,
       created_at: new Date(category.created_at),
-    }))
+    }));
     return categoriesWithTopics;
   },
   /**
@@ -69,20 +75,20 @@ export const categoriesService = {
    */
   getById: async (id: string): Promise<Category | null> => {
     const { data, error } = await supabase
-      .from('categories')
-      .select('*')
-      .eq('id', id)
-      .single()
+      .from("categories")
+      .select("*")
+      .eq("id", id)
+      .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {
-        return null // Category not found
+      if (error.code === "PGRST116") {
+        return null; // Category not found
       }
-      console.error('Error fetching category:', error)
-      throw new Error(`Failed to fetch category: ${error.message}`)
+      console.error("Error fetching category:", error);
+      throw new Error(`Failed to fetch category: ${error.message}`);
     }
 
-    return mapRowToCategory(data)
+    return mapRowToCategory(data);
   },
 
   /**
@@ -92,15 +98,13 @@ export const categoriesService = {
     const insertData: CategoryInsert = {
       ...input,
       slug: generateSlug(input.name),
-    }
+    };
 
-    const { error } = await supabase
-      .from('categories')
-      .insert(insertData)
+    const { error } = await supabase.from("categories").insert(insertData);
 
     if (error) {
-      console.error('Error creating category:', error)
-      throw new Error(`Failed to create category: ${error.message}`)
+      console.error("Error creating category:", error);
+      throw new Error(`Failed to create category: ${error.message}`);
     }
   },
 
@@ -108,23 +112,23 @@ export const categoriesService = {
    * Update an existing category
    */
   update: async (input: UpdateCategoryInput): Promise<void> => {
-    const { id, ...updateData } = input
+    const { id, ...updateData } = input;
     const updatePayload: CategoryUpdate = {
       ...updateData,
       ...(updateData.name && { slug: generateSlug(updateData.name) }),
-    }
+    };
 
     const { error } = await supabase
-      .from('categories')
+      .from("categories")
       .update(updatePayload)
-      .eq('id', id)
+      .eq("id", id);
 
     if (error) {
-      if (error.code === 'PGRST116') {
-        throw new Error('Category not found')
+      if (error.code === "PGRST116") {
+        throw new Error("Category not found");
       }
-      console.error('Error updating category:', error)
-      throw new Error(`Failed to update category: ${error.message}`)
+      console.error("Error updating category:", error);
+      throw new Error(`Failed to update category: ${error.message}`);
     }
   },
 
@@ -133,23 +137,24 @@ export const categoriesService = {
    */
   toggleActive: async (id: string): Promise<Category | null> => {
     // First get the current category to toggle its status
-    const currentCategory = await categoriesService.getById(id)
+    const currentCategory = await categoriesService.getById(id);
     if (!currentCategory) {
-      return null
+      return null;
     }
 
     const { data, error } = await supabase
-      .from('categories')
+      .from("categories")
       .update({ is_active: !currentCategory.is_active })
-      .eq('id', id)
+      .eq("id", id)
       .select()
-      .single()
+      .single();
 
     if (error) {
-      console.error('Error toggling category active status:', error)
-      throw new Error(`Failed to toggle category active status: ${error.message}`)
+      console.error("Error toggling category active status:", error);
+      throw new Error(
+        `Failed to toggle category active status: ${error.message}`
+      );
     }
-
-    return mapRowToCategory(data)
+    return mapRowToCategory(data);
   },
-}
+};

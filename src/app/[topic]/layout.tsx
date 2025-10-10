@@ -1,28 +1,26 @@
-"use client"
-
-import { isValidTopic } from "@/lib/topic-data"
-import { notFound } from "next/navigation"
-import { use } from "react"
+import { AppSidebar } from "@/components/topics/TopicSidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import SidebarHeader from "../lessons/_components/LessonSidebarHeader";
 
 interface TopicLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   params: Promise<{
-    topic: string
-  }>
+    topic: string;
+  }>;
 }
 
-export default function TopicLayout({ children, params }: TopicLayoutProps) {
-  const { topic } = use(params)
-  // Validate the topic parameter
-  if (!isValidTopic(topic)) {
-    notFound()
-  }
-
+export default async function TopicLayout({
+  children,
+  params,
+}: TopicLayoutProps) {
+  const { topic } = await params;
   return (
-    <>
-      <div className="flex min-h-screen w-full">
+    <SidebarProvider>
+      <AppSidebar params={{ topic }} />
+      <SidebarInset>
+        <SidebarHeader />
         {children}
-      </div>
-    </>
-  )
+      </SidebarInset>
+    </SidebarProvider>
+  );
 }

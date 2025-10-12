@@ -83,7 +83,7 @@ export function MultiExerciseForm({ lessons }: MultiExerciseFormProps) {
   };
 
   const addExercise = () => {
-    appendExercise(createDefaultExercise());
+    //appendExercise(createDefaultExercise());
   };
 
   const duplicateExercise = (index: number) => {

@@ -5,7 +5,13 @@ export type ExerciseRow = Database['public']['Tables']['exercises']['Row']
 export type ExerciseType = Database['public']['Enums']['exercise_types']
 
 export interface ExerciseContent {
-  question: string
+  question?: string
+  question_parts?: {
+    type: 'text' | 'blank'
+    id: string
+    value?: string
+    hint?: string
+  }[]
   answers: { value: string }[]
   options: { value: string }[] | null
   answer_explanation: string
@@ -33,10 +39,10 @@ export interface CreateExerciseInput {
 
 export interface UpdateExerciseInput {
   id: string
-  lesson_id: string
-  exercise_types: ExerciseType
-  content: ExerciseContent
-  instructions: string
+  lesson_id?: string
+  exercise_types?: ExerciseType
+  content?: ExerciseContent
+  instructions?: string
   display_order?: number | null
 }
 

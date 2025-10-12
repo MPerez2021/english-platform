@@ -36,6 +36,8 @@ import { useRouter } from "next/navigation";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { FormActionButtons } from "./form-action-buttons";
+import QuestionEditor, { QuestionPart } from "./question-editor";
+import { useState, useEffect } from "react";
 
 interface ExerciseFormProps {
   exercise?: Exercise;
@@ -45,28 +47,73 @@ interface ExerciseFormProps {
 
 export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
   const router = useRouter();
+  const [questionParts, setQuestionParts] = useState<QuestionPart[]>([]);
 
   const form = useForm<ExerciseFormSchema>({
     resolver: zodResolver(exerciseFormSchema),
-    defaultValues: {
-      lesson_id: exercise?.lesson_id || "",
-      exercise_types: exercise?.exercise_types,
-      instructions: exercise?.instructions || "",
-      display_order: exercise?.display_order || 1,
-      content: exercise?.content ? {
-        question: exercise.content.question || "",
-        answers: exercise.content.answers?.length ? exercise.content.answers : [{ value: "" }],
-        options: exercise.content.options?.length ? exercise.content.options : undefined,
-        answer_explanation: exercise.content.answer_explanation || "",
-      } : {
-        question: "",
-        answers: [{ value: "" }],
-        options: undefined,
-        answer_explanation: "",
-      },
-    },
-  });
+    defaultValues: (() => {
+      const base = {
+        lesson_id: exercise?.lesson_id || "",
+        exercise_types: exercise?.exercise_types || "FILL_BLANK",
+        instructions: exercise?.instructions || "",
+        display_order: exercise?.display_order || 1,
+      };
 
+      // --- FILL_BLANK (multiple choice type) ---
+      if (
+        exercise?.exercise_types === "FILL_BLANK" ||
+        exercise?.exercise_types == "READING_COMPREHENSION"
+      ) {
+        return {
+          ...base,
+          content: {
+            question: exercise?.content?.question || "",
+            answers: exercise?.content?.answers?.length
+              ? exercise.content.answers
+              : [{ value: "" }],
+            options: exercise?.content?.options?.length
+              ? exercise.content.options
+              : undefined,
+            answer_explanation: exercise?.content?.answer_explanation || "",
+          },
+        } as ExerciseFormSchema;
+      }
+
+      // --- FILL_BLANK_FREE (user fills input manually) ---
+      if (exercise?.exercise_types === "FILL_BLANK_FREE") {
+        return {
+          ...base,
+          content: {
+            question_parts: exercise?.content?.question_parts || [
+              { id: "", type: "text", value: "" },
+            ],
+            answers: exercise?.content?.answers?.length
+              ? exercise.content.answers
+              : [{ value: "" }],
+            options: exercise?.content?.options?.length
+              ? exercise.content.options
+              : undefined,
+            answer_explanation: exercise?.content?.answer_explanation || "",
+          },
+        } as ExerciseFormSchema;
+      }
+    })(),
+  });
+  const handleQuestionPartChange = (index: number, part: QuestionPart) => {
+    setQuestionParts((prev) => {
+      const newParts = [...prev];
+      if (index >= newParts.length) {
+        newParts.push(part);
+      } else {
+        newParts[index] = part;
+      }
+      return newParts;
+    });
+  };
+
+  const handleQuestionPartRemove = (index: number) => {
+    setQuestionParts((prev) => prev.filter((_, i) => i !== index));
+  };
   // for answer
   const {
     fields: answerFields,
@@ -92,6 +139,52 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
     name: "exercise_types",
   });
 
+  // Sync questionParts state to form when it changes
+  useEffect(() => {
+    if (watchedExerciseType === EXERCISE_TYPE_CODES.FILL_BLANK_FREE && questionParts.length > 0) {
+      const formattedParts = questionParts.map((p) => {
+        if (p.type === "text") {
+          return { type: "text" as const, id: crypto.randomUUID(), value: p.value };
+        } else {
+          return { type: "blank" as const, id: p.id, hint: p.hint };
+        }
+      });
+      form.setValue("content.question_parts", formattedParts, { shouldValidate: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionParts, watchedExerciseType]);
+
+  // Reset form content when exercise type changes and sync questionParts state
+  useEffect(() => {
+    if (!watchedExerciseType) return;
+
+    // Reset common fields
+    form.setValue("content.answers", [{ value: "" }]);
+    form.setValue("content.answer_explanation", "");
+
+    if (watchedExerciseType === EXERCISE_TYPE_CODES.FILL_BLANK_FREE) {
+      // FILL_BLANK_FREE: use question_parts, no options
+      const initialQuestionParts = [
+        { id: crypto.randomUUID(), type: "text" as const, value: "" },
+      ];
+      form.setValue("content.question_parts", initialQuestionParts);
+      // @ts-expect-error - Setting undefined for discriminated union transition
+      form.setValue("content.question", undefined);
+      form.setValue("content.options", undefined);
+
+      // Sync questionParts state after form is updated
+      setQuestionParts([{ type: "text", value: "" }]);
+    } else {
+      // FILL_BLANK / READING_COMPREHENSION: use question string, with options
+      form.setValue("content.question", "");
+      form.setValue("content.options", [{ value: "" }]);
+
+      // Clear questionParts state when not in FILL_BLANK_FREE mode
+      setQuestionParts([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedExerciseType]);
+
   const requiresOptions =
     watchedExerciseType === EXERCISE_TYPE_CODES.FILL_BLANK ||
     watchedExerciseType === EXERCISE_TYPE_CODES.READING_COMPREHENSION;
@@ -115,12 +208,13 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
         ...data,
         content: {
           ...data.content,
-          options: data.content.options || null
-        }
+          options: data.content.options || null,
+        },
       };
 
       if (mode === "create") {
-        await exercisesService.create(transformedData);
+        console.log(transformedData);
+         await exercisesService.create(transformedData);
         toast.success("Exercise created successfully");
       } else if (exercise) {
         await exercisesService.update({
@@ -129,8 +223,8 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
         });
         toast.success("Exercise updated successfully");
       }
-      router.push("/dashboard/exercises");
-      router.refresh();
+      /*   router.push("/dashboard/exercises");
+      router.refresh(); */
     } catch (error) {
       toast.error("Failed to save exercise", {
         description:
@@ -184,19 +278,7 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
                 <FormItem>
                   <FormLabel>Exercise Type</FormLabel>
                   <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      // Reset form content when exercise type changes
-                      form.setValue("content.question", "");
-                      form.setValue("content.answers", [{ value: "" }]);
-                      form.setValue("content.answer_explanation", "");
-
-                      if (value === EXERCISE_TYPE_CODES.FILL_BLANK_FREE) {
-                        form.setValue("content.options", undefined);
-                      } else {
-                        form.setValue("content.options", [{ value: "" }]);
-                      }
-                    }}
+                    onValueChange={field.onChange}
                     value={field.value || ""}
                   >
                     <FormControl>
@@ -275,26 +357,49 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
             <div className="space-y-6 border rounded-lg p-6">
               <h3 className="text-lg font-medium">Exercise Content</h3>
 
-              <FormField
-                control={form.control}
-                name="content.question"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Question</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Enter the exercise question"
-                        className="min-h-20"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      The main question or prompt for this exercise
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!requiresOptions ? (
+                <FormField
+                  control={form.control}
+                  name="content.question_parts"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Question</FormLabel>
+                      <FormControl>
+                        <QuestionEditor
+                          questionParts={questionParts}
+                          onChange={handleQuestionPartChange}
+                          onRemove={handleQuestionPartRemove}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Build your question by combining text and blanks
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : (
+                <FormField
+                  control={form.control}
+                  name="content.question"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Question</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter the exercise question"
+                          className="min-h-20"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        The main question or prompt for this exercise
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               {/* Options (only for choice-based exercises) */}
               {requiresOptions && (

@@ -131,7 +131,6 @@ export const lessonsService = {
 
   getBySlugWithBreadcrumb: cache(
     async (slug: string): Promise<LessonWithBreadcrumb | null> => {
-      console.log(`[DB CALL] Fetching from Supabase for slug: ${slug} at ${new Date().toISOString()}`);
       const { data, error } = await supabase
         .from("lessons")
         .select(

@@ -9,17 +9,22 @@ import { Clock, Share2, Tag } from "lucide-react";
 import { notFound } from "next/navigation";
 import { LessonBackButton } from "./LessonBackButton";
 import { LessonRender } from "./LessonRender";
+import LessonExercises from "./LessonExercises";
+import { LessonExerciseSkeleton } from "./LessonExerciseSkeleton";
+import { Suspense } from "react";
 
 interface LessonContentProps {
   subcategory: string;
 }
 
-export default async function LessonContent({subcategory}: LessonContentProps) {
+export default async function LessonContent({
+  subcategory,
+}: LessonContentProps) {
   const result = await lessonsService.getBySlugWithBreadcrumb(subcategory);
   if (!result) {
     notFound();
   }
-  const {lesson, breadcrumb} = result;
+  const { lesson, breadcrumb } = result;
 
   const formatEstimatedTime = (minutes: number | null): string => {
     if (!minutes) return "—";
@@ -78,6 +83,11 @@ export default async function LessonContent({subcategory}: LessonContentProps) {
             <Separator />
             {/* Lesson Content */}
             <LessonRender html={lesson.explanation_content} />
+
+            {/* Lesson Exercises */}
+            <Suspense fallback={<LessonExerciseSkeleton />}>
+              <LessonExercises lessonId={lesson.id} />
+            </Suspense>
           </div>
 
           {/* Right Column - Table of Contents */}

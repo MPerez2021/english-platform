@@ -22,7 +22,6 @@ const mapRowToLesson = (row: LessonRow): Lesson => ({
   subcategory_id: row.subcategory_id,
   title: row.title,
   explanation_content: row.explanation_content,
-  slug: row.slug,
   cefr_level: row.cefr_level,
   estimated_time: row.estimated_time,
   is_published: row.is_published,
@@ -54,7 +53,7 @@ export const lessonsService = {
     const { data, error } = await supabase
       .from("lessons")
       .select(
-        "id,title, slug, cefr_level, estimated_time, is_published,created_at, subcategories(name, categories(name, topics(name)))"
+        "id,title, cefr_level, estimated_time, is_published,created_at, subcategories(name, slug, categories(name, topics(name)))"
       )
       .order("created_at", { ascending: false });
 
@@ -73,9 +72,9 @@ export const lessonsService = {
         id: lesson.id,
         topic: lesson.subcategories.categories.topics.name,
         subcategory: lesson.subcategories.name,
+        subcategorySlug: lesson.subcategories.slug,
         category: lesson.subcategories.categories.name,
         title: lesson.title,
-        slug: lesson.slug,
         cefr_level: lesson.cefr_level,
         estimated_time: lesson.estimated_time,
         is_published: lesson.is_published,
@@ -134,10 +133,10 @@ export const lessonsService = {
       const { data, error } = await supabase
         .from("lessons")
         .select(
-          "*, subcategories(name, description, categories(name, slug, topics(id,name, slug)))"
+          "*, subcategories!inner(name, description, categories(name, slug, topics(id,name, slug)))"
         )
         .eq("is_published", true)
-        .eq("slug", slug)
+        .eq("subcategories.slug", slug)
         .single();
 
       if (error) {
@@ -169,8 +168,7 @@ export const lessonsService = {
    */
   create: async (input: CreateLessonInput): Promise<void> => {
     const insertData: LessonInsert = {
-      ...input,
-      slug: generateSlug(input.title),
+      ...input
     };
 
     const { error } = await supabase.from("lessons").insert(insertData);

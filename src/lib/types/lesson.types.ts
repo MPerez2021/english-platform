@@ -7,7 +7,6 @@ export interface Lesson {
   subcategory_id: string;
   title: string;
   explanation_content: string;
-  slug: string;
   cefr_level: CefrLevel;
   estimated_time: number | null;
   is_published: boolean;
@@ -47,9 +46,9 @@ export interface LessonWithSubcategoryAndCategory {
   id: string;
   topic: string;
   subcategory: string;
+  subcategorySlug:string;
   category: string;
   title: string;
-  slug: string;
   cefr_level: CefrLevel;
   estimated_time: number | null;
   is_published: boolean;

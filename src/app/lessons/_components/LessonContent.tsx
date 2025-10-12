@@ -84,6 +84,7 @@ export default async function LessonContent({
             {/* Lesson Content */}
             <LessonRender html={lesson.explanation_content} />
 
+            <Separator />
             {/* Lesson Exercises */}
             <Suspense fallback={<LessonExerciseSkeleton />}>
               <LessonExercises lessonId={lesson.id} />

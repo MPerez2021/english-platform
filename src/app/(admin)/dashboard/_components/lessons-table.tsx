@@ -96,12 +96,6 @@ export function LessonsTable({ initialLessons }: LessonsTableProps) {
       ),
     },
     {
-      key: "slug",
-      label: "Slug",
-      responsive: "xl:table-cell",
-      className: "text-muted-foreground font-mono text-sm",
-    },
-    {
       key: "is_published",
       label: "Published",
       width: "w-24",
@@ -128,7 +122,7 @@ export function LessonsTable({ initialLessons }: LessonsTableProps) {
       label: "View lesson",
       icon: <Eye className="h-4 w-4" />,
       href: (lesson: LessonWithSubcategoryAndCategory) =>
-        `/lessons/${lesson.slug}`,
+        `/lessons/${lesson.subcategorySlug}`,
       variant: "ghost",
     },
     {

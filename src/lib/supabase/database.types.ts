@@ -107,7 +107,6 @@ export type Database = {
           explanation_content: string
           id: string
           is_published: boolean
-          slug: string
           subcategory_id: string
           title: string
           updated_at: string
@@ -119,7 +118,6 @@ export type Database = {
           explanation_content: string
           id?: string
           is_published?: boolean
-          slug: string
           subcategory_id: string
           title: string
           updated_at?: string
@@ -131,7 +129,6 @@ export type Database = {
           explanation_content?: string
           id?: string
           is_published?: boolean
-          slug?: string
           subcategory_id?: string
           title?: string
           updated_at?: string
@@ -231,12 +228,11 @@ export type Database = {
       get_sidebar_topic_categories_with_subcategories: {
         Args: { topic_slug: string }
         Returns: {
-          topic_id:string
-          topic_name: string
           category_id: string
           category_name: string
-          category_slug:string
+          category_slug: string
           subcategories: Json
+          topic_name: string
         }[]
       }
     }

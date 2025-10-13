@@ -1,14 +1,13 @@
-import { LessonWithSubcategoryAndCategory } from "./../types/lesson.types";
 import { createClient } from "@/lib/supabase/client";
-import { generateSlug } from "@/lib/utils";
-import type {
-  Lesson,
-  CreateLessonInput,
-  UpdateLessonInput,
-  LessonWithBreadcrumb,
-} from "@/lib/types/lesson.types";
 import type { Database } from "@/lib/supabase/database.types";
+import type {
+  CreateLessonInput,
+  Lesson,
+  LessonWithBreadcrumb,
+  UpdateLessonInput,
+} from "@/lib/types/lesson.types";
 import { cache } from "react";
+import { LessonWithSubcategoryAndCategory } from "./../types/lesson.types";
 
 type LessonRow = Database["public"]["Tables"]["lessons"]["Row"];
 type LessonInsert = Database["public"]["Tables"]["lessons"]["Insert"];
@@ -185,8 +184,7 @@ export const lessonsService = {
   update: async (input: UpdateLessonInput): Promise<void> => {
     const { id, ...updateData } = input;
     const updatePayload: LessonUpdate = {
-      ...updateData,
-      ...(updateData.title && { slug: generateSlug(updateData.title) }),
+      ...updateData
     };
 
     const { error } = await supabase

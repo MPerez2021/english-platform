@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { lessonsService } from "@/lib/services/lessons.service";
-import { subcategoriesService } from "@/lib/services/subcategories.service";
 import { LessonForm } from "../../_components/lesson-form";
 
 interface Props {
@@ -10,10 +9,7 @@ interface Props {
 export default async function EditLessonPage({ params }: Props) {
   const { id } = await params;
 
-  const [lesson, subcategories] = await Promise.all([
-    lessonsService.getById(id),
-    subcategoriesService.getAll(),
-  ]);
+  const lesson = await lessonsService.getById(id);
 
   if (!lesson) {
     notFound();
@@ -29,7 +25,6 @@ export default async function EditLessonPage({ params }: Props) {
       </div>
       <LessonForm
         lesson={lesson}
-        subcategories={subcategories}
         mode="edit"
       />
     </div>

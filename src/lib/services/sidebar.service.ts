@@ -18,7 +18,6 @@ export const sidebarService = {
     }
 
     const sidebarData: SidebarData[] = data!.map((data) => ({
-      topicId: data.topic_id,
       topicName: data.topic_name,
       categoryId: data.category_id,
       categoryName: data.category_name,

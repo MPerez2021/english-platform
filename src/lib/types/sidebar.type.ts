@@ -1,5 +1,4 @@
 export interface SidebarData {
-  topicId:string;
   topicName: string;
   categoryId: string;
   categoryName: string;

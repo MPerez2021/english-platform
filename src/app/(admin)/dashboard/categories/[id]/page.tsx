@@ -10,8 +10,7 @@ interface EditCategoryPageProps {
 export default async function EditCategoryPage({ params}: EditCategoryPageProps) {
   const categoryId = (await params).id;
   const category = await categoriesService.getById(categoryId);
-  const allTopics = await topicsService.getAll();
-  const topics = allTopics.filter((topic) => topic.is_active);
+  const topics = await topicsService.getTopicOptions();
 
   if (!category) {
     notFound();

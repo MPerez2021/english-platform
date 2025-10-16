@@ -1,4 +1,6 @@
+import { CategoryOption, SubcategoryOption } from './category.types';
 import type { Database } from "@/lib/supabase/database.types";
+import { TopicOption } from "./topic.types";
 
 export type CefrLevel = Database["public"]["Enums"]["cefr_level"];
 
@@ -12,6 +14,8 @@ export interface Lesson {
   is_published: boolean;
   created_at: Date;
   updated_at: Date;
+  topic_id?: string;
+  category_id?: string;
 }
 
 export interface CreateLessonInput {
@@ -34,12 +38,16 @@ export interface UpdateLessonInput {
 }
 
 export interface LessonFormData {
+  id:string;
   subcategory_id: string;
   title: string;
   explanation_content: string;
   cefr_level: CefrLevel;
   estimated_time?: number | null;
   is_published: boolean;
+  topicOption: TopicOption;
+  categoryOption: CategoryOption;
+  subcategoryOption: SubcategoryOption;
 }
 
 export interface LessonWithSubcategoryAndCategory {

@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/client'
 import { generateSlug } from '@/lib/utils'
-import type { Subcategory, CreateSubcategoryInput, UpdateSubcategoryInput, SubcategoryWithCategory } from '@/lib/types/category.types'
+import type { Subcategory, CreateSubcategoryInput, UpdateSubcategoryInput, SubcategoryWithCategory, SubcategoryOption } from '@/lib/types/category.types'
 import type { Database } from '@/lib/supabase/database.types'
 
 type SubcategoryRow = Database['public']['Tables']['subcategories']['Row']
@@ -72,7 +72,7 @@ export const subcategoriesService = {
   getById: async (id: string): Promise<Subcategory | null> => {
     const { data, error } = await supabase
       .from('subcategories')
-      .select('*')
+      .select('*, categories(topic_id, topics(id, name))')
       .eq('id', id)
       .single()
 
@@ -84,7 +84,17 @@ export const subcategoriesService = {
       throw new Error(`Failed to fetch subcategory: ${error.message}`)
     }
 
-    return mapRowToSubcategory(data)
+    const subcategory = mapRowToSubcategory(data);
+
+    // Add topic information if available
+    if (data.categories?.topics) {
+      subcategory.topicOption = {
+        id: data.categories.topics.id,
+        name: data.categories.topics.name
+      };
+    }
+
+    return subcategory;
   },
 
   /**
@@ -154,4 +164,20 @@ export const subcategoriesService = {
 
     return mapRowToSubcategory(data)
   },
+
+  getAllOptionsByCategoryId: async (id:string): Promise<SubcategoryOption[]> => {
+    const { data, error } = await supabase
+      .from('subcategories')
+      .select('id,name')
+      .eq('is_active',true)
+      .eq('category_id', id);
+
+    if (error) {
+      console.error('Error fetching subcategories:', error)
+      throw new Error(`Failed to fetch subcategories: ${error.message}`)
+    }
+
+    return data as SubcategoryOption[];
+  },
+
 }

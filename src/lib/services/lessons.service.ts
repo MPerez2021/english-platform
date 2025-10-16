@@ -3,6 +3,7 @@ import type { Database } from "@/lib/supabase/database.types";
 import type {
   CreateLessonInput,
   Lesson,
+  LessonFormData,
   LessonWithBreadcrumb,
   UpdateLessonInput,
 } from "@/lib/types/lesson.types";
@@ -84,10 +85,10 @@ export const lessonsService = {
   /**
    * Get a single lesson by ID
    */
-  getById: async (id: string): Promise<Lesson | null> => {
+  getById: async (id: string): Promise<LessonFormData | null> => {
     const { data, error } = await supabase
       .from("lessons")
-      .select("*")
+      .select("*, subcategories(id,name, categories(id,name, topics(id,name)))")
       .eq("id", id)
       .single();
 
@@ -99,7 +100,29 @@ export const lessonsService = {
       throw new Error(`Failed to fetch lesson: ${error.message}`);
     }
 
-    return mapRowToLesson(data);
+    const result: LessonFormData = {
+      id: data.id,
+      subcategory_id: data.subcategory_id,
+      title: data.title,
+      explanation_content: data.explanation_content,
+      cefr_level: data.cefr_level,
+      estimated_time: data.estimated_time,
+      is_published: data.is_published,
+      topicOption: {
+        id: data.subcategories.categories.topics.id,
+        name: data.subcategories.categories.topics.name
+      },
+      categoryOption: {
+        id: data.subcategories.categories.id,
+        name: data.subcategories.categories.name,
+      },
+      subcategoryOption:{
+        id: data.subcategories.id,
+        name: data.subcategories.name
+      }
+    }
+
+    return result;
   },
 
   /**

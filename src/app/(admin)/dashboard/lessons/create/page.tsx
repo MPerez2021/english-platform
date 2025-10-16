@@ -1,9 +1,6 @@
-import { subcategoriesService } from "@/lib/services/subcategories.service";
 import { LessonForm } from "../../_components/lesson-form";
 
 export default async function NewLessonPage() {
-  const subcategories = await subcategoriesService.getAll();
-
   return (
     <div className="space-y-8">
       <div className="text-center space-y-2">
@@ -12,7 +9,7 @@ export default async function NewLessonPage() {
           Create engaging lesson content to help students learn effectively.
         </p>
       </div>
-      <LessonForm subcategories={subcategories} mode="create" />
+      <LessonForm mode="create" />
     </div>
   );
 }

@@ -30,3 +30,5 @@ export interface TopicFormData {
   display_order: number;
   is_active: boolean;
 }
+
+export type TopicOption = Pick<Topic, 'id' | 'name'>

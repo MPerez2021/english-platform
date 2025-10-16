@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { SubcategoryForm } from "../../_components/subcategory-form";
 import { subcategoriesService } from "@/lib/services/subcategories.service";
-import { categoriesService } from "@/lib/services/categories.service";
+import { topicsService } from "@/lib/services/topics.service";
 
 interface EditSubcategoryPageProps {
   params:  Promise<{ id: string}>
@@ -10,8 +10,7 @@ interface EditSubcategoryPageProps {
 export default async function EditSubcategoryPage({ params }: EditSubcategoryPageProps) {
   const subcategoryId = (await params).id;
   const subcategory = await subcategoriesService.getById(subcategoryId);
-  const allCategories = await categoriesService.getAll();
-  const categories = allCategories.filter(category => category.is_active);
+  const topics = await topicsService.getTopicOptions();
 
   if (!subcategory) {
     notFound();
@@ -25,7 +24,7 @@ export default async function EditSubcategoryPage({ params }: EditSubcategoryPag
           Update the details of &ldquo;{subcategory.name}&rdquo; subcategory.
         </p>
       </div>
-      <SubcategoryForm subcategory={subcategory} mode="edit" categories={categories} />
+      <SubcategoryForm subcategory={subcategory} mode="edit" topics={topics} />
     </div>
   );
 }

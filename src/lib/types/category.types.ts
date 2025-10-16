@@ -1,3 +1,5 @@
+import { TopicOption } from "./topic.types";
+
 export interface Category {
   id: string;
   topic_id: string;
@@ -45,6 +47,7 @@ export interface Subcategory {
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
+  topicOption?: TopicOption
 }
 
 export interface CreateSubcategoryInput {
@@ -93,3 +96,7 @@ export interface SubcategoryWithCategory {
   display_order: number;
   is_active: boolean;
 }
+
+export type CategoryOption = Pick<Category,'id' | 'name'>
+
+export type SubcategoryOption = Pick<Subcategory, 'id' |'name'>

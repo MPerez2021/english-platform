@@ -20,7 +20,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { subcategoriesService } from "@/lib/services/subcategories.service";
-import { Category, Subcategory } from "@/lib/types/category.types";
+import { Subcategory } from "@/lib/types/category.types";
 import {
   subcategoryFormSchema,
   SubcategoryFormSchema,
@@ -30,19 +30,30 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { FormActionButtons } from "./form-action-buttons";
+import { TopicOption } from "@/lib/types/topic.types";
+import { useState, useEffect } from "react";
+import { categoriesService } from "@/lib/services/categories.service";
+import { CategoryOption } from "@/lib/types/category.types";
 
 interface SubcategoryFormProps {
   subcategory?: Subcategory;
-  categories: Category[];
+  topics: TopicOption[];
   mode: "create" | "edit";
 }
 
 export function SubcategoryForm({
   subcategory,
-  categories,
+  topics,
   mode,
 }: SubcategoryFormProps) {
   const router = useRouter();
+  const [selectedTopicId, setSelectedTopicId] = useState<string>(
+    subcategory?.topicOption?.id || ""
+  );
+  const [filteredCategories, setFilteredCategories] = useState<
+    CategoryOption[]
+  >([]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(false);
 
   const form = useForm<SubcategoryFormSchema>({
     resolver: zodResolver(subcategoryFormSchema),
@@ -54,6 +65,36 @@ export function SubcategoryForm({
       is_active: subcategory?.is_active ?? true,
     },
   });
+
+  // Fetch categories based on selected topic
+  useEffect(() => {
+    const fetchCategories = async () => {
+      if (!selectedTopicId) {
+        setFilteredCategories([]);
+        return;
+      }
+      setIsLoadingCategories(true);
+      try {
+        const categoryOptions =
+          await categoriesService.getCategoryOptionsByTopicId(selectedTopicId);
+        setFilteredCategories(categoryOptions);
+      } catch (error) {
+        console.error("Error fetching categories options:", error);
+        toast.error("Failed to fetch categories options");
+        setFilteredCategories([]);
+      } finally {
+        setIsLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, [selectedTopicId]);
+
+  // Handle topic change - clear category selection when topic changes
+  const handleTopicChange = (value: string) => {
+    setSelectedTopicId(value);
+    form.setValue("category_id", ""); // Clear category selection
+  };
 
   const onSubmit = async (data: SubcategoryFormSchema) => {
     try {
@@ -76,7 +117,10 @@ export function SubcategoryForm({
     } catch (error) {
       console.error("Error saving subcategory:", error);
       toast.error("Failed to save subcategory", {
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
       });
     }
   };
@@ -89,40 +133,76 @@ export function SubcategoryForm({
     <div className="max-w-2xl mx-auto space-y-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="category_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(value)}
-                  value={field.value ? field.value.toString() : ""}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem
-                        key={category.id}
-                        value={category.id.toString()}
-                      >
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  The category this subcategory belongs to
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Topic Filter (not part of form validation) */}
+          <div className="flex flex-col md:flex-row gap-4 items-start">
+            <FormItem>
+              <FormLabel>Topic</FormLabel>
+              <Select onValueChange={handleTopicChange} value={selectedTopicId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a topic first" />
+                </SelectTrigger>
+                <SelectContent>
+                  {topics.map((topic) => (
+                    <SelectItem key={topic.id} value={topic.id}>
+                      {topic.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Select a topic to load its categories
+              </FormDescription>
+            </FormItem>
 
+            <FormField
+              control={form.control}
+              name="category_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value)}
+                    value={field.value ? field.value.toString() : ""}
+                    disabled={!selectedTopicId || isLoadingCategories}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            !selectedTopicId
+                              ? "Select a topic first"
+                              : isLoadingCategories
+                              ? "Loading categories..."
+                              : "Select a category"
+                          }
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {filteredCategories.length > 0 ? (
+                        filteredCategories.map((category) => (
+                          <SelectItem
+                            key={category.id}
+                            value={category.id.toString()}
+                          >
+                            {category.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <div className="px-2 py-4 text-sm text-muted-foreground text-center">
+                          No categories found for this topic
+                        </div>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    The category this subcategory belongs to
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="name"

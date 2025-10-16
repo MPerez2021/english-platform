@@ -2,11 +2,13 @@ import { createClient } from "@/lib/supabase/client";
 import type { Database } from "@/lib/supabase/database.types";
 import type {
   Category,
+  CategoryOption,
   CreateCategoryInput,
-  UpdateCategoryInput
+  UpdateCategoryInput,
 } from "@/lib/types/category.types";
 import { generateSlug } from "@/lib/utils";
 import { CategoryWithTopic } from "./../types/category.types";
+import { cache } from "react";
 
 type CategoryRow = Database["public"]["Tables"]["categories"]["Row"];
 type CategoryInsert = Database["public"]["Tables"]["categories"]["Insert"];
@@ -157,4 +159,18 @@ export const categoriesService = {
     }
     return mapRowToCategory(data);
   },
+
+  getCategoryOptionsByTopicId: cache(async (id: string): Promise<CategoryOption[]> => {
+    const { data, error } = await supabase
+      .from("categories")
+      .select("id, name")
+      .eq("topic_id", id)
+      .eq("is_active", true);
+
+    if (error) {
+      console.error("Error fetching categories:", error);
+      throw new Error(`Failed to fetch categories: ${error.message}`);
+    }
+    return data as CategoryOption[];
+  }),
 };

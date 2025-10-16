@@ -21,7 +21,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { categoriesService } from "@/lib/services/categories.service";
 import { Category } from "@/lib/types/category.types";
-import { Topic } from "@/lib/types/topic.types";
+import { TopicOption } from "@/lib/types/topic.types";
 import { categoryFormSchema, CategoryFormSchema } from "@/lib/validations/category.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -31,7 +31,7 @@ import { FormActionButtons } from "./form-action-buttons";
 
 interface CategoryFormProps {
   category?: Category;
-  topics: Topic[];
+  topics: TopicOption[];
   mode: "create" | "edit";
 }
 

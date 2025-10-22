@@ -164,6 +164,35 @@ Create a free, high-quality English learning platform providing structured pract
 - Document any visual differences found
 - Re-test after fixes are applied
 
+### Next.js MCP
+
+**Primary Use**: Interact with running Next.js development server's MCP endpoint for runtime information, diagnostics, and internals.
+
+**Requirements**:
+
+- Next.js 16+ (MCP enabled by default)
+- Development server must be running
+
+**When to Use**:
+
+- **Before implementing changes**: Query current routes, component structure, and app state
+- **Diagnostics**: Check runtime errors, build status, compilation errors
+- **Investigation**: "What's happening?", "Why isn't this working?", "What routes exist?"
+- **Agentic codebase search**: First choice for searching the running app (fallback to static search if not found)
+
+**Available Actions**:
+
+1. `discover_servers` - Find running Next.js dev servers and their ports
+2. `list_tools` - See available MCP tools exposed by Next.js runtime
+3. `call_tool` - Invoke specific tools for route info, errors, logs, diagnostics
+
+**Best Practices**:
+
+- Query runtime FIRST before modifying the app to understand current state
+- Use for understanding existing routes and component hierarchy
+- Check runtime diagnostics before implementing fixes
+- Prefer this over static file search for running application context
+
 ## ✅ Quality Standards & Verification
 
 ### 🔍 Mandatory Component Checklist
@@ -249,8 +278,9 @@ Test all components across official Tailwind CSS breakpoints:
 
 ### Frontend Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **Styling**: Tailwind (version 4.0) CSS + Shadcn/ui components + Lucid Icons
+- **Framework**: Next.js 16.0.0 (App Router)
+- **React**: React 19.2.0
+- **Styling**: Tailwind CSS 4.0 + Shadcn/ui components + Lucide React Icons
 - **TypeScript**: Mandatory for type safety
 
 ### Backend & Database

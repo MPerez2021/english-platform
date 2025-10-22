@@ -162,10 +162,10 @@ export const lessonsService = {
         .single();
 
       if (error) {
+        console.error("Error fetching lesson by slug with breadcrumb:", error);
         if (error.code === "PGRST116") {
           return null; // Lesson not found
         }
-        console.error("Error fetching lesson by slug with breadcrumb:", error);
         throw new Error(
           `Failed to fetch lesson by slug with breadcrumb: ${error.message}`
         );

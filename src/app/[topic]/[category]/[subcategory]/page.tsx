@@ -1,8 +1,6 @@
 import LessonContent from "@/app/lessons/_components/LessonContent";
-import LoaderSkeleton from "@/components/layout/LoaderSkeleton";
 import { lessonsService } from "@/lib/services/lessons.service";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
 interface PageProps {
   params: Promise<{ topic: string; category: string; subcategory: string }>;
@@ -49,9 +47,7 @@ export default async function SubcategoryPage({ params }: PageProps) {
 
   return (
     <>
-      <Suspense fallback={<LoaderSkeleton />}>
         <LessonContent subcategory={subcategory} />
-      </Suspense>
     </>
   );
 }

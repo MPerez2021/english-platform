@@ -6,6 +6,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
   SidebarMenuSub,
@@ -99,6 +100,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
         </div>
       </SidebarHeader>
       <SidebarContent className="bg-background">
+        {/* Topics for mobile */}
         <SidebarGroup className="flex xl:hidden">
           <div className="flex flex-col pl-3 gap-2">
             {menu.map((item) => (
@@ -119,7 +121,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
             <SidebarGroup>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarGroupLabel>{item.categoryName}</SidebarGroupLabel>
+                  <SidebarGroupLabel className="text-sm">{item.categoryName}</SidebarGroupLabel>
                   <SidebarMenuSub
                     role="list"
                     aria-label={`${item.categoryName} subcategories`}
@@ -128,6 +130,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
                       <SidebarMenuSubItem key={sub.name} role="listitem">
                         <SidebarMenuSubButton
                           asChild
+                          className="data-[active=true]:bg-transparent data-[active=true]:text-primary"
                           isActive={sub.slug === subcategory}
                         >
                           <Link

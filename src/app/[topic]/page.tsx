@@ -11,7 +11,6 @@ interface PageProps {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  "use cache";
   const { topic } = await params;
   const result = await topicsService.getTopicBySlug(topic);
 

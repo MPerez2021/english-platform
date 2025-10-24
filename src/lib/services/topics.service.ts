@@ -21,6 +21,7 @@ const mapRowToTopic = (row: TopicRow): Topic => ({
   name: row.name,
   slug: row.slug,
   description: row.description,
+  overview: row.overview,
   is_active: row.is_active,
   created_at: new Date(row.created_at),
   updated_at: new Date(row.updated_at),

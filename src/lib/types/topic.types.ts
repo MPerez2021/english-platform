@@ -3,6 +3,7 @@ export interface Topic {
   name: string;
   slug: string;
   description: string;
+  overview: string;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
@@ -11,6 +12,7 @@ export interface Topic {
 export interface CreateTopicInput {
   name: string;
   description: string;
+  overview: string;
   is_active: boolean;
 }
 
@@ -18,12 +20,14 @@ export interface UpdateTopicInput {
   id: string;
   name: string;
   description: string;
+  overview: string;
   is_active: boolean;
 }
 
 export interface TopicFormData {
   name: string;
   description: string;
+  overview: string;
   is_active: boolean;
 }
 

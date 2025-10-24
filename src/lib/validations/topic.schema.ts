@@ -11,6 +11,10 @@ export const topicFormSchema = z.object({
     .min(10, "Description must be at least 10 characters")
     .max(500, "Description must be less than 500 characters")
     .trim(),
+  overview: z
+    .string()
+    .min(10, "Overview must be at least 10 characters")
+    .trim(),
   is_active: z.boolean(),
 });
 

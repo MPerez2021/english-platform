@@ -96,7 +96,7 @@ export function LessonToc({ htmlContent, className = "" }: LessonTocProps) {
       <div className="space-y-3">
         <div className="flex items-center gap-2 text-sm font-semibold">
           <BookOpen className="h-4 w-4" />
-          <span>Table of Contents</span>
+          <span>ON THIS PAGE</span>
         </div>
 
         <ul className="space-y-2 border-l-2 border-border pl-4">

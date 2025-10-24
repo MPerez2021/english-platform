@@ -1,6 +1,8 @@
 import { topicsService } from "@/lib/services/topics.service";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { LessonRender } from "../lessons/_components/LessonRender";
+import { LessonToc } from "@/components/lessons/LessonToc";
 
 interface PageProps {
   params: Promise<{ topic: string }>;
@@ -9,7 +11,7 @@ interface PageProps {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  'use cache'
+  "use cache";
   const { topic } = await params;
   const result = await topicsService.getTopicBySlug(topic);
 
@@ -22,7 +24,7 @@ export async function generateMetadata({
 
   return {
     title: `${result.name}`,
-description: `${result.description}`,
+    description: `${result.description}`,
     keywords: [
       "English learning",
       result.name,
@@ -42,19 +44,27 @@ description: `${result.description}`,
   };
 }
 
-export default async function Page() {
-  const result = await getText();
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ topic: string }>;
+}) {
+  const { topic } = await params;
+  const result = await getText(topic);
   return (
     <>
-    <h1>fasdfasdfas</h1>
-    <p>{result.name}</p>
-      <p>{result.slug}</p>
-      <p>{result.description}</p>
+      <div className="container mx-auto max-w-7xl px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
+          <LessonRender html={result.overview} />
+          <div className="hidden lg:block">
+            <LessonToc htmlContent={result.overview} />
+          </div>
+        </div>
+      </div>
     </>
   );
 }
-async function getText(){
-  'use cache'
-  const result = await topicsService.getTopicBySlug('grammar');
+async function getText(slug: string) {
+  const result = await topicsService.getTopicBySlug(slug);
   return result;
 }

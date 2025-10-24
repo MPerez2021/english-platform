@@ -3,7 +3,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { NAVIGATION_ITEMS } from "@/lib/constants";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 export default function SidebarHeader() {
   return (

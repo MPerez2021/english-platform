@@ -55,18 +55,6 @@ export function ExercisesTable({
       ),
     },
     {
-      key: "display_order",
-      label: "Order",
-      width: "w-16",
-      className: "text-center text-muted-foreground",
-      responsive: "md:table-cell",
-      render: (value: unknown) => (
-        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs">
-          {value as number || "-"}
-        </span>
-      ),
-    },
-    {
       key: "created_at",
       label: "Created at",
       responsive: "xl:table-cell",

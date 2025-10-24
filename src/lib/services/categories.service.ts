@@ -23,7 +23,6 @@ const mapRowToCategory = (row: CategoryRow): Category => ({
   name: row.name,
   slug: generateSlug(row.name),
   description: row.description,
-  display_order: row.display_order,
   is_active: row.is_active,
   created_at: new Date(row.created_at),
   updated_at: new Date(row.updated_at),
@@ -31,14 +30,14 @@ const mapRowToCategory = (row: CategoryRow): Category => ({
 
 export const categoriesService = {
   /**
-   * Get all categories ordered by topic_id and display_order
+   * Get all categories ordered by topic_id and name
    */
   getAll: async (): Promise<Category[]> => {
     const { data, error } = await supabase
       .from("categories")
       .select("*")
       .order("topic_id", { ascending: true })
-      .order("display_order", { ascending: true });
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching categories:", error);
@@ -52,8 +51,7 @@ export const categoriesService = {
     const { data, error } = await supabase
       .from("categories")
       .select("*, topics(name)")
-      .order("topic_id", { ascending: true })
-      .order("display_order", { ascending: true });
+      .order("created_at", { ascending: false });
 
     if (error) {
       throw new Error(
@@ -66,7 +64,6 @@ export const categoriesService = {
       slug: category.slug,
       description: category.description,
       topic: category.topics.name,
-      display_order: category.display_order,
       is_active: category.is_active,
       created_at: new Date(category.created_at),
     }));

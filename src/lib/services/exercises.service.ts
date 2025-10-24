@@ -21,20 +21,18 @@ const mapRowToExercise = (row: ExerciseRow): Exercise => ({
   exercise_types: row.exercise_types,
   content: row.content as unknown as ExerciseContent,
   instructions: row.instructions,
-  display_order: row.display_order,
   created_at: new Date(row.created_at),
   updated_at: new Date(row.updated_at),
 })
 
 export const exercisesService = {
   /**
-   * Get all exercises ordered by display_order and created_at
+   * Get all exercises ordered by created_at
    */
   getAll: async (): Promise<Exercise[]> => {
     const { data, error } = await supabase
       .from('exercises')
       .select('*')
-      .order('display_order', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -75,7 +73,6 @@ export const exercisesService = {
       .from('exercises')
       .select('*')
       .eq('lesson_id', lessonId)
-      .order('display_order', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -136,17 +133,12 @@ export const exercisesService = {
   createMultiple: async (input: CreateMultipleExercisesSchema): Promise<void> => {
     const { lesson_id, exercises } = input;
 
-    // Get the current max display order for the lesson
-    const existingExercises = await exercisesService.getByLessonId(lesson_id);
-    const maxOrder = Math.max(0, ...existingExercises.map(ex => ex.display_order || 0));
-
     // Prepare insert data for each exercise
-    const insertData: ExerciseInsert[] = exercises.map((exercise, index) => ({
+    const insertData: ExerciseInsert[] = exercises.map((exercise) => ({
       lesson_id,
       exercise_types: exercise.exercise_types,
       content: exercise.content as unknown as Json,
       instructions: exercise.instructions,
-      display_order: maxOrder + index + 1,
     }));
 
     const { error } = await supabase

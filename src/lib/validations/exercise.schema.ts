@@ -53,13 +53,6 @@ const sharedExerciseMeta = {
     .min(5, "Instructions must be at least 5 characters")
     .max(500, "Instructions must be less than 500 characters")
     .trim(),
-  display_order: z
-    .number()
-    .min(1, "Display order must be at least 1")
-    .max(1000, "Display order must be less than 1000")
-    .int("Display order must be a whole number")
-    .optional()
-    .nullable(),
 };
 
 // Exercise Schemas

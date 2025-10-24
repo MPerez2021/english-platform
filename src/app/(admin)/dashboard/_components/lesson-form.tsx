@@ -197,9 +197,15 @@ useEffect(() => {
       router.refresh();
     } catch (error) {
       console.error("Error saving lesson:", error);
+
+      const isDuplicateError = error instanceof Error &&
+        (error.message.includes("duplicate key value violates unique constraint") ||
+         error.message.includes("unique constraint"));
+
       toast.error("Failed to save lesson", {
-        description:
-          error instanceof Error
+        description: isDuplicateError
+          ? "A lesson with this title already exists. Please use a different title."
+          : error instanceof Error
             ? error.message
             : "An unexpected error occurred",
       });

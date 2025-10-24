@@ -34,7 +34,6 @@ export function TopicForm({ topic, mode }: TopicFormProps) {
     defaultValues: {
       name: topic?.name || "",
       description: topic?.description || "",
-      display_order: topic?.display_order || 1,
       is_active: topic?.is_active ?? true,
     },
   });
@@ -59,8 +58,17 @@ export function TopicForm({ topic, mode }: TopicFormProps) {
       router.refresh();
     } catch (error) {
       console.error("Error saving topic:", error);
+
+      const isDuplicateError = error instanceof Error &&
+        (error.message.includes("duplicate key value violates unique constraint") ||
+         error.message.includes("unique constraint"));
+
       toast.error("Failed to save topic", {
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        description: isDuplicateError
+          ? "A topic with this name already exists. Please use a different name."
+          : error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
       });
     }
   };
@@ -105,29 +113,6 @@ export function TopicForm({ topic, mode }: TopicFormProps) {
                 </FormControl>
                 <FormDescription>
                   A detailed description of what this topic covers
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="display_order"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Display Order</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    min="1"
-                    placeholder="Enter display order"
-                    {...field}
-                    onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-                  />
-                </FormControl>
-                <FormDescription>
-                  The order in which this topic appears in lists (lower numbers appear first)
                 </FormDescription>
                 <FormMessage />
               </FormItem>

@@ -18,7 +18,6 @@ export type Database = {
         Row: {
           created_at: string
           description: string
-          display_order: number
           id: string
           is_active: boolean
           name: string
@@ -29,7 +28,6 @@ export type Database = {
         Insert: {
           created_at?: string
           description: string
-          display_order?: number
           id?: string
           is_active?: boolean
           name: string
@@ -40,7 +38,6 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
-          display_order?: number
           id?: string
           is_active?: boolean
           name?: string
@@ -62,7 +59,6 @@ export type Database = {
         Row: {
           content: Json
           created_at: string
-          display_order: number | null
           exercise_types: Database["public"]["Enums"]["exercise_types"]
           id: string
           instructions: string
@@ -72,7 +68,6 @@ export type Database = {
         Insert: {
           content: Json
           created_at?: string
-          display_order?: number | null
           exercise_types: Database["public"]["Enums"]["exercise_types"]
           id?: string
           instructions: string
@@ -82,7 +77,6 @@ export type Database = {
         Update: {
           content?: Json
           created_at?: string
-          display_order?: number | null
           exercise_types?: Database["public"]["Enums"]["exercise_types"]
           id?: string
           instructions?: string
@@ -137,7 +131,7 @@ export type Database = {
           {
             foreignKeyName: "lessons_subcategory_id_fkey"
             columns: ["subcategory_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "subcategories"
             referencedColumns: ["id"]
           },
@@ -148,7 +142,6 @@ export type Database = {
           category_id: string
           created_at: string
           description: string
-          display_order: number
           id: string
           is_active: boolean
           name: string
@@ -159,7 +152,6 @@ export type Database = {
           category_id: string
           created_at?: string
           description: string
-          display_order?: number
           id?: string
           is_active?: boolean
           name: string
@@ -170,7 +162,6 @@ export type Database = {
           category_id?: string
           created_at?: string
           description?: string
-          display_order?: number
           id?: string
           is_active?: boolean
           name?: string
@@ -191,7 +182,6 @@ export type Database = {
         Row: {
           created_at: string
           description: string
-          display_order: number
           id: string
           is_active: boolean
           name: string
@@ -201,7 +191,6 @@ export type Database = {
         Insert: {
           created_at?: string
           description: string
-          display_order?: number
           id?: string
           is_active?: boolean
           name: string
@@ -211,7 +200,6 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
-          display_order?: number
           id?: string
           is_active?: boolean
           name?: string

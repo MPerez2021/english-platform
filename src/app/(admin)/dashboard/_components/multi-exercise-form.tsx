@@ -49,7 +49,6 @@ interface MultiExerciseFormProps {
 const createDefaultExercise = () => ({
   exercise_types: "FILL_BLANK" as "FILL_BLANK" | "FILL_BLANK_FREE" | "READING_COMPREHENSION",
   instructions: "",
-  display_order: undefined as number | undefined,
   content: {
     question: "",
     answers: [{ value: "" }],

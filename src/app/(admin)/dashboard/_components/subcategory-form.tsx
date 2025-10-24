@@ -61,7 +61,6 @@ export function SubcategoryForm({
       category_id: subcategory?.category_id || "",
       name: subcategory?.name || "",
       description: subcategory?.description || "",
-      display_order: subcategory?.display_order || 1,
       is_active: subcategory?.is_active ?? true,
     },
   });
@@ -116,9 +115,15 @@ export function SubcategoryForm({
       router.refresh();
     } catch (error) {
       console.error("Error saving subcategory:", error);
+
+      const isDuplicateError = error instanceof Error &&
+        (error.message.includes("duplicate key value violates unique constraint") ||
+         error.message.includes("unique constraint"));
+
       toast.error("Failed to save subcategory", {
-        description:
-          error instanceof Error
+        description: isDuplicateError
+          ? "A subcategory with this name already exists. Please use a different name."
+          : error instanceof Error
             ? error.message
             : "An unexpected error occurred",
       });
@@ -236,32 +241,6 @@ export function SubcategoryForm({
                 </FormControl>
                 <FormDescription>
                   A detailed description of what this subcategory covers
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="display_order"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Display Order</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    min="1"
-                    placeholder="Enter display order"
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(parseInt(e.target.value) || 1)
-                    }
-                  />
-                </FormControl>
-                <FormDescription>
-                  The order in which this subcategory appears within its
-                  category (lower numbers appear first)
                 </FormDescription>
                 <FormMessage />
               </FormItem>

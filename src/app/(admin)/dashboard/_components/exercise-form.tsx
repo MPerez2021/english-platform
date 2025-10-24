@@ -56,7 +56,6 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
         lesson_id: exercise?.lesson_id || "",
         exercise_types: exercise?.exercise_types || "FILL_BLANK",
         instructions: exercise?.instructions || "",
-        display_order: exercise?.display_order || 1,
       };
 
       // --- FILL_BLANK (multiple choice type) ---
@@ -226,9 +225,16 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
       /*   router.push("/dashboard/exercises");
       router.refresh(); */
     } catch (error) {
+      console.error("Error saving exercise:", error);
+
+      const isDuplicateError = error instanceof Error &&
+        (error.message.includes("duplicate key value violates unique constraint") ||
+         error.message.includes("unique constraint"));
+
       toast.error("Failed to save exercise", {
-        description:
-          error instanceof Error
+        description: isDuplicateError
+          ? "An exercise with this configuration already exists. Please modify the exercise details."
+          : error instanceof Error
             ? error.message
             : "An unexpected error occurred",
       });
@@ -320,32 +326,6 @@ export function ExerciseForm({ exercise, lessons, mode }: ExerciseFormProps) {
                 </FormControl>
                 <FormDescription>
                   Instructions that students will see for this exercise
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="display_order"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Display Order</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    min="1"
-                    placeholder="Enter display order"
-                    {...field}
-                    value={field.value?.toString() || ""}
-                    onChange={(e) =>
-                      field.onChange(parseInt(e.target.value) || 1)
-                    }
-                  />
-                </FormControl>
-                <FormDescription>
-                  The order in which this exercise appears within the lesson
                 </FormDescription>
                 <FormMessage />
               </FormItem>

@@ -16,7 +16,6 @@ const mapRowToSubcategory = (row: SubcategoryRow): Subcategory => ({
   name: row.name,
   slug: generateSlug(row.name),
   description: row.description,
-  display_order: row.display_order,
   is_active: row.is_active,
   created_at: new Date(row.created_at),
   updated_at: new Date(row.updated_at),
@@ -24,14 +23,13 @@ const mapRowToSubcategory = (row: SubcategoryRow): Subcategory => ({
 
 export const subcategoriesService = {
   /**
-   * Get all subcategories ordered by category_id and display_order
+   * Get all subcategories ordered by category_id and name
    */
   getAll: async (): Promise<Subcategory[]> => {
     const { data, error } = await supabase
       .from('subcategories')
       .select('*')
-      .order('category_id', { ascending: true })
-      .order('display_order', { ascending: true })
+      .order('created_at', { ascending: false })
 
     if (error) {
       console.error('Error fetching subcategories:', error)
@@ -45,8 +43,7 @@ export const subcategoriesService = {
     const { data, error } = await supabase
       .from('subcategories')
       .select('*, categories(name)')
-      .order('category_id', { ascending: true })
-      .order('display_order', { ascending: true })
+      .order('created_at', { ascending: false })
 
     if (error) {
       console.error('Error fetching subcategories with categories:', error)
@@ -59,7 +56,6 @@ export const subcategoriesService = {
       category: subcategory.categories.name,
       slug: subcategory.slug,
       description: subcategory.description,
-      display_order: subcategory.display_order,
       is_active: subcategory.is_active,
       created_at: new Date(subcategory.created_at),
     }))

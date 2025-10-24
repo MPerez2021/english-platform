@@ -14,10 +14,6 @@ export const categoryFormSchema = z.object({
     .min(10, "Description must be at least 10 characters")
     .max(500, "Description must be less than 500 characters")
     .trim(),
-  display_order: z
-    .number()
-    .min(1, "Display order must be a positive number")
-    .int("Display order must be a whole number"),
   is_active: z.boolean(),
 });
 
@@ -41,10 +37,6 @@ export const subcategoryFormSchema = z.object({
     .min(10, "Description must be at least 10 characters")
     .max(500, "Description must be less than 500 characters")
     .trim(),
-  display_order: z
-    .number()
-    .min(1, "Display order must be a positive number")
-    .int("Display order must be a whole number"),
   is_active: z.boolean(),
 });
 

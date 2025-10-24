@@ -6,7 +6,6 @@ export interface Category {
   name: string;
   slug: string;
   description: string;
-  display_order: number;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
@@ -16,7 +15,6 @@ export interface CreateCategoryInput {
   topic_id: string;
   name: string;
   description: string;
-  display_order: number;
   is_active: boolean;
 }
 
@@ -25,7 +23,6 @@ export interface UpdateCategoryInput {
   topic_id: string;
   name: string;
   description: string;
-  display_order: number;
   is_active: boolean;
 }
 
@@ -33,7 +30,6 @@ export interface CategoryFormData {
   topic_id: string;
   name: string;
   description: string;
-  display_order: number;
   is_active: boolean;
 }
 
@@ -43,7 +39,6 @@ export interface Subcategory {
   name: string;
   slug: string;
   description: string;
-  display_order: number;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
@@ -54,7 +49,6 @@ export interface CreateSubcategoryInput {
   category_id: string;
   name: string;
   description: string;
-  display_order: number;
   is_active: boolean;
 }
 
@@ -63,7 +57,6 @@ export interface UpdateSubcategoryInput {
   category_id: string;
   name: string;
   description: string;
-  display_order: number;
   is_active: boolean;
 }
 
@@ -71,7 +64,6 @@ export interface SubcategoryFormData {
   category_id: string;
   name: string;
   description: string;
-  display_order: number;
   is_active: boolean;
 }
 
@@ -81,7 +73,6 @@ export interface CategoryWithTopic {
   topic: string;
   slug: string;
   description: string;
-  display_order: number;
   is_active: boolean;
   created_at: Date;
 }
@@ -93,7 +84,6 @@ export interface SubcategoryWithCategory {
   category: string;
   slug: string;
   description: string;
-  display_order: number;
   is_active: boolean;
 }
 

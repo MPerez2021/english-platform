@@ -22,7 +22,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { categoriesService } from "@/lib/services/categories.service";
 import { Category } from "@/lib/types/category.types";
 import { TopicOption } from "@/lib/types/topic.types";
-import { categoryFormSchema, CategoryFormSchema } from "@/lib/validations/category.schema";
+import {
+  categoryFormSchema,
+  CategoryFormSchema,
+} from "@/lib/validations/category.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -44,7 +47,6 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
       topic_id: category?.topic_id || "",
       name: category?.name || "",
       description: category?.description || "",
-      display_order: category?.display_order || 1,
       is_active: category?.is_active ?? true,
     },
   });
@@ -69,8 +71,17 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
       router.refresh();
     } catch (error) {
       console.error("Error saving category:", error);
+
+      const isDuplicateError = error instanceof Error &&
+        (error.message.includes("duplicate key value violates unique constraint") ||
+         error.message.includes("unique constraint"));
+
       toast.error("Failed to save category", {
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        description: isDuplicateError
+          ? "A category with this name already exists. Please use a different name."
+          : error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
       });
     }
   };
@@ -124,7 +135,8 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
                   <Input placeholder="Enter category name" {...field} />
                 </FormControl>
                 <FormDescription>
-                  The display name for this category (e.g., &ldquo;Tenses&rdquo;, &ldquo;Daily Life&rdquo;)
+                  The display name for this category (e.g.,
+                  &ldquo;Tenses&rdquo;, &ldquo;Daily Life&rdquo;)
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -146,29 +158,6 @@ export function CategoryForm({ category, topics, mode }: CategoryFormProps) {
                 </FormControl>
                 <FormDescription>
                   A detailed description of what this category covers
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="display_order"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Display Order</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    min="1"
-                    placeholder="Enter display order"
-                    {...field}
-                    onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-                  />
-                </FormControl>
-                <FormDescription>
-                  The order in which this category appears within its topic (lower numbers appear first)
                 </FormDescription>
                 <FormMessage />
               </FormItem>

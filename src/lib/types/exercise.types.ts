@@ -24,7 +24,6 @@ export interface Exercise {
   exercise_types: ExerciseType
   content: ExerciseContent
   instructions: string
-  display_order: number | null
   created_at: Date
   updated_at: Date
 }
@@ -34,7 +33,6 @@ export interface CreateExerciseInput {
   exercise_types: ExerciseType
   content: ExerciseContent
   instructions: string
-  display_order?: number | null
 }
 
 export interface UpdateExerciseInput {
@@ -43,7 +41,6 @@ export interface UpdateExerciseInput {
   exercise_types?: ExerciseType
   content?: ExerciseContent
   instructions?: string
-  display_order?: number | null
 }
 
 // Form data types for admin interface
@@ -52,7 +49,6 @@ export interface ExerciseFormData {
   exercise_types: ExerciseType
   content: ExerciseContent
   instructions: string
-  display_order?: number | null
 }
 
 // Exercise type constants matching the enum

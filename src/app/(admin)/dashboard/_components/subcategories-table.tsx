@@ -77,12 +77,6 @@ export function SubcategoriesTable({
       ),
     },
     {
-      key: "display_order",
-      label: "Order",
-      width: "w-20",
-      className: "text-center",
-    },
-    {
       key: "is_active",
       label: "Status",
       width: "w-20",

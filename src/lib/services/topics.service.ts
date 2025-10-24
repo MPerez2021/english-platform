@@ -21,7 +21,6 @@ const mapRowToTopic = (row: TopicRow): Topic => ({
   name: row.name,
   slug: row.slug,
   description: row.description,
-  display_order: row.display_order,
   is_active: row.is_active,
   created_at: new Date(row.created_at),
   updated_at: new Date(row.updated_at),
@@ -29,13 +28,13 @@ const mapRowToTopic = (row: TopicRow): Topic => ({
 
 export const topicsService = {
   /**
-   * Get all topics ordered by display_order
+   * Get all topics ordered by name
    */
   getAll: async (): Promise<Topic[]> => {
     const { data, error } = await supabase
       .from("topics")
       .select("*")
-      .order("display_order", { ascending: true });
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error("Error fetching topics:", error);
@@ -74,7 +73,6 @@ export const topicsService = {
       ...input,
       slug: generateSlug(input.name),
     };
-    console.log(input);
     const { error } = await supabase.from("topics").insert(insertData);
 
     if (error) {
@@ -141,7 +139,7 @@ export const topicsService = {
       .from("topics")
       .select("id, name")
       .eq("is_active", true)
-      .order("display_order", { ascending: true });
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error("Error fetching basic topics:", error);
@@ -150,4 +148,22 @@ export const topicsService = {
 
     return data as TopicOption[];
   }),
+
+  getTopicBySlug: async (slug:string): Promise<Topic> =>{
+    const { data, error } = await supabase
+      .from("topics")
+      .select("*")
+      .eq("slug", slug)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        console.log("Topic not found"); // Topic not found
+      }
+      console.error("Error fetching topic:", error);
+      throw new Error(`Failed to fetch topic: ${error.message}`);
+    }
+
+    return mapRowToTopic(data);
+  }
 };
